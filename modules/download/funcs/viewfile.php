@@ -142,6 +142,7 @@ if( $row['is_download_allow'] )
 $session_files = array();
 $session_files['fileupload'] = array();
 $session_files['linkdirect'] = array();
+$row['filepdf'] = '';
 
 if( $row['is_download_allow'] )
 {
@@ -164,6 +165,10 @@ if( $row['is_download_allow'] )
 					$session_files['fileupload'][$new_name] = array( 'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] );
 
 					++$a;
+					if( empty( $row['filepdf'] ) and preg_match( '/\.pdf$/i', $file2 ) )
+					{
+						$row['filepdf'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=down&amp;filepdf=1&amp;filename=' . $new_name;
+					}
 				}
 			}
 		}

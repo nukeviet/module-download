@@ -19,7 +19,7 @@ function nv_download_file(fr, flnm) {
 	download_hits = download_hits + 1;
 	document.getElementById('download_hits').innerHTML = download_hits;
 
-	window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&file=" + flnm;
+	window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&filename=" + flnm;
 	return false;
 }
 

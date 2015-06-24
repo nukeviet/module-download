@@ -222,6 +222,11 @@ function view_file( $row, $download_config, $content_comment )
 	if( $row['is_download_allow'] )
 	{
 		$xtpl->parse( 'main.report' );
+		if( ! empty( $row['filepdf'] ) )
+		{
+			$xtpl->assign( 'FILEPDF', $row['filepdf'] );
+			$xtpl->parse( 'main.filepdf' );
+		}
 
 		if( ! empty( $row['fileupload'] ) )
 		{
@@ -378,6 +383,19 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 	{
 		$xtpl->parse( 'main.is_upload_allow' );
 	}
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+function theme_viewpdf( $filename )
+{
+	global $module_name, $lang_module;
+
+	$xtpl = new XTemplate( 'viewer.tpl', NV_ROOTDIR . '/themes/default/js/pdf.js/' );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'PDF_JS_DIR', NV_BASE_SITEURL . 'themes/default/js/pdf.js/' );
+	$xtpl->assign( 'PDF_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=down&filepdf=2&filename=' . $filename );
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

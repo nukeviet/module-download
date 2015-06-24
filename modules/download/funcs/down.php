@@ -10,13 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-if( ! $nv_Request->isset_request( 'session_files', 'session' ) )
-{
-	die( 'Wrong URL' );
-}
-
 $session_files = $nv_Request->get_string( 'session_files', 'session', '' );
-
 if( empty( $session_files ) )
 {
 	die( 'Wrong URL' );
@@ -45,40 +39,39 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 	die();
 }
 
-if( ! $nv_Request->isset_request( 'file', 'get' ) )
+
+$filename = $nv_Request->get_string( 'filename', 'get', '' );
+if( empty( $filename ) or ! isset( $session_files['fileupload'][$filename] ) )
 {
 	die( 'Wrong URL' );
 }
 
-$file = $nv_Request->get_string( 'file', 'get', '' );
-
-if( empty( $file ) )
+if( ! file_exists( $session_files['fileupload'][$filename]['src'] ) )
 {
 	die( 'Wrong URL' );
 }
 
-if( ! isset( $session_files['fileupload'][$file] ) )
+if( ! isset( $session_files['fileupload'][$filename]['id'] ) )
 {
 	die( 'Wrong URL' );
 }
-
-if( ! file_exists( $session_files['fileupload'][$file]['src'] ) )
-{
-	die( 'Wrong URL' );
-}
-
-if( ! isset( $session_files['fileupload'][$file]['id'] ) )
-{
-	die( 'Wrong URL' );
-}
-
-$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['fileupload'][$file]['id'] );
-$db->query( $sql );
 
 $upload_dir = 'files';
 $is_zip = false;
 $is_resume = false;
 $max_speed = 0;
+
+$filepdf = $nv_Request->get_int( 'filepdf', 'get', 0 );
+if( $filepdf == 1 )
+{
+	$html = theme_viewpdf( $filename );
+	die($html);
+}
+elseif( empty( $filepdf ) )
+{
+	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['fileupload'][$filename]['id'] );
+	$db->query( $sql );
+}
 
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir' OR config_name='is_zip' OR config_name='is_resume' OR config_name='max_speed'";
 $result = $db->query( $sql );
@@ -90,7 +83,7 @@ while( $row = $result->fetch() )
 	}
 	elseif( $row['config_name'] == 'is_zip' )
 	{
-		$is_zip = ( bool )$row['config_value'];
+		$is_zip = ( $filepdf == 2 ) ? false : ( bool )$row['config_value'];
 	}
 	elseif( $row['config_name'] == 'is_resume' )
 	{
@@ -101,15 +94,14 @@ while( $row = $result->fetch() )
 		$max_speed = ( int )$row['config_value'];
 	}
 }
-
-$file_src = $session_files['fileupload'][$file]['src'];
-$file_basename = $file;
+$file_src = $session_files['fileupload'][$filename]['src'];
+$file_basename = $filename;
 $directory = NV_UPLOADS_REAL_DIR;
 
 if( $is_zip )
 {
 	$upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir;
-	$subfile = nv_pathinfo_filename( $file );
+	$subfile = nv_pathinfo_filename( $filename );
 	$tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
 
 	$file_exists = file_exists( $tem_file );
@@ -160,7 +152,7 @@ require_once NV_ROOTDIR . '/includes/class/download.class.php';
 $download = new download( $file_src, $directory, $file_basename, $is_resume, $max_speed );
 if( $is_zip )
 {
-	$mtime = ( $mtime = filemtime( $session_files['fileupload'][$file]['src'] ) ) > 0 ? $mtime : NV_CURRENTTIME;
+	$mtime = ( $mtime = filemtime( $session_files['fileupload'][$filename]['src'] ) ) > 0 ? $mtime : NV_CURRENTTIME;
 	$download->set_property( 'mtime', $mtime );
 }
 $download->download_file();

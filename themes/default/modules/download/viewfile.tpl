@@ -27,6 +27,9 @@
 		{ROW.description}
 	</div>
 	<!-- END: introtext -->
+	<!-- BEGIN: filepdf -->
+	<iframe frameborder="0" height="600" scrolling="yes" src="{FILEPDF}" width="100%"></iframe>
+	<!-- END: filepdf -->
 	<div class="detail">
 		<em class="fa fa-tasks">&nbsp;</em> {LANG.listing_details}
 	</div>
