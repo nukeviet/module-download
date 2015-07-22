@@ -182,8 +182,6 @@ if( $nv_Request->isset_request( 'fdownload', 'get' ) )
 		$file = substr( $file, strlen( NV_BASE_SITEURL ) );
 		$file = NV_ROOTDIR . '/' . $file;
 
-		require_once NV_ROOTDIR . '/includes/class/download.class.php';
-
 		$download = new download( $file, NV_UPLOADS_REAL_DIR );
 
 		$download->download_file();

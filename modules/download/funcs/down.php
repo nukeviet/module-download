@@ -119,8 +119,6 @@ if( $is_zip )
 			@nv_deletefile( $tem_file );
 		}
 
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-
 		$zip = new PclZip( $tem_file );
 
 		$zip->add( $file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir );
@@ -146,8 +144,6 @@ if( $is_zip )
 		}
 	}
 }
-
-require_once NV_ROOTDIR . '/includes/class/download.class.php';
 
 $download = new download( $file_src, $directory, $file_basename, $is_resume, $max_speed );
 if( $is_zip )
