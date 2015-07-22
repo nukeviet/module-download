@@ -154,14 +154,4 @@
 		</div>
 	</div>
 </form>
-
-<script type="text/javascript">
-	$('#upload_fileupload').change(function(){
-	     $('#file_name').val($(this).val().match(/[-_\w]+[.][\w]+$/i)[0]);
-	});
-
-	$('#upload_fileimage').change(function(){
-	     $('#photo_name').val($(this).val().match(/[-_\w]+[.][\w]+$/i)[0]);
-	});
-</script>
 <!-- END: main -->

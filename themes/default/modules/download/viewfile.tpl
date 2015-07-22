@@ -150,32 +150,9 @@
 
 	<script type="text/javascript">
 		var sr = 0;
-		$('.hover-star').rating({
-			focus : function(value, link) {
-				var tip = $('#hover-test');
-				if (sr != 2) {
-					tip[0].data = tip[0].data || tip.html();
-					tip.html('{LANG.file_your_rating}: ' + link.title || 'value: ' + value);
-					sr = 1;
-				}
-			},
-			blur : function(value, link) {
-				var tip = $('#hover-test');
-				if (sr != 2) {
-					$('#hover-test').html(tip[0].data || '');
-					sr = 1;
-				}
-			},
-			callback : function(value, link) {
-				if (sr == 1) {
-					sr = 2;
-					$('.hover-star').rating('disable');
-					nv_sendrating('{ROW.id}', value);
-				}
-			}
-		});
-
-		$('.hover-star').rating('select', '{ROW.rating_point}');
+		var file_your_rating = '{LANG.file_your_rating}';
+		var rating_point = '{LANG.rating_point}';
+		var id = '{ROW.id}';
 	</script>
 
 	<!-- BEGIN: disablerating -->
@@ -200,12 +177,5 @@
 <!-- BEGIN: comment -->
 {CONTENT_COMMENT}
 <!-- END: comment -->
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
-});
-</script>
+
 <!-- END: main -->
