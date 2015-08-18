@@ -71,7 +71,7 @@ function nv_download_file(fr, flnm) {
 	download_hits = download_hits + 1;
 	document.getElementById('download_hits').innerHTML = download_hits;
 
-	window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&filename=" + flnm;
+	window.location.href = nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&filename=" + flnm;
 	return false;
 }
 
@@ -83,7 +83,7 @@ function nv_linkdirect(code) {
 	download_hits = download_hits + 1;
 	document.getElementById('download_hits').innerHTML = download_hits;
 
-	win = window.open(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=down&code=' + code, 'mydownload');
+	win = window.open(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=down&code=' + code, 'mydownload');
 	win.focus();
 	return false;
 }
@@ -91,7 +91,7 @@ function nv_linkdirect(code) {
 //  ---------------------------------------
 
 function nv_link_report(fid) {
-	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
+	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
 		alert(report_thanks_mess);
 	});
 	return false;
@@ -101,7 +101,7 @@ function nv_link_report(fid) {
 
 function nv_sendrating(fid, point) {
 	if (fid > 0 && point > 0 && point < 6) {
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'rating=' + fid + '_' + point, function(res) {
+		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'rating=' + fid + '_' + point, function(res) {
 			$("#stringrating").html(res);
 		});
 	}
