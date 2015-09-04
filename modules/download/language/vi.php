@@ -17,6 +17,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['page'] = 'Trang';
 $lang_module['unknown'] = 'N/A';
 $lang_module['author_name'] = 'Tác giả';
 $lang_module['author_email'] = 'Email tác giả';
@@ -88,7 +89,7 @@ $lang_module['file_upload_captcha'] = 'Mã an toàn';
 $lang_module['file_upload_captcha2'] = 'Chép lại Mã an toàn';
 $lang_module['file_upload_ok'] = 'File gửi lên của bạn đã được tiếp nhận. Xin cảm ơn!';
 $lang_module['categories'] = 'Danh mục';
-$lang_module['viewcat_download_hits'] = 'Lượt down';
+$lang_module['viewcat_download_hits'] = 'Lượt tải';
 $lang_module['viewcat_view_hits'] = 'Lượt xem';
 $lang_module['categories_viewall'] = 'Xem tất cả';
 $lang_module['search'] = 'Tìm kiếm dữ liệu';

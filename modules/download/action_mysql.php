@@ -113,6 +113,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 )ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
+('indexfile', 'viewcat_main_bottom'),
 ('is_addfile', '1'),
 ('is_upload', '1'),
 ('groups_upload', ''),

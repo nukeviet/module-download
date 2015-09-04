@@ -11,22 +11,24 @@
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 /**
- * theme_viewcat_download()
+ * theme_viewcat_main()
  *
- * @param mixed $array
+ * @param mixed $viewcat
+ * @param mixed $array_cats
+ * @param mixed $list_cats
  * @param mixed $download_config
- * @param mixed $subs
- * @param mixed $generate_page
  * @return
  */
-function theme_main_download( $array_cats, $list_cats, $download_config )
+function theme_viewcat_main( $viewcat, $array_cats, $list_cats, $download_config )
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head;
-	$xtpl = new XTemplate( 'main_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
+
+	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/download/' );
 	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
+
 	foreach( $array_cats as $cat )
 	{
 		if( empty( $cat['parentid'] ) )
@@ -84,6 +86,40 @@ function theme_main_download( $array_cats, $list_cats, $download_config )
 			$xtpl->parse( 'main.catbox.related' );
 			$xtpl->parse( 'main.catbox' );
 		}
+	}
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * theme_viewcat_list()
+ *
+ * @param mixed $array_files
+ * @return
+ */
+function theme_viewcat_list( $array_files, $page )
+{
+	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
+
+	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+
+	if( !empty( $array_files ) )
+	{
+		foreach( $array_files as $file )
+		{
+			$file['title0'] = nv_clean60( $file['title'], 30 );
+			$xtpl->assign( 'FILE', $file );
+			$xtpl->parse( 'main.loop' );
+		}
+	}
+
+	if( !empty( $page ) )
+	{
+		$xtpl->assign( 'PAGE', $page );
+		$xtpl->parse( 'main.page' );
 	}
 
 	$xtpl->parse( 'main' );

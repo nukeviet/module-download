@@ -148,6 +148,8 @@ function nv_mod_down_config()
 
 if( $op == 'main' )
 {
+	$page = 1; // Trang mặc định
+	$per_page = 20; // Số lượng bản ghi trên một trang
 	$catalias = '';
 	$filealias = '';
 	$catid = 0;
@@ -236,6 +238,10 @@ if( $op == 'main' )
 				$parentid = $c['parentid'];
 			}
 			sort( $array_mod_title, SORT_NUMERIC );
+		}
+		elseif( preg_match( '/^page\-([0-9]+)$/', ( isset( $array_op[0] ) ? $array_op[0] : '' ), $m ) )
+		{
+			$page = ( int )$m[1];
 		}
 	}
 }

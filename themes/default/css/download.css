@@ -45,12 +45,12 @@
 	width: 100%;
 }
 
-.category .glyphicon { 
-	margin-right:10px; 
+.category .glyphicon {
+	margin-right:10px;
 }
 
 .category .panel-body {
-	padding:0px; 
+	padding:0px;
 }
 .category .panel-body table tr td {
 	padding-left: 15px
@@ -58,4 +58,18 @@
 
 .category .panel-body .table {
 	margin-bottom: 0px;
+}
+
+.viewcat_list .list-title{
+	margin: 5px
+}
+
+.viewcat_list .list-content{
+	border-top: 1px dotted #DDDDDD;
+	margin: 0 5px 0 5px;
+	padding: 5px 0 5px 0;
+}
+
+.viewcat_list .pagination{
+	margin-top: 0
 }

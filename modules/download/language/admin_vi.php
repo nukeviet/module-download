@@ -18,6 +18,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['download_config'] = 'Cấu hình module';
+$lang_module['config_indexfile'] = 'Phương án hiển thị trên trang chủ';
+$lang_module['config_indexfile_main_bottom'] = 'Chuyên mục, tập tin khác nằm bên dưới';
+$lang_module['config_indexfile_list_new'] = 'Danh sách, tập tin mới lên trên';
+$lang_module['config_indexfile_none'] = 'Không hiển thị';
 $lang_module['config_is_addfile'] = 'Cho phép thêm file';
 $lang_module['config_is_uploadfile'] = 'Cho phép upload file lên server';
 $lang_module['config_allowfiletype'] = 'Loại file được cho phép tải lên';
