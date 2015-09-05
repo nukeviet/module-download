@@ -87,6 +87,7 @@ while( $row = $result->fetch() )
 		'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
 		'view_hits' => $row['view_hits'],
 		'download_hits' => $row['download_hits'],
+		'comment_hits' => $row['comment_hits'],
 		'more_link' =>  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 		'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
 		'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
@@ -129,6 +130,7 @@ if( ! empty( $subcats ) )
 				'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
 				'view_hits' => $row['view_hits'],
 				'download_hits' => ( int )$row['download_hits'],
+				'comment_hits' => ( int )$row['comment_hits'],
 				'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 				'edit_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'],
 				'del_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
@@ -141,21 +143,20 @@ if( ! empty( $subcats ) )
 				'title' => $list_cats[$sub]['title'],
 				'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$sub]['alias'],
 				'description' => $list_cats[$sub]['description'],
-				'posts' => $array_item
+				'items' => $array_item
 			);
 		}
 		unset( $array_item );
 	}
 }
-
 // Chuyen huong neu khong co noi dung gi
 if( empty( $num_items ) and empty( $subs ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	exit();
-}
-
-$contents = theme_viewcat_download( $array, $download_config, $subs, $generate_page );
+		exit();
+	}
+//$c['viewcat'] = 'viewcat_list';
+$contents = theme_viewcat_catmain( $c['viewcat'], $array, $subs, $generate_page );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

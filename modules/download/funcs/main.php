@@ -20,7 +20,6 @@ if( empty( $list_cats ) )
 }
 
 $contents = '';
-
 $download_config = nv_mod_down_config();
 
 $today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
@@ -176,7 +175,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 		}
 	}
 
-	$contents = theme_viewcat_main( $viewcat, $array_cats, $list_cats, $download_config );
+	$contents = theme_viewcat_main( $viewcat, $array_cats );
 }
 elseif( $viewcat == 'viewcat_list' )
 {

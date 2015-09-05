@@ -1,6 +1,9 @@
 <!-- BEGIN: main -->
 <div class="viewcat_list">
 	<div class="panel panel-default">
+		<!-- BEGIN: cat_data -->
+		<div class="panel-heading">{CAT.title}</div>
+		<!-- END: cat_data -->
 		<div class="row list-title">
 			<div class="col-md-10"><strong>{LANG.file_title}</strong></div>
 			<div class="col-md-6"><strong>{LANG.uploadtime}</strong></div>

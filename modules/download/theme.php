@@ -19,9 +19,9 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
  * @param mixed $download_config
  * @return
  */
-function theme_viewcat_main( $viewcat, $array_cats, $list_cats, $download_config )
+function theme_viewcat_main( $viewcat, $array_cats )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head;
+	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -96,15 +96,18 @@ function theme_viewcat_main( $viewcat, $array_cats, $list_cats, $download_config
  * theme_viewcat_list()
  *
  * @param mixed $array_files
+ * @param mixed $page
+ * @param mixed $cat_data
  * @return
  */
-function theme_viewcat_list( $array_files, $page )
+function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
 	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'CAT', $cat_data );
 
 	if( !empty( $array_files ) )
 	{
@@ -114,6 +117,11 @@ function theme_viewcat_list( $array_files, $page )
 			$xtpl->assign( 'FILE', $file );
 			$xtpl->parse( 'main.loop' );
 		}
+	}
+
+	if( !empty( $cat_data ) )
+	{
+		$xtpl->parse( 'main.cat_data' );
 	}
 
 	if( !empty( $page ) )
@@ -126,9 +134,9 @@ function theme_viewcat_list( $array_files, $page )
 	return $xtpl->text( 'main' );
 }
 
-function theme_viewcat_download( $array, $download_config, $subs, $generate_page )
+function theme_viewcat_catmain( $viewcat, $array, $subs, $generate_page )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file;
+	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $download_config, $list_cats;
 
 	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -141,43 +149,29 @@ function theme_viewcat_download( $array, $download_config, $subs, $generate_page
 		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
-	#view cat
+
+	// Hien thi chu de con
 	if( ! empty( $subs ) )
 	{
-		$i = 1;
-		foreach( $subs as $cat )
+		if( $viewcat == 'viewcat_main_bottom' )
 		{
-			$cat['current'] = 'current-cat';
-			$xtpl->assign( 'listsubcat', $cat );
-			if( ! empty( $cat['posts'] ) )
+			$xtpl->assign( 'SUBCAT', theme_viewcat_main( $viewcat, $subs ) );
+			$xtpl->parse( 'main.viewcat_main' );
+		}
+		elseif( $viewcat == 'viewcat_list' )
+		{
+			foreach( $subs as $subcat )
 			{
-				//post in subcat
-				$items = $cat['posts'];
-				#parse the first items
-				$thefirstcat = current( $items );
-				$xtpl->assign( 'itemcat', $thefirstcat );
-				if( ! empty( $thefirstcat['imagesrc'] ) )
+				if( !empty( $subcat['items'] ) )
 				{
-					$xtpl->parse( 'main.listsubcat.itemcat.image' );
+					$xtpl->assign( 'SUBCAT', theme_viewcat_list( $subcat['items'], '', $subcat ) );
+					$xtpl->parse( 'main.viewcat_list' );
 				}
-				foreach( $items as $item )
-				{
-					if( $item['id'] != $thefirstcat['id'] )
-					{
-						$xtpl->assign( 'loop', $item );
-						$xtpl->parse( 'main.listsubcat.itemcat.related.loop' );
-					}
-				}
-				$xtpl->parse( 'main.listsubcat.itemcat.related' );
-				$xtpl->parse( 'main.listsubcat.itemcat' );
-				//post in subcat
 			}
-
-			$xtpl->parse( 'main.listsubcat' );
-			$i = 0;
 		}
 	}
 
+	// Danh sach file trong chu de
 	if( ! empty( $array ) )
 	{
 		foreach( $array as $row )
