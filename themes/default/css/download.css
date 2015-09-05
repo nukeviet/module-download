@@ -13,7 +13,6 @@
 
 .block_download .introtext {
 	font: normal 13px arial, verdana, sans-serif;
-	padding: 10px 5px 5px 10px;
 	text-align: justify;
     max-height: 105px;
     overflow: hidden;
@@ -70,13 +69,13 @@
 }
 
 .viewcat_list .list-title{
-	margin: 5px
+	margin: 10px 0 5px 0
 }
 
 .viewcat_list .list-content{
 	border-top: 1px dotted #DDDDDD;
 	margin: 0 5px 0 5px;
-	padding: 5px 0 5px 0;
+	padding: 10px 0 10px 0;
 }
 
 .viewcat_list .pagination{

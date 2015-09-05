@@ -53,7 +53,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 {
 	global $module_data, $module_name, $module_info;
 
-	$sql = 'SELECT id,title,alias,description,groups_view,groups_download,viewcat,parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1 ORDER BY parentid,weight ASC';
+	$sql = 'SELECT id,title,alias,description,groups_view,groups_download,viewcat,numlink,parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1 ORDER BY parentid,weight ASC';
 
 	$list = nv_db_cache( $sql, 'id' );
 

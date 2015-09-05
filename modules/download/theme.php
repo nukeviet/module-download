@@ -233,21 +233,20 @@ function view_file( $row, $download_config, $content_comment )
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
 
-	if( isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
+	if( ! empty( $row['description'] ) )
 	{
-		$xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
-		$xtpl->parse( 'main.is_image' );
+		if( isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
+		{
+			$xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
+			$xtpl->parse( 'main.introtext.is_image' );
+		}
+		$xtpl->parse( 'main.introtext' );
 	}
 
     if( ! empty( $row['download_info'] ) )
     {
         $xtpl->parse( 'main.download_info' );
     }
-
-	if( ! empty( $row['description'] ) )
-	{
-		$xtpl->parse( 'main.introtext' );
-	}
 
 	if( $row['is_download_allow'] )
 	{

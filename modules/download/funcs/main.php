@@ -96,7 +96,6 @@ $contents = '';
 if( $viewcat == 'viewcat_main_bottom' )
 {
 	// View cat
-	$new_page = 3;
 	$array_cats = array();
 	foreach( $list_cats as $value )
 	{
@@ -126,7 +125,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 			{
 				$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' );
 				$db->order( 'uploadtime DESC' );
-				$db->limit( $new_page );
+				$db->limit( $value['numlink'] );
 
 				$result = $db->query( $db->sql() );
 

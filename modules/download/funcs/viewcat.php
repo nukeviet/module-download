@@ -104,14 +104,14 @@ if( $page > 1 )
 $subs = array();
 if( ! empty( $subcats ) )
 {
-	$db->sqlreset()
-		->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
-		->from( NV_PREFIXLANG . '_' . $module_data )
-		->order( 'uploadtime DESC' )
-		->limit( 3 );
-
 	foreach( $subcats as $sub )
 	{
+		$db->sqlreset()
+			->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
+			->from( NV_PREFIXLANG . '_' . $module_data )
+			->order( 'uploadtime DESC' )
+			->limit( $list_cats[$sub]['numlink'] );
+
 		$array_item = array();
 		$result = $db->query( $db->where( 'catid=' . $sub . ' AND status=1' )->sql() );
 		$i = 0;
