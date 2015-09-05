@@ -149,13 +149,14 @@ if( ! empty( $subcats ) )
 		unset( $array_item );
 	}
 }
+
 // Chuyen huong neu khong co noi dung gi
 if( empty( $num_items ) and empty( $subs ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-		exit();
-	}
-//$c['viewcat'] = 'viewcat_list';
+	exit();
+}
+
 $contents = theme_viewcat_catmain( $c['viewcat'], $array, $subs, $generate_page );
 
 include NV_ROOTDIR . '/includes/header.php';
