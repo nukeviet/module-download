@@ -26,6 +26,12 @@ if( $catid > 0 )
 		$stmt->execute();
 		$content = 'OK_' . $parentid;
 	}
+	elseif( $mod == 'numlink' and $new_vid >= 0 and $new_vid <= 20 )
+	{
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET numlink=' . $new_vid . ' WHERE id=' . $catid ;
+		$db->query( $sql );
+		$content = 'OK_' . $parentid;
+	}
 	nv_del_moduleCache( $module_name );
 }
 

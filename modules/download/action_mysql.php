@@ -93,6 +93,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  groups_view varchar(255) DEFAULT '',
  groups_download varchar(255) DEFAULT '',
  viewcat varchar(100) DEFAULT 'viewcat_main_bottom',
+ numlink smallint(4) DEFAULT '3',
  weight smallint(4) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),

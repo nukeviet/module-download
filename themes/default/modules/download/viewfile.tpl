@@ -1,7 +1,8 @@
 <!-- BEGIN: main -->
 
 <div class="block_download">
-	<h2>{ROW.title}</h2>
+	<h2 class="m-bottom">{ROW.title}</h2>
+	<!-- BEGIN: introtext -->
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<!-- BEGIN: is_image -->
@@ -24,7 +25,6 @@
 				</div>
 			</div>
 			<!-- END: is_image -->
-			<!-- BEGIN: introtext -->
 			<div class="introtext m-bottom">
 				{ROW.description}
 			</div>
@@ -47,9 +47,10 @@
 					$('.introtext').toggleClass("expand");
 				});
 			</script>
-			<!-- END: introtext -->
 		</div>
 	</div>
+	<!-- END: introtext -->
+
 	<!-- BEGIN: filepdf -->
 	<iframe frameborder="0" height="600" scrolling="yes" src="{FILEPDF}" width="100%"></iframe>
 	<!-- END: filepdf -->
