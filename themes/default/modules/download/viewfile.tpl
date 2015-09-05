@@ -157,7 +157,7 @@
 	<div class="info_download">
 		<!-- BEGIN: report -->
 		<div class="report pull-right">
-			<a href="javascript:void(0);" onclick="nv_link_report({ROW.id});">{LANG.report}</a>
+			<a href="javascript:void(0);" data-thanks="{LANG.report_thanks}" onclick="nv_link_report( $(this), {ROW.id} );">{LANG.report}</a>
 		</div>
 		<!-- END: report -->
 		<em class="fa fa-download">&nbsp;</em> {LANG.download_detail}

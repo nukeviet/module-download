@@ -90,9 +90,9 @@ function nv_linkdirect(code) {
 
 //  ---------------------------------------
 
-function nv_link_report(fid) {
+function nv_link_report($_this, fid) {
 	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
-		alert(report_thanks_mess);
+		alert($_this.data('thanks'));
 	});
 	return false;
 }
