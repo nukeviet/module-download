@@ -43,6 +43,7 @@ $lang_module['addcat_titlebox'] = 'Thêm chủ đề';
 $lang_module['category_cat_name'] = 'Tên chủ đề';
 $lang_module['category_cat_parent'] = 'Thuộc chủ đề';
 $lang_module['category_cat_maincat'] = 'Chủ đề chính';
+$lang_module['category_viewcat'] = 'Cách thể hiện';
 $lang_module['groups_view'] = 'Quyền xem';
 $lang_module['groups_download'] = 'Quyền tải file';
 $lang_module['description'] = 'Mô tả';

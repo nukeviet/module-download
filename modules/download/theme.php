@@ -158,7 +158,7 @@ function theme_viewcat_catmain( $viewcat, $array, $subs, $generate_page )
 			$xtpl->assign( 'SUBCAT', theme_viewcat_main( $viewcat, $subs ) );
 			$xtpl->parse( 'main.viewcat_main' );
 		}
-		elseif( $viewcat == 'viewcat_list' )
+		elseif( $viewcat == 'viewcat_list_new' )
 		{
 			foreach( $subs as $subcat )
 			{

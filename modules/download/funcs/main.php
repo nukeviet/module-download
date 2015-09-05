@@ -177,7 +177,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 
 	$contents = theme_viewcat_main( $viewcat, $array_cats );
 }
-elseif( $viewcat == 'viewcat_list' )
+elseif( $viewcat == 'viewcat_list_new' )
 {
 	$array_files = array();
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;

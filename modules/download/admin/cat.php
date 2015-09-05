@@ -590,6 +590,7 @@ foreach ( $_array_cat as $row )
 		'titlelink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['id'],
 		'numsub' => $numsub,
 		'parentid' => $parentid,
+		'viewcat' => $row['viewcat'],
 		'weight' => $weight,
 		'status' => $row['status'] ? ' checked="checked"' : ''
 	);
@@ -603,6 +604,11 @@ $xtpl->assign( 'TABLE_CAPTION', $caption );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'LANG', $lang_module );
 
+$array_viewcat = array(
+	'viewcat_main_bottom' => $lang_module['config_indexfile_main_bottom'],
+	'viewcat_list_new' => $lang_module['config_indexfile_list_new'],
+	'viewcat_none' => $lang_module['config_indexfile_none']
+);
 foreach( $list as $row )
 {
 	$xtpl->assign( 'ROW', $row );
@@ -611,6 +617,13 @@ foreach( $list as $row )
 	{
 		$xtpl->assign( 'WEIGHT', $weight );
 		$xtpl->parse( 'main.row.weight' );
+	}
+
+	foreach( $array_viewcat as $key => $value )
+	{
+		$sl = $key == $row['viewcat'] ? 'selected="selected"' : '';
+		$xtpl->assign( 'VIEWCAT', array( 'key' => $key, 'value' => $value, 'selected' => $sl ) );
+		$xtpl->parse( 'main.row.viewcat' );
 	}
 
 	$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;edit=1&amp;catid=' . $row['id'] );

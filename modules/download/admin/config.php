@@ -218,7 +218,7 @@ foreach( $array_config['groups_upload'] as $group )
 
 $array_indexfile = array(
 	'viewcat_main_bottom' => $lang_module['config_indexfile_main_bottom'],
-	'viewcat_list' => $lang_module['config_indexfile_list_new'],
+	'viewcat_list_new' => $lang_module['config_indexfile_list_new'],
 	'none' => $lang_module['config_indexfile_none']
 );
 foreach( $array_indexfile as $key => $value )
