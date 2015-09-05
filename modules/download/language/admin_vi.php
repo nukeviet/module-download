@@ -18,6 +18,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['download_config'] = 'Cấu hình module';
+$lang_module['config_indexfile'] = 'Phương án hiển thị trên trang chủ';
+$lang_module['config_indexfile_main_bottom'] = 'Chuyên mục, tập tin khác nằm bên dưới';
+$lang_module['config_indexfile_list_new'] = 'Danh sách, tập tin mới lên trên';
+$lang_module['config_indexfile_none'] = 'Không hiển thị';
 $lang_module['config_is_addfile'] = 'Cho phép thêm file';
 $lang_module['config_is_uploadfile'] = 'Cho phép upload file lên server';
 $lang_module['config_allowfiletype'] = 'Loại file được cho phép tải lên';
@@ -39,6 +43,8 @@ $lang_module['addcat_titlebox'] = 'Thêm chủ đề';
 $lang_module['category_cat_name'] = 'Tên chủ đề';
 $lang_module['category_cat_parent'] = 'Thuộc chủ đề';
 $lang_module['category_cat_maincat'] = 'Chủ đề chính';
+$lang_module['category_viewcat'] = 'Cách thể hiện';
+$lang_module['category_numlink'] = 'Số liên kết';
 $lang_module['groups_view'] = 'Quyền xem';
 $lang_module['groups_download'] = 'Quyền tải file';
 $lang_module['description'] = 'Mô tả';
@@ -118,3 +124,5 @@ $lang_module['siteinfo_users_send'] = 'Số file chờ kiểm duyệt';
 $lang_module['siteinfo_eror'] = 'Số báo cáo lỗi được gửi tới';
 $lang_module['siteinfo_comment'] = 'Số bình luận được gửi tới';
 $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ kiểm duyệt';
+
+$lang_module['notification_report'] = '<strong>%s</strong> đã thông báo tập tin <strong>%s</strong> bị lỗi';

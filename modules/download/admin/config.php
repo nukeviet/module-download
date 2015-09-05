@@ -20,6 +20,7 @@ $array_config = array();
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+	$array_config['indexfile'] = $nv_Request->get_title( 'indexfile', 'post', 'none' );
 	$array_config['is_addfile'] = $nv_Request->get_int( 'is_addfile', 'post', 0 );
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
@@ -213,6 +214,18 @@ foreach( $array_config['groups_upload'] as $group )
 {
 	$xtpl->assign( 'GROUPS_UPLOAD', $group );
 	$xtpl->parse( 'main.groups_upload' );
+}
+
+$array_indexfile = array(
+	'viewcat_main_bottom' => $lang_module['config_indexfile_main_bottom'],
+	'viewcat_list_new' => $lang_module['config_indexfile_list_new'],
+	'none' => $lang_module['config_indexfile_none']
+);
+foreach( $array_indexfile as $key => $value )
+{
+	$sl = $array_config['indexfile'] == $key ? 'selected="selected"' : '';
+	$xtpl->assign( 'INDEXFILE', array( 'key' => $key, 'value' => $value, 'selected' => $sl ) );
+	$xtpl->parse( 'main.indexfile' );
 }
 
 $xtpl->parse( 'main' );

@@ -13,9 +13,14 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 // Edit file
 if( $nv_Request->isset_request( 'edit', 'get' ) )
 {
+	$id = $nv_Request->get_int( 'id', 'get', 0 );
 	$report = $nv_Request->isset_request( 'report', 'get' );
 
-	$id = $nv_Request->get_int( 'id', 'get', 0 );
+	// Cap nhat trang thai thong bao
+	if( $report )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'report', $id );
+	}
 
 	$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$row = $db->query( $query )->fetch();
@@ -498,6 +503,9 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id );
+
+	// Xoa thong bao loi
+	nv_delete_notification( NV_LANG_DATA, $module_name, 'report', $id );
 
     nv_del_moduleCache( $module_name );
 

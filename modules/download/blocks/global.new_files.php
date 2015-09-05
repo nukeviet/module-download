@@ -82,9 +82,9 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 			if( ! empty( $list ) )
 			{
-				if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $file . '/block_new_files.tpl' ) )
+				if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $file . '/block_new_files.tpl' ) )
 				{
-					$block_theme = $module_info['template'];
+					$block_theme = $global_config['module_theme'];
 				}
 				else
 				{

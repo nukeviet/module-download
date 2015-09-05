@@ -87,6 +87,7 @@ while( $row = $result->fetch() )
 		'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
 		'view_hits' => $row['view_hits'],
 		'download_hits' => $row['download_hits'],
+		'comment_hits' => $row['comment_hits'],
 		'more_link' =>  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 		'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
 		'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
@@ -103,14 +104,14 @@ if( $page > 1 )
 $subs = array();
 if( ! empty( $subcats ) )
 {
-	$db->sqlreset()
-		->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
-		->from( NV_PREFIXLANG . '_' . $module_data )
-		->order( 'uploadtime DESC' )
-		->limit( 3 );
-
 	foreach( $subcats as $sub )
 	{
+		$db->sqlreset()
+			->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
+			->from( NV_PREFIXLANG . '_' . $module_data )
+			->order( 'uploadtime DESC' )
+			->limit( $list_cats[$sub]['numlink'] );
+
 		$array_item = array();
 		$result = $db->query( $db->where( 'catid=' . $sub . ' AND status=1' )->sql() );
 		$i = 0;
@@ -129,6 +130,7 @@ if( ! empty( $subcats ) )
 				'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
 				'view_hits' => $row['view_hits'],
 				'download_hits' => ( int )$row['download_hits'],
+				'comment_hits' => ( int )$row['comment_hits'],
 				'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 				'edit_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'],
 				'del_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
@@ -141,7 +143,7 @@ if( ! empty( $subcats ) )
 				'title' => $list_cats[$sub]['title'],
 				'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$sub]['alias'],
 				'description' => $list_cats[$sub]['description'],
-				'posts' => $array_item
+				'items' => $array_item
 			);
 		}
 		unset( $array_item );
@@ -155,7 +157,7 @@ if( empty( $num_items ) and empty( $subs ) )
 	exit();
 }
 
-$contents = theme_viewcat_download( $array, $download_config, $subs, $generate_page );
+$contents = theme_viewcat_catmain( $c['viewcat'], $array, $subs, $generate_page );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

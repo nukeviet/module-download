@@ -13,12 +13,20 @@
 
 .block_download .introtext {
 	font: normal 13px arial, verdana, sans-serif;
-	padding: 10px 5px 5px 10px;
-	text-align: justify
+	text-align: justify;
+    max-height: 105px;
+    overflow: hidden;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+.block_download div.expand {
+    max-height: 900px;
 }
 
 .block_download .dl-horizontal dt, .block_download .dl-horizontal dd {
-	padding: 8px;
+	padding: 3px;
 }
 
 .block_download .rating {
@@ -45,12 +53,12 @@
 	width: 100%;
 }
 
-.category .glyphicon { 
-	margin-right:10px; 
+.category .glyphicon {
+	margin-right:10px;
 }
 
 .category .panel-body {
-	padding:0px; 
+	padding:0px;
 }
 .category .panel-body table tr td {
 	padding-left: 15px
@@ -58,4 +66,18 @@
 
 .category .panel-body .table {
 	margin-bottom: 0px;
+}
+
+.viewcat_list .list-title{
+	margin: 10px 0 5px 0
+}
+
+.viewcat_list .list-content{
+	border-top: 1px dotted #DDDDDD;
+	margin: 0 5px 0 5px;
+	padding: 10px 0 10px 0;
+}
+
+.viewcat_list .pagination{
+	margin-top: 0
 }
