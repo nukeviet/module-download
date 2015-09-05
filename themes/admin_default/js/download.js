@@ -262,3 +262,17 @@ function nv_linkdirect_additem() {
 	$("#linkdirect_items").append(newitem);
 	linkdirect_items++;
 }
+
+function nv_viewcat_change( catid, mod ) {
+	var nv_timer = nv_settimeout_disable('id_' + mod + '_' + catid, 5000);
+	var new_vid = $('#id_' + mod + '_' + catid).val();
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+		var r_split = res.split('_');
+		if (r_split[0] != 'OK') {
+			alert(nv_is_change_act_confirm[2]);
+		}
+		clearTimeout(nv_timer);
+		window.location.href = window.location.href;
+	});
+	return;
+}

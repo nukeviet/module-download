@@ -14,6 +14,16 @@
 				</tfoot>
 				<tbody>
 					<tr>
+						<td>{LANG.config_indexfile}</td>
+						<td>
+							<select class="form-control" name="indexfile">
+								<!-- BEGIN: indexfile -->
+								<option value="{INDEXFILE.key}" {INDEXFILE.selected}>{INDEXFILE.value}</option>
+								<!-- END: indexfile -->
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<td>{LANG.config_is_addfile}</td>
 						<td><input name="is_addfile" value="1" type="checkbox"{DATA.is_addfile} /></td>
 					</tr>

@@ -20,7 +20,6 @@ if( empty( $list_cats ) )
 }
 
 $contents = '';
-
 $download_config = nv_mod_down_config();
 
 $today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
@@ -91,88 +90,149 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 $page_title = $mod_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
+$viewcat = $download_config['indexfile'];
+$contents = '';
 
-// View cat
-$new_page = 3;
-$array_cats = array();
-foreach( $list_cats as $value )
+if( $viewcat == 'viewcat_main_bottom' )
 {
-	if( empty( $value['parentid'] ) )
+	// View cat
+	$new_page = 3;
+	$array_cats = array();
+	foreach( $list_cats as $value )
 	{
-		$catid_i = $value['id'];
-		if( empty( $value['subcats'] ) )
+		if( empty( $value['parentid'] ) )
 		{
-			$in = 'catid=' . $catid_i;
+			$catid_i = $value['id'];
+			if( empty( $value['subcats'] ) )
+			{
+				$in = 'catid=' . $catid_i;
+			}
+			else
+			{
+				$in = $value['subcats'];
+				$in[] = $catid_i;
+				$in = implode( ',', $in );
+				$in = 'catid IN (' . $in . ')';
+			}
+
+			$db->sqlreset()
+				->select( 'COUNT(*)' )
+				->from( NV_PREFIXLANG . '_' . $module_data )
+				->where( $in . ' AND status=1 ' );
+
+			$num_items = $db->query( $db->sql() )->fetchColumn();
+
+			if( $num_items )
+			{
+				$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' );
+				$db->order( 'uploadtime DESC' );
+				$db->limit( $new_page );
+
+				$result = $db->query( $db->sql() );
+
+				$array_item = array();
+				while( $row = $result->fetch() )
+				{
+					$uploadtime = ( int )$row['uploadtime'];
+					if( $uploadtime >= $today )
+					{
+						$uploadtime = $lang_module['today'] . ', ' . date( 'H:i', $row['uploadtime'] );
+					}
+					elseif( $uploadtime >= $yesterday )
+					{
+						$uploadtime = $lang_module['yesterday'] . ', ' . date( 'H:i', $row['uploadtime'] );
+					}
+					else
+					{
+						$uploadtime = nv_date( 'd/m/Y H:i', $row['uploadtime'] );
+					}
+
+					$array_item[$row['id']] = array(
+						'id' => ( int )$row['id'],
+						'title' => $row['title'],
+						'introtext' => $row['introtext'],
+						'uploadtime' => $uploadtime,
+						'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'],
+						'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : '',
+						'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
+						'view_hits' => ( int )$row['view_hits'],
+						'download_hits' => ( int )$row['download_hits'],
+						'comment_hits' => ( int )$row['comment_hits'],
+						'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
+						'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
+						'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
+					);
+				}
+
+				$array_cats[$catid_i] = array();
+				$array_cats[$catid_i]['id'] = $value['id'];
+				$array_cats[$catid_i]['title'] = $value['title'];
+				$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
+				$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
+				$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
+				$array_cats[$catid_i]['items'] = $array_item;
+			}
+		}
+	}
+
+	$contents = theme_viewcat_main( $viewcat, $array_cats );
+}
+elseif( $viewcat == 'viewcat_list_new' )
+{
+	$array_files = array();
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
+	// Fetch Limit
+	$db->sqlreset()
+	  ->select( 'COUNT(*)' )
+	  ->from( NV_PREFIXLANG . '_' . $module_data )
+	  ->where( 'status=1' );
+
+	$all_page = $db->query( $db->sql() )->fetchColumn();
+
+	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
+	  ->order( 'uploadtime DESC' )
+	  ->limit( $per_page )
+	  ->offset( ($page - 1) * $per_page );
+
+	$_query = $db->query( $db->sql() );
+
+	while( $row = $_query->fetch() )
+	{
+		$uploadtime = ( int )$row['uploadtime'];
+		if( $uploadtime >= $today )
+		{
+			$uploadtime = $lang_module['today'] . ', ' . date( 'H:i', $row['uploadtime'] );
+		}
+		elseif( $uploadtime >= $yesterday )
+		{
+			$uploadtime = $lang_module['yesterday'] . ', ' . date( 'H:i', $row['uploadtime'] );
 		}
 		else
 		{
-			$in = $value['subcats'];
-			$in[] = $catid_i;
-			$in = implode( ',', $in );
-			$in = 'catid IN (' . $in . ')';
+			$uploadtime = nv_date( 'd/m/Y H:i', $row['uploadtime'] );
 		}
 
-		$db->sqlreset()
-			->select( 'COUNT(*)' )
-			->from( NV_PREFIXLANG . '_' . $module_data )
-			->where( $in . ' AND status=1 ' );
-
-		$num_items = $db->query( $db->sql() )->fetchColumn();
-
-		if( $num_items )
-		{
-			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' );
-			$db->order( 'uploadtime DESC' );
-			$db->limit( $new_page );
-
-			$result = $db->query( $db->sql() );
-
-			$array_item = array();
-			while( $row = $result->fetch() )
-			{
-				$uploadtime = ( int )$row['uploadtime'];
-				if( $uploadtime >= $today )
-				{
-					$uploadtime = $lang_module['today'] . ', ' . date( 'H:i', $row['uploadtime'] );
-				}
-				elseif( $uploadtime >= $yesterday )
-				{
-					$uploadtime = $lang_module['yesterday'] . ', ' . date( 'H:i', $row['uploadtime'] );
-				}
-				else
-				{
-					$uploadtime = nv_date( 'd/m/Y H:i', $row['uploadtime'] );
-				}
-
-				$array_item[$row['id']] = array(
-					'id' => ( int )$row['id'],
-					'title' => $row['title'],
-					'introtext' => $row['introtext'],
-					'uploadtime' => $uploadtime,
-					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'],
-					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : '',
-					'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
-					'view_hits' => ( int )$row['view_hits'],
-					'download_hits' => ( int )$row['download_hits'],
-					'comment_hits' => ( int )$row['comment_hits'],
-					'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
-					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
-					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
-				);
-			}
-
-			$array_cats[$catid_i] = array();
-			$array_cats[$catid_i]['id'] = $value['id'];
-			$array_cats[$catid_i]['title'] = $value['title'];
-			$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
-			$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
-			$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
-			$array_cats[$catid_i]['items'] = $array_item;
-		}
+		$array_files[$row['id']] = array(
+			'id' => ( int )$row['id'],
+			'title' => $row['title'],
+			'introtext' => $row['introtext'],
+			'uploadtime' => $uploadtime,
+			'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'],
+			'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : '',
+			'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
+			'view_hits' => ( int )$row['view_hits'],
+			'download_hits' => ( int )$row['download_hits'],
+			'comment_hits' => ( int )$row['comment_hits'],
+			'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
+			'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
+			'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
+		);
 	}
+	$page_title = $page > 1 ? $page_title . ' - ' . $lang_module['page'] . ' ' . $page : $page_title;
+	$page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+	$contents = theme_viewcat_list( $array_files, $page );
 }
-
-$contents = theme_main_download( $array_cats, $list_cats, $download_config );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
