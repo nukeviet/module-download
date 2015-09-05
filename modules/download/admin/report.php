@@ -95,12 +95,19 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
+	nv_status_notification( NV_LANG_DATA, $module_name, 'report', $id );
+
 	die( 'OK' );
 }
 
 //All del
 if( $nv_Request->isset_request( 'alldel', 'post' ) )
 {
+	$query = $db->query( 'SELECT fid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report' );
+	while( list( $fid ) = $query->fetch( 3 ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'report', $fid );
+	}
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report' );
 	die( 'OK' );
 }
