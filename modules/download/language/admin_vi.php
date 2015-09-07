@@ -17,6 +17,9 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['search'] = 'Tìm kiếm';
+$lang_module['search_keywods'] = 'Từ khóa tìm kiếm';
+$lang_module['search_per_page'] = 'Số file hiển thị';
 $lang_module['download_config'] = 'Cấu hình module';
 $lang_module['config_indexfile'] = 'Phương án hiển thị trên trang chủ';
 $lang_module['config_indexfile_main_bottom'] = 'Chuyên mục, tập tin khác nằm bên dưới';
@@ -51,6 +54,7 @@ $lang_module['description'] = 'Mô tả';
 $lang_module['cat_save'] = 'Lưu lại';
 $lang_module['download_catmanager'] = 'Quản lý chủ đề';
 $lang_module['category_cat_sub'] = 'chủ đề con';
+$lang_module['category_cat_c'] = 'Chọn chủ đề';
 $lang_module['category_cat_active'] = 'Hoạt động';
 $lang_module['category_cat_feature'] = 'Chức năng';
 $lang_module['table_caption1'] = 'Danh sách các chủ đề là chủ đề chính';
