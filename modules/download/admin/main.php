@@ -514,7 +514,16 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 }
 
 // List file
+$page_title = $lang_module['download_filemanager'];
+
+$where = '';
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+$array_search = array(
+	'q' => $nv_Request->get_title( 'q', 'get', '' ),
+	'catid' => $nv_Request->get_int( 'catid', 'get', 0 ),
+	'active' => $nv_Request->get_int( 'active', 'get', '-1' ),
+	'per_page' => $nv_Request->get_int( 'per_page', 'get', '30' )
+);
 
 $listcats = nv_listcats( 0 );
 if( empty( $listcats ) )
@@ -523,47 +532,31 @@ if( empty( $listcats ) )
 	exit();
 }
 
+if( !empty( $array_search['q'] ) )
+{
+	$base_url .= '&q=' . $array_search['q'];
+	$where .= ' AND title LIKE "%' . $array_search['q'] . '%" OR description LIKE "%' . $array_search['q'] . '%" OR introtext LIKE "%' . $array_search['q'] . '%" OR author_name LIKE "%' . $array_search['q'] . '%" OR author_email LIKE "%' . $array_search['q'] . '%"';
+}
+if( !empty( $array_search['catid'] ) )
+{
+	$base_url .= '&catid=' . $array_search['catid'];
+	$where .= ' AND catid=' . $array_search['catid'];
+}
+if( $array_search['active'] >= 0 )
+{
+	$base_url .= '&active=' . $array_search['active'];
+	$where .= ' AND status=' . $array_search['active'];
+}
+
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( NV_PREFIXLANG . '_' . $module_data );
-
-if( $nv_Request->isset_request( 'catid', 'get' ) )
-{
-	$catid = $nv_Request->get_int( 'catid', 'get', 0 );
-	if( ! $catid or ! isset( $listcats[$catid] ) )
-	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-		exit();
-	}
-
-	$page_title = sprintf( $lang_module['file_list_by_cat'], $listcats[$catid]['title'] );
-	$base_url .= '&amp;catid=' . $catid;
-
-	$db->where( 'catid=' . $catid );
-}
-else
-{
-	$page_title = $lang_module['download_filemanager'];
-}
+	->from( NV_PREFIXLANG . '_' . $module_data )
+	->where( '1=1' . $where );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-if( empty( $num_items ) )
-{
-	if( $catid )
-	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-		exit();
-	}
-	else
-	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add' );
-		exit();
-	}
-}
-
 $page = $nv_Request->get_int( 'page', 'get', 1 );
-$per_page = 30;
+$per_page = $array_search['per_page'];
 
 $db->select( '*' )
 	->order( 'uploadtime DESC' )
@@ -595,7 +588,16 @@ $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'ADD_NEW_FILE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
+$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'SEARCH', $array_search );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 
 if( ! empty( $array ) )
 {
@@ -605,6 +607,31 @@ if( ! empty( $array ) )
 		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] );
 		$xtpl->parse( 'main.row' );
 	}
+}
+
+foreach( $listcats as $cat )
+{
+	$cat['selected'] = $cat['id'] == $array_search['catid'] ? 'selected="selected"' : '';
+	$xtpl->assign( 'LISTCATS', $cat );
+	$xtpl->parse( 'main.catid' );
+}
+
+$array_active = array(
+	'1' => $lang_global['yes'],
+	'0' => $lang_global['no']
+);
+foreach( $array_active as $key => $value )
+{
+	$sl = $array_search['active'] == $key ? 'selected="selected"' : '';
+	$xtpl->assign( 'ACTIVE', array( 'key' => $key, 'value' => $value, 'selected' => $sl ) );
+	$xtpl->parse( 'main.active' );
+}
+
+for( $i = 5; $i <= 300; $i+=5 )
+{
+	$sl = $array_search['per_page'] == $i ? 'selected="selected"' : '';
+	$xtpl->assign( 'PER_PAGE', array( 'key' => $i, 'selected' => $sl ) );
+	$xtpl->parse( 'main.per_page' );
 }
 
 if( ! empty( $generate_page ) )
