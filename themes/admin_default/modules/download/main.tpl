@@ -36,7 +36,7 @@
 			<div class="col-xs-24 col-md-3">
 				<div class="form-group">
 					<select class="form-control" name="per_page">
-						<option value="">---{LANG.search_per_page}---</option>
+						<option value="30">---{LANG.search_per_page}---</option>
 						<!-- BEGIN: per_page -->
 						<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.key}</option>
 						<!-- END: per_page -->
