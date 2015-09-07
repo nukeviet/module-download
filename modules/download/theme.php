@@ -104,7 +104,9 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
-	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
+	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
+
+	$xtpl = new XTemplate(  $viewcat. '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'CAT', $cat_data );

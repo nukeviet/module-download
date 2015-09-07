@@ -81,3 +81,41 @@
 .viewcat_list .pagination{
 	margin-top: 0
 }
+
+/* div table */
+.divTable {
+	width: 100%;
+	display: table;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.divTable .divTitle {
+	display: table-caption;
+	text-align: center;
+	font-weight: bold;
+	font-size: larger;
+}
+.divTable .divHeading {
+	display: table-row;
+	font-weight: bold;
+	border-bottom-width: 2px;
+}
+.divTable .divHeading .Cell {
+	border-bottom-width: 2px;
+}
+.divTable .Row {
+	display: table-row;
+}
+.divTable .Row:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+.divTable .Row:hover {
+	background-color: #f5f5f5;
+	cursor: default
+}
+.divTable .Cell {
+	display: table-cell;
+	border: 1px solid #ddd;
+	border-width: thin;
+	padding: 8px;
+}
