@@ -93,6 +93,7 @@ $lang_module['file_upload_ok'] = 'File gửi lên của bạn đã được ti�
 $lang_module['categories'] = 'Danh mục';
 $lang_module['viewcat_download_hits'] = 'Lượt tải';
 $lang_module['viewcat_view_hits'] = 'Lượt xem';
+$lang_module['viewcat_listfile'] = 'Danh sách tập tin thuộc chủ đề "%s"';
 $lang_module['categories_viewall'] = 'Xem tất cả';
 $lang_module['search'] = 'Tìm kiếm dữ liệu';
 $lang_module['search_key'] = 'Từ khóa';

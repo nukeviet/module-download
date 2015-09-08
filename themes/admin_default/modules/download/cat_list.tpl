@@ -30,7 +30,7 @@
 						<option value="{WEIGHT.pos}"{WEIGHT.selected}>{WEIGHT.pos}</option>
 						<!-- END: weight -->
 					</select></td>
-					<td><strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub} </td>
+					<td><strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub_str} </td>
 					<td> {ROW.parentid} </td>
 					<td>
 						<select name="viewcat" class="form-control" id="id_viewcat_{ROW.id}" onchange="nv_viewcat_change( {ROW.id}, 'viewcat' )">

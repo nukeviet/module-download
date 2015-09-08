@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+
 <!-- BEGIN: catbox -->
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -50,4 +51,10 @@
 	<!-- END: related -->
 </div>
 <!-- END: catbox -->
+
+<!-- BEGIN: filelist -->
+<h2 class="m-bottom">{CAT_TITLE}</h2>
+{FILE_LIST}
+<!-- END: filelist -->
+
 <!-- END: main -->

@@ -19,7 +19,7 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
  * @param mixed $download_config
  * @return
  */
-function theme_viewcat_main( $viewcat, $array_cats )
+function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat_data = array(), $generate_page = '' )
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
 
@@ -40,7 +40,7 @@ function theme_viewcat_main( $viewcat, $array_cats )
 				$i = 0;
 				foreach( $list_cats as $subcat )
 				{
-					if( $subcat['parentid'] == $cat['id'] )
+					if( $subcat['parentid'] == $cat['catid'] )
 					{
 						$subcat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $subcat['alias'];
 						$xtpl->assign( 'listsubcat', $subcat );
@@ -88,6 +88,17 @@ function theme_viewcat_main( $viewcat, $array_cats )
 		}
 	}
 
+	// Danh sach file trong chu de
+	if( ! empty( $array_files ) )
+	{
+		if( !empty( $cat_data ) )
+		{
+			$xtpl->assign( 'CAT_TITLE', sprintf( $lang_module['viewcat_listfile'], $cat_data['title'] ) );
+		}
+		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page ) );
+		$xtpl->parse( 'main.filelist' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -130,79 +141,6 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 	{
 		$xtpl->assign( 'PAGE', $page );
 		$xtpl->parse( 'main.page' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-function theme_viewcat_catmain( $viewcat, $array, $subs, $generate_page )
-{
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $download_config, $list_cats;
-
-	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/download/' );
-	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
-
-	if( $download_config['is_addfile_allow'] )
-	{
-		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
-		$xtpl->parse( 'main.is_addfile_allow' );
-	}
-
-	// Hien thi chu de con
-	if( ! empty( $subs ) )
-	{
-		if( $viewcat == 'viewcat_main_bottom' )
-		{
-			$xtpl->assign( 'SUBCAT', theme_viewcat_main( $viewcat, $subs ) );
-			$xtpl->parse( 'main.viewcat_main' );
-		}
-		elseif( $viewcat == 'viewcat_list_new' )
-		{
-			foreach( $subs as $subcat )
-			{
-				if( !empty( $subcat['items'] ) )
-				{
-					$xtpl->assign( 'SUBCAT', theme_viewcat_list( $subcat['items'], '', $subcat ) );
-					$xtpl->parse( 'main.viewcat_list' );
-				}
-			}
-		}
-	}
-
-	// Danh sach file trong chu de
-	if( ! empty( $array ) )
-	{
-		foreach( $array as $row )
-		{
-			$xtpl->assign( 'listpostcat', $row );
-
-			if( ! empty( $row['author_name'] ) )
-			{
-				$xtpl->parse( 'main.row.author_name' );
-			}
-
-			if( ! empty( $row['imagesrc'] ) )
-			{
-				$xtpl->parse( 'main.listpostcat.image' );
-			}
-
-			if( ! empty( $row['edit_link'] ) )
-			{
-				$xtpl->parse( 'main.listpostcat.is_admin' );
-			}
-
-			$xtpl->parse( 'main.listpostcat' );
-		}
-	}
-
-	if( ! empty( $generate_page ) )
-	{
-		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-		$xtpl->parse( 'main.generate_page' );
 	}
 
 	$xtpl->parse( 'main' );

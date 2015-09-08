@@ -569,11 +569,11 @@ foreach ( $_array_cat as $row )
 	$numsub = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $row['id'] )->fetchColumn();
 	if( $numsub )
 	{
-		$numsub = ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $row['id'] . '">' . $numsub . ' ' . $lang_module['category_cat_sub'] . '</a>)';
+		$numsub_str = ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $row['id'] . '">' . $numsub . ' ' . $lang_module['category_cat_sub'] . '</a>)';
 	}
 	else
 	{
-		$numsub = '';
+		$numsub_str = '';
 	}
 
 	$weight = array();
@@ -589,6 +589,7 @@ foreach ( $_array_cat as $row )
 		'title' => $row['title'],
 		'titlelink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['id'],
 		'numsub' => $numsub,
+		'numsub_str' => $numsub_str,
 		'parentid' => $parentid,
 		'viewcat' => $row['viewcat'],
 		'numlink' => $row['numlink'],
@@ -605,11 +606,6 @@ $xtpl->assign( 'TABLE_CAPTION', $caption );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'LANG', $lang_module );
 
-$array_viewcat = array(
-	'viewcat_main_bottom' => $lang_module['config_indexfile_main_bottom'],
-	'viewcat_list_new' => $lang_module['config_indexfile_list_new'],
-	'viewcat_none' => $lang_module['config_indexfile_none']
-);
 foreach( $list as $row )
 {
 	$xtpl->assign( 'ROW', $row );
@@ -618,6 +614,14 @@ foreach( $list as $row )
 	{
 		$xtpl->assign( 'WEIGHT', $weight );
 		$xtpl->parse( 'main.row.weight' );
+	}
+
+	$array_viewcat = array(
+		'viewcat_list_new' => $lang_module['config_indexfile_list_new']
+	);
+	if( $row['numsub'] > 0 )
+	{
+		$array_viewcat['viewcat_main_bottom'] = $lang_module['config_indexfile_main_bottom'];
 	}
 
 	foreach( $array_viewcat as $key => $value )
