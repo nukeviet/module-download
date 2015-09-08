@@ -13,9 +13,10 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 
 $list_cats = nv_list_cats( true );
+$download_config = nv_mod_down_config();
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
-$per_page = 15;
+$per_page = $download_config['per_page_child'];
 
 $key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );
 $cat = $nv_Request->get_int( 'cat', 'post', 0 );
@@ -122,7 +123,7 @@ if( ! empty( $num_items ) )
 	}
 	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
-	$contents = theme_viewcat_download( $array, $download_config, '', $generate_page );
+	$contents = theme_viewcat_list( $array, $generate_page );
 	if( $page > 1 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;

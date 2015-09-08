@@ -21,6 +21,7 @@ if( empty( $list_cats ) )
 
 $contents = '';
 $download_config = nv_mod_down_config();
+$per_page = $download_config['per_page_home'];
 
 $today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 $yesterday = $today - 86400;
