@@ -40,7 +40,7 @@ function theme_viewcat_main( $viewcat, $array_cats )
 				$i = 0;
 				foreach( $list_cats as $subcat )
 				{
-					if( $subcat['parentid'] == $cat['id'] )
+					if( $subcat['parentid'] == $cat['catid'] )
 					{
 						$subcat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $subcat['alias'];
 						$xtpl->assign( 'listsubcat', $subcat );

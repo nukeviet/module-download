@@ -143,6 +143,7 @@ if( ! empty( $subcats ) )
 				'title' => $list_cats[$sub]['title'],
 				'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$sub]['alias'],
 				'description' => $list_cats[$sub]['description'],
+				'subcats' => $list_cats[$sub]['subcats'],
 				'items' => $array_item
 			);
 		}
