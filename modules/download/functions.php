@@ -149,7 +149,6 @@ function nv_mod_down_config()
 if( $op == 'main' )
 {
 	$page = 1; // Trang mặc định
-	$per_page = 20; // Số lượng bản ghi trên một trang
 	$catalias = '';
 	$filealias = '';
 	$catid = 0;

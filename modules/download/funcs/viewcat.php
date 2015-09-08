@@ -44,7 +44,7 @@ $page_title = $mod_title = $c['title'];
 $key_words = $module_info['keywords'];
 $description = $c['description'];
 
-$per_page = 15;
+$per_page = $download_config['per_page_child'];
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias;
 
 if( $viewcat == 'viewcat_main_bottom' )

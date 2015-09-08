@@ -22,6 +22,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$array_config['indexfile'] = $nv_Request->get_title( 'indexfile', 'post', 'none' );
 	$array_config['viewlist_type'] = $nv_Request->get_title( 'viewlist_type', 'post', 'list' );
+	$array_config['per_page_home'] = $nv_Request->get_int( 'per_page_home', 'post', 20 );
+	$array_config['per_page_child'] = $nv_Request->get_int( 'per_page_child', 'post', 20 );
 	$array_config['is_addfile'] = $nv_Request->get_int( 'is_addfile', 'post', 0 );
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );

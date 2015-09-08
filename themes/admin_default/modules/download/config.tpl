@@ -32,6 +32,14 @@
 						</td>
 					</tr>
 					<tr>
+						<td>{LANG.config_per_page_home}</td>
+						<td><input type="number" name="per_page_home" value="{DATA.per_page_home}" class="form-control" /></td>
+					</tr>
+					<tr>
+						<td>{LANG.config_per_page_child}</td>
+						<td><input type="number" name="per_page_child" value="{DATA.per_page_child}" class="form-control" /></td>
+					</tr>
+					<tr>
 						<td>{LANG.config_is_addfile}</td>
 						<td><input name="is_addfile" value="1" type="checkbox"{DATA.is_addfile} /></td>
 					</tr>
