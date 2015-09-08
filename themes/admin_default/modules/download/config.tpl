@@ -16,14 +16,14 @@
 					<tr>
 						<td>{LANG.config_indexfile}</td>
 						<td>
-							<select class="form-control" name="indexfile" id="indexfile">
+							<select class="form-control" name="indexfile">
 								<!-- BEGIN: indexfile -->
 								<option value="{INDEXFILE.key}" {INDEXFILE.selected}>{INDEXFILE.value}</option>
 								<!-- END: indexfile -->
 							</select>
 						</td>
 					</tr>
-					<tr id="viewlist_type" <!-- BEGIN: display_viewlist_type -->style="display: none"<!-- END: display_viewlist_type --> >
+					<tr>
 						<td>{LANG.config_viewlist_type}</td>
 						<td>
 							<!-- BEGIN: viewlist_type -->
@@ -100,15 +100,4 @@
 		</div>
 	</form>
 </div>
-<script>
-	$('#indexfile').change(function(){
-		var value = $(this).val();
-		if( value == 'viewcat_list_new' ){
-			$('#viewlist_type').show();
-		}
-		else{
-			$('#viewlist_type').hide();
-		}
-	});
-</script>
 <!-- END: main -->
