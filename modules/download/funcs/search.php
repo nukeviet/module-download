@@ -122,7 +122,7 @@ if( ! empty( $num_items ) )
 	}
 	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
-	$contents = theme_viewcat_download( $array, $download_config, '', $generate_page );
+	$contents = theme_viewcat_list( $array, $generate_page );
 	if( $page > 1 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
