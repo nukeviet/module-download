@@ -135,3 +135,4 @@ $lang_module['siteinfo_comment'] = 'Số bình luận được gửi tới';
 $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ kiểm duyệt';
 
 $lang_module['notification_report'] = '<strong>%s</strong> đã thông báo tập tin <strong>%s</strong> bị lỗi';
+$lang_module['notification_upload'] = '<strong>%s</strong> đã gửi tập tin <strong>%s</strong> lên hệ thống';

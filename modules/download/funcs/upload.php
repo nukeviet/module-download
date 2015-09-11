@@ -280,18 +280,23 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$data_insert['fileimage'] = $fileimage;
 				$data_insert['copyright'] = $array['copyright'];
 
-				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
+				$file_id = $db->insert_id( $sql, 'id', $data_insert );
+
+				if( ! $file_id )
 				{
 					$is_error = true;
 					$error = $lang_module['upload_error3'];
 				}
 				else
 				{
-					$contents = "<div class=\"info_exit\">" . $lang_module['file_upload_ok'] . "</div>";
-					$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
-
 					$user_post = defined( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " . $client_info['ip'] . $user_post, 0 );
+
+					$user_post = defined( "NV_IS_USER" ) ? $user_info['userid'] : 0;
+					nv_insert_notification( $module_name, 'upload_new', array( 'title' => $array['title'] ), $file_id, 0, $user_post, 1 );
+
+					$url_back = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
+					nv_theme_alert( $lang_module['file_upload_success_title'], $lang_module['file_upload_success_content'], 'info', $url_back );
 
 					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_site_theme( $contents );

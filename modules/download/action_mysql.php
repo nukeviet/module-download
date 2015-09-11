@@ -63,7 +63,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- catid smallint(5) unsigned NOT NULL DEFAULT '0',
+ catid int(10) unsigned NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  description mediumtext NOT NULL,
  introtext text NOT NULL,

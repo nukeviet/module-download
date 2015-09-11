@@ -368,3 +368,63 @@ function theme_viewpdf( $filename )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
+
+/**
+ * nv_theme_alert()
+ *
+ * @param mixed $message
+ * @param mixed $type
+ * @return
+ */
+function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5 )
+{
+	global $module_file, $module_info, $lang_module, $page_title;
+
+	$xtpl = new XTemplate( 'alert.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'CONTENT', $message_content );
+
+	if( $type == 'success' )
+	{
+		$xtpl->parse( 'main.success' );
+	}
+	elseif( $type == 'warning' )
+	{
+		$xtpl->parse( 'main.warning' );
+	}
+	elseif( $type == 'danger' )
+	{
+		$xtpl->parse( 'main.danger' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.info' );
+	}
+
+	if( !empty( $message_title ) )
+	{
+		$page_title = $message_title;
+		$xtpl->assign( 'TITLE', $message_title );
+		$xtpl->parse( 'main.title' );
+	}
+	else
+	{
+		$page_title = $module_info['custom_title'];
+	}
+
+	if( !empty( $url_back ) )
+	{
+		$xtpl->assign( 'TIME', $time_back );
+		$xtpl->assign( 'URL', $url_back );
+		$xtpl->parse( 'main.url_back' );
+		$xtpl->parse( 'main.url_back_button' );
+	}
+
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include (NV_ROOTDIR . "/includes/header.php");
+	echo nv_site_theme( $contents );
+	include (NV_ROOTDIR . "/includes/footer.php");
+	exit( );
+}
