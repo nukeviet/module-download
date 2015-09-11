@@ -36,7 +36,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_resume'] = $nv_Request->get_int( 'is_resume', 'post', 0 );
 	$array_config['max_speed'] = $nv_Request->get_int( 'max_speed', 'post', 0 );
 
-	$_groups_post = $nv_Request->get_array( 'groups_upload', 'post', array() );
+	$_groups_post = $nv_Request->get_array( 'groups_addfile', 'post', array() );
 	$array_config['groups_addfile'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$_groups_post = $nv_Request->get_array( 'groups_upload', 'post', array() );
