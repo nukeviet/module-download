@@ -25,6 +25,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$groups_list = nv_groups_list();
+	nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $id );
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
@@ -652,7 +653,10 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$db->query( $sql );
+	if( $db->query( $sql ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $id );
+	}
 
 	die( 'OK' );
 }
@@ -689,7 +693,14 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 		}
 	}
 
+	$result = $db->query( 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' );
+	while( list( $_id ) = $result->fetch( 3 ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $_id );
+	}
+
 	$db->query( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' );
+
 	die( 'OK' );
 }
 
