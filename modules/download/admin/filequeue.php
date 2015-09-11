@@ -622,8 +622,8 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	$query = 'SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	list( $id, $fileupload, $fileimage ) = $db->query->fetch( 3 );
+	$query = $db->query( 'SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id );
+	list( $id, $fileupload, $fileimage ) = $query->fetch( 3 );
 	if( empty( $id ) )
 	{
 		die( 'NO' );
