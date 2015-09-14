@@ -18,6 +18,7 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['page'] = 'Trang';
+$lang_module['file'] = 'Tập tin';
 $lang_module['unknown'] = 'N/A';
 $lang_module['author_name'] = 'Tác giả';
 $lang_module['author_email'] = 'Email tác giả';
@@ -103,7 +104,6 @@ $lang_module['search_option'] = 'Chọn chủ đề';
 $lang_module['search_result'] = 'Kết quả tìm kiếm';
 $lang_module['search_noresult'] = 'Không có dữ liệu phù hợp với yêu cầu của bạn !';
 $lang_module['upload_files_log'] = 'Đăng file mới';
-$lang_module['error_not_permission_title'] = 'Xin lỗi, Bạn không có quyền xem chi tiết tài liệu này!';
 $lang_module['error_not_permission_content'] = 'Quản trị không cho phép bạn truy cập vào nội dung của tài liệu. Vui lòng liên hệ BQT để được giải đáp';
 $lang_module['error_not_permission_title'] = 'Bạn không có quyền truy cập vào khu vực này';
 $lang_module['error_not_permission_upload_content_guest'] = 'Bạn không được phép truy cập vào khu vực này, vui lòng đăng nhập để hệ thống xác định quyền hạn tải lên tập tin, chúng tôi sẽ chuyển bạn đến trang đăng nhập trong giây lát...';

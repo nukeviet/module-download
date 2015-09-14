@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: cat_data -->
-<strong class="show m-bottom">{CAT.title}</strong>
+<strong class="show m-bottom">{CAT.title} <span class="text-danger">({CAT.numfile} {LANG.file})</span></strong>
 <!-- END: cat_data -->
 <div class="divTable m-bottom">
 	<div class="divHeading">

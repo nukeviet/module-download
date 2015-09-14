@@ -2,7 +2,7 @@
 <div class="viewcat_list">
 	<div class="panel panel-default">
 		<!-- BEGIN: cat_data -->
-		<div class="panel-heading">{CAT.title}</div>
+		<div class="panel-heading">{CAT.title} <span class="text-danger">({CAT.numfile} {LANG.file})</span></div>
 		<!-- END: cat_data -->
 		<div class="row list-title">
 			<div class="col-md-10"><strong>{LANG.file_title}</strong></div>

@@ -49,6 +49,8 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 if( $viewcat == 'viewcat_main_bottom' )
 {
+	$allcats = array( $c['id'] );
+
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data )
@@ -110,11 +112,18 @@ if( $viewcat == 'viewcat_main_bottom' )
 	{
 		foreach( $subcats as $sub )
 		{
+			$allcats = $sub;
+
 			$db->sqlreset()
 				->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
 				->from( NV_PREFIXLANG . '_' . $module_data )
 				->order( 'uploadtime DESC' )
 				->limit( $list_cats[$sub]['numlink'] );
+
+			if( !empty( $list_cats[$sub]['subcats'] ) )
+			{
+				$allcats .= ',' . implode( ',', $list_cats[$sub]['subcats'] );
+			}
 
 			$array_item = array();
 			$result = $db->query( $db->where( 'catid=' . $sub . ' AND status=1' )->sql() );
@@ -140,6 +149,9 @@ if( $viewcat == 'viewcat_main_bottom' )
 					'del_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 				);
 			}
+
+			$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . $allcats . ' )' )->fetchColumn();
+
 			if( $i )
 			{
 				$subs[] = array(
@@ -148,6 +160,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$sub]['alias'],
 					'description' => $list_cats[$sub]['description'],
 					'subcats' => $list_cats[$sub]['subcats'],
+					'numfile' => $numfile,
 					'items' => $array_item
 				);
 			}
@@ -172,6 +185,7 @@ elseif( $viewcat == 'viewcat_list_new' )
 		->where( 'catid=' . $c['id'] . ' AND status=1' );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
+	$c['numfile'] = $num_items;
 
 	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
 		->order( 'uploadtime DESC' )

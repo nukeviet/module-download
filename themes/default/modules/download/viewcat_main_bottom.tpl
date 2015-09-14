@@ -4,7 +4,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h4 class="panel-title">
-		<a title="{catbox.title}" href="{catbox.link}">{catbox.title}</a>
+		<a title="{catbox.title}" href="{catbox.link}">{catbox.title}</a> <span class="text-danger">({catbox.numfile} {LANG.file})</span>
 		<!-- BEGIN: subcatbox -->
 		<!-- BEGIN: listsubcat -->
 		<span class="divider">></span> <a title="{listsubcat.title}" href="{listsubcat.link}">{listsubcat.title}</a>
