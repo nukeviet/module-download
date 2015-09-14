@@ -16,8 +16,19 @@ $download_config = nv_mod_down_config();
 
 if( ! $download_config['is_addfile_allow'] )
 {
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	exit();
+	if( !defined( 'NV_IS_USER' ) )
+	{
+		$alert_content = $lang_module['error_not_permission_upload_content_guest'];
+		$urlback = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] );
+		$lang_back = false;
+	}
+	else
+	{
+		$alert_content = $lang_module['error_not_permission_upload_content_user'];
+		$urlback = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
+		$lang_back = true;
+	}
+	nv_theme_alert( $lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back );
 }
 
 $list_cats = nv_list_cats( false, false );

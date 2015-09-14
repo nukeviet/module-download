@@ -105,3 +105,6 @@ $lang_module['search_noresult'] = 'Không có dữ liệu phù hợp với yêu 
 $lang_module['upload_files_log'] = 'Đăng file mới';
 $lang_module['error_not_permission_title'] = 'Xin lỗi, Bạn không có quyền xem chi tiết tài liệu này!';
 $lang_module['error_not_permission_content'] = 'Quản trị không cho phép bạn truy cập vào nội dung của tài liệu. Vui lòng liên hệ BQT để được giải đáp';
+$lang_module['error_not_permission_title'] = 'Bạn không có quyền truy cập vào khu vực này';
+$lang_module['error_not_permission_upload_content_guest'] = 'Bạn không được phép truy cập vào khu vực này, vui lòng đăng nhập để hệ thống xác định quyền hạn tải lên tập tin, chúng tôi sẽ chuyển bạn đến trang đăng nhập trong giây lát...';
+$lang_module['error_not_permission_upload_content_user'] = 'Nhóm thành viên bạn đang tham gia không được cấp phép để truy cập vào khu vực này, vui lòng liên hệ với người quản trị để biết thêm thông tin.';

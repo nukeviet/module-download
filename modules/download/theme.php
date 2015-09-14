@@ -372,11 +372,14 @@ function theme_viewpdf( $filename )
 /**
  * nv_theme_alert()
  *
- * @param mixed $message
+ * @param mixed $message_title
+ * @param mixed $message_content
  * @param mixed $type
+ * @param mixed $url_back
+ * @param mixed $time_back
  * @return
  */
-function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5 )
+function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true )
 {
 	global $module_file, $module_info, $lang_module, $page_title;
 
@@ -417,7 +420,10 @@ function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_
 		$xtpl->assign( 'TIME', $time_back );
 		$xtpl->assign( 'URL', $url_back );
 		$xtpl->parse( 'main.url_back' );
-		$xtpl->parse( 'main.url_back_button' );
+		if( $lang_back )
+		{
+			$xtpl->parse( 'main.url_back_button' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

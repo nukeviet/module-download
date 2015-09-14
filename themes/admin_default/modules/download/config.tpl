@@ -95,7 +95,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.max_speed}</td>
-						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" /><span class="text-middle"> {LANG.kb_sec} </span></td>
+						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" />&nbsp;<span class="text-middle"> {LANG.kb_sec} </span></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_zip}</td>
