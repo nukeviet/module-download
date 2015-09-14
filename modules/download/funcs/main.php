@@ -175,6 +175,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 				$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
 				$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
 				$array_cats[$catid_i]['numfile'] = $numfile;
+				$array_cats[$catid_i]['viewcat'] = $list_cats[$value['id']]['viewcat'];
 				$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
 				$array_cats[$catid_i]['items'] = $array_item;
 			}

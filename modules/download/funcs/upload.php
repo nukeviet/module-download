@@ -41,6 +41,7 @@ if( empty( $list_cats ) )
 
 $is_error = false;
 $error = '';
+$array = array();
 
 if( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
@@ -51,8 +52,6 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 		exit();
 	}
-
-	$array = array();
 
 	$array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
 	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 255 );
@@ -320,7 +319,8 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 }
 else
 {
-	$array['catid'] = $array['filesize'] = 0;
+	$array['catid'] = sizeof( $array_op ) == 2 ? (int)$array_op[1] : 0;
+	$array['filesize'] = 0;
 	$array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['linkdirect'] = $array['version'] = $array['copyright'] = $array['user_name'] = '';
 	if( defined( 'NV_IS_USER' ) )
 	{

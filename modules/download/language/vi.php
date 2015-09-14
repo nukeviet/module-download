@@ -37,6 +37,7 @@ $lang_module['collapse'] = 'Đóng lại';
 $lang_module['today'] = 'Hôm nay';
 $lang_module['yesterday'] = 'Hôm qua';
 $lang_module['download'] = 'Tải file';
+$lang_module['upload_to'] = 'Tải lên';
 $lang_module['upload'] = 'Gửi file';
 $lang_module['report'] = 'Báo link hỏng';
 $lang_module['listing_details'] = 'Thông tin chi tiết';

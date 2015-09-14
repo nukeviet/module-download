@@ -1,7 +1,14 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: cat_data -->
-<strong class="show m-bottom">{CAT.title} <span class="text-danger">({CAT.numfile} {LANG.file})</span></strong>
-<!-- END: cat_data -->
+
+<div class="clearfix">
+	<!-- BEGIN: cat_data -->
+	<strong class="show m-bottom pull-left">{CAT.title} <span class="text-danger">({CAT.numfile} {LANG.file})</span></strong>
+	<!-- END: cat_data -->
+	<!-- BEGIN: is_addfile_allow -->
+	<small><strong class="pull-right"><a title="{LANG.upload_to}" href="{CAT.uploadurl}"><em class="fa fa-upload fa-lg">&nbsp;</em>{LANG.upload_to}</a></strong></small>
+	<!-- END: is_addfile_allow -->
+</div>
+
 <div class="divTable m-bottom">
 	<div class="divHeading">
 		<div class="Cell">
