@@ -21,7 +21,7 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
  */
 function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat_data = array(), $generate_page = '' )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
+	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -33,6 +33,10 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 	{
 		if( empty( $cat['parentid'] ) )
 		{
+			if( $download_config['is_addfile_allow'] )
+			{
+				$cat['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat['catid'];
+			}
 			$xtpl->assign( 'catbox', $cat );
 
 			if( ! empty( $cat['subcats'] ) )
@@ -45,7 +49,7 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 						$subcat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $subcat['alias'];
 						$xtpl->assign( 'listsubcat', $subcat );
 
-						if( ++$i >= 4 )
+						if( ++$i >= 3 )
 						{
 							$xtpl->assign( 'MORE', $cat['link'] );
 							$xtpl->parse( 'main.catbox.subcatbox.more' );
@@ -55,6 +59,12 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 						$xtpl->parse( 'main.catbox.subcatbox.listsubcat' );
 					}
 				}
+
+				if( $download_config['is_addfile_allow'] )
+				{
+					$xtpl->parse( 'main.catbox.subcatbox.is_addfile_allow' );
+				}
+
 				$xtpl->parse( 'main.catbox.subcatbox' );
 			}
 			$items = $cat['items'];
@@ -113,9 +123,14 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
  */
 function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
+	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
 	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
+
+	if( $download_config['is_addfile_allow'] )
+	{
+		$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
+	}
 
 	$xtpl = new XTemplate(  $viewcat. '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -135,6 +150,11 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 	if( !empty( $cat_data ) )
 	{
 		$xtpl->parse( 'main.cat_data' );
+	}
+
+	if( $download_config['is_addfile_allow'] )
+	{
+		$xtpl->parse( 'main.is_addfile_allow' );
 	}
 
 	if( !empty( $page ) )
@@ -372,11 +392,14 @@ function theme_viewpdf( $filename )
 /**
  * nv_theme_alert()
  *
- * @param mixed $message
+ * @param mixed $message_title
+ * @param mixed $message_content
  * @param mixed $type
+ * @param mixed $url_back
+ * @param mixed $time_back
  * @return
  */
-function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5 )
+function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true )
 {
 	global $module_file, $module_info, $lang_module, $page_title;
 
@@ -417,7 +440,10 @@ function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_
 		$xtpl->assign( 'TIME', $time_back );
 		$xtpl->assign( 'URL', $url_back );
 		$xtpl->parse( 'main.url_back' );
-		$xtpl->parse( 'main.url_back_button' );
+		if( $lang_back )
+		{
+			$xtpl->parse( 'main.url_back_button' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

@@ -31,6 +31,7 @@ $lang_module['config_viewlist_table'] = 'Bảng';
 $lang_module['config_per_page_home'] = 'Số lượng tập tin trên trang chủ';
 $lang_module['config_per_page_child'] = 'Số lượng tập tin trên trang con';
 $lang_module['config_is_addfile'] = 'Cho phép thêm file';
+$lang_module['config_is_addfile_note'] = 'Cho phép người dùng có thể đóng góp tập tin cho hệ thống';
 $lang_module['config_is_uploadfile'] = 'Cho phép upload file lên server';
 $lang_module['config_allowfiletype'] = 'Loại file được cho phép tải lên';
 $lang_module['config_maxfilesize'] = 'Dung lượng tối đa của file';

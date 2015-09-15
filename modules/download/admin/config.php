@@ -246,6 +246,8 @@ foreach( $array_viewlist_type as $key => $value )
 	$xtpl->parse( 'main.viewlist_type' );
 }
 
+$xtpl->assign( 'IS_ADDFILE', !$array_config['is_addfile'] ? 'style="display: none"' : '' );
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
