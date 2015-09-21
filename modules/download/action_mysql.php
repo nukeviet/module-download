@@ -114,6 +114,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  UNIQUE KEY config_name (config_name)
 )ENGINE=MyISAM";
 
+$maxfilesize = min( $global_config['nv_max_size'], nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
+
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('indexfile', 'viewcat_main_bottom'),
 ('viewlist_type', 'list'),
@@ -122,7 +124,7 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('is_addfile', '1'),
 ('is_upload', '1'),
 ('groups_upload', ''),
-('maxfilesize', '2097152'),
+('maxfilesize', '" . $maxfilesize . "'),
 ('upload_filetype', 'doc,xls,zip,rar'),
 ('upload_dir', 'files'),
 ('temp_dir', 'temp'),
