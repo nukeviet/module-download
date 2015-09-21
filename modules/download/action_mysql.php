@@ -123,8 +123,6 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('groups_upload', '4'),
 ('maxfilesize', '2097152'),
 ('upload_filetype', 'doc,xls,zip,rar'),
-('upload_dir', 'files'),
-('temp_dir', 'temp'),
 ('groups_addfile', '4'),
 ('is_zip', '1'),
 ('is_resume', '1'),

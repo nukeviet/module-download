@@ -27,8 +27,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_addfile'] = $nv_Request->get_int( 'is_addfile', 'post', 0 );
 	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
-	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
-	$array_config['temp_dir'] = $nv_Request->get_title( 'temp_dir', 'post', '' );
 	$array_config['is_zip'] = $nv_Request->get_int( 'is_zip', 'post', 0 );
 	$array_config['readme'] = $nv_Request->get_textarea( 'readme', '' );
 	$array_config['readme'] = strip_tags( $array_config['readme'] );
@@ -51,46 +49,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
     }
 
 	$array_config['upload_filetype'] = ( ! empty( $array_config['upload_filetype'] ) ) ? implode( ',', $array_config['upload_filetype'] ) : '';
-
-	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['upload_dir'] ) )
-	{
-		$array_config['upload_dir'] = 'files';
-	}
-	else
-	{
-		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array_config['upload_dir'] ) )
-		{
-			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, $array_config['upload_dir'] );
-			if( $mkdir[0] == 0 )
-			{
-				$array_config['upload_dir'] = 'files';
-			}
-			else
-			{
-				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $array_config['upload_dir'] . "', 0)" );
-			}
-		}
-	}
-
-	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['temp_dir'] ) )
-	{
-		$array_config['temp_dir'] = 'temp';
-	}
-	else
-	{
-		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array_config['temp_dir'] ) )
-		{
-			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, $array_config['temp_dir'] );
-			if( $mkdir[0] == 0 )
-			{
-				$array_config['temp_dir'] = 'temp';
-			}
-			else
-			{
-				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $array_config['upload_dir'] . "', 0)" );
-			}
-		}
-	}
 
 	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
@@ -126,8 +84,6 @@ $array_config['groups_addfile'] = '';
 $array_config['groups_upload'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
-$array_config['upload_dir'] = 'files';
-$array_config['temp_dir'] = 'temp';
 $array_config['is_zip'] = 0;
 $array_config['readme'] = '';
 $array_config['is_resume'] = 0;

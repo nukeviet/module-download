@@ -76,11 +76,7 @@ $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
-	if( $row['config_name'] == 'upload_dir' )
-	{
-		$upload_dir = $row['config_value'];
-	}
-	elseif( $row['config_name'] == 'is_zip' )
+	if( $row['config_name'] == 'is_zip' )
 	{
 		$is_zip = ( $filepdf == 2 ) ? false : ( bool )$row['config_value'];
 	}
