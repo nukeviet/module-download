@@ -49,21 +49,15 @@
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
 							<!-- BEGIN: groups_addfile -->
-							<input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
-							<br />
+							<label class="show"><input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}</label>
 							<!-- END: groups_addfile -->
 						</td>
-					</tr>
-					<tr class="is_addfile" {IS_ADDFILE}>
-						<td>{LANG.config_is_uploadfile}</td>
-						<td><input name="is_upload" value="1" type="checkbox"{DATA.is_upload} /></td>
 					</tr>
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
 							<!-- BEGIN: groups_upload -->
-							<input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}
-							<br />
+							<label class="show"><input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}</label>
 							<!-- END: groups_upload -->
 						</td>
 					</tr>

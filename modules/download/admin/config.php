@@ -25,7 +25,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['per_page_home'] = $nv_Request->get_int( 'per_page_home', 'post', 20 );
 	$array_config['per_page_child'] = $nv_Request->get_int( 'per_page_child', 'post', 20 );
 	$array_config['is_addfile'] = $nv_Request->get_int( 'is_addfile', 'post', 0 );
-	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
 	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
@@ -124,7 +123,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $array_config['is_addfile'] = 0;
 $array_config['groups_addfile'] = '';
-$array_config['is_upload'] = 0;
 $array_config['groups_upload'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
@@ -149,7 +147,6 @@ while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 }
 
 $array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? ' checked="checked"' : '';
-$array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? ' checked="checked"' : '';
 $array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
 $array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
 
