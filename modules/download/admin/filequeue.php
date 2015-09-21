@@ -27,10 +27,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$groups_list = nv_groups_list();
 	nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $id );
 
-	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-	$result = $db->query( $sql );
-	$upload_dir = $result->fetchColumn();
-
 	$array = array();
 	$is_error = false;
 	$error = '';
@@ -263,15 +259,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 					$newfile2 = $newfile;
 					$i = 1;
-					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
+					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/files/' . $newfile2 ) )
 					{
 						$newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
 						++$i;
 					}
 
-					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
+					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/files/' . $newfile2 ) )
 					{
-						$array['fileupload'][] = '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2;
+						$array['fileupload'][] = '/' . $module_upload . '/files/' . $newfile2;
 					}
 				}
 			}
@@ -541,7 +537,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
-	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $upload_dir );
+	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 
 	if( ! empty( $error ) )
 	{

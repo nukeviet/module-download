@@ -9,13 +9,13 @@
 			<!-- BEGIN: listsubcat -->
 			<span class="divider">></span> <a title="{listsubcat.title}" href="{listsubcat.link}">{listsubcat.title}</a>
 			<!-- END: listsubcat -->
-			<!-- BEGIN: is_addfile_allow -->
-			<em class="pull-right"><small><a title="{LANG.upload_to}" href="{catbox.uploadurl}"><em class="fa fa-upload fa-lg">&nbsp;</em>{LANG.upload_to}</a></small></em>
-			<!-- END: is_addfile_allow -->
 			<!-- BEGIN: more -->
-			<em class="pull-right"><small><a title="{LANG.categories_viewall}" href="{MORE}"><em class="fa fa-search fa-lg">&nbsp;</em>{LANG.categories_viewall}&nbsp;&nbsp;&nbsp;</a></small></em>
+			<em class="pull-right"><small><a title="{LANG.categories_viewall}" href="{MORE}"><em class="fa fa-search fa-lg">&nbsp;</em>{LANG.categories_viewall}</a></small></em>
 			<!-- END: more -->
 			<!-- END: subcatbox -->
+			<!-- BEGIN: is_addfile_allow -->
+			<em class="pull-right"><small><a title="{LANG.upload_to}" href="{catbox.uploadurl}"><em class="fa fa-upload fa-lg">&nbsp;</em>{LANG.upload_to}&nbsp;&nbsp;&nbsp;</a></small></em>
+			<!-- END: is_addfile_allow -->
 		</h4>
 	</div>
 	<div class="panel-body">

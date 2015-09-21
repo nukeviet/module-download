@@ -49,45 +49,31 @@
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
 							<!-- BEGIN: groups_addfile -->
-							<input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
-							<br />
+							<label class="show"><input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}</label>
 							<!-- END: groups_addfile -->
 						</td>
-					</tr>
-					<tr class="is_addfile" {IS_ADDFILE}>
-						<td>{LANG.config_is_uploadfile}</td>
-						<td><input name="is_upload" value="1" type="checkbox"{DATA.is_upload} /></td>
 					</tr>
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
 							<!-- BEGIN: groups_upload -->
-							<input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}
-							<br />
+							<label class="show"><input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}</label>
 							<!-- END: groups_upload -->
 						</td>
 					</tr>
+					<!-- BEGIN: allow_files_type -->
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td class="top">{LANG.config_allowfiletype}</td>
 						<td>
-							<div class="dl-fixheight">
-								<!-- BEGIN: upload_filetype -->
-								<label><input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}</label><br />
-								<!-- END: upload_filetype -->
-							</div>
+						<!-- BEGIN: loop -->
+						<label><input name="upload_filetype[]" type="checkbox" value="{TP}" {CHECKED} /> {TP}</label>&nbsp;&nbsp;&nbsp;
+						<!-- END: loop -->
 						</td>
 					</tr>
+					<!-- END: allow_files_type -->
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_maxfilesize}</td>
 						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="pull-left form-control w200"/><span class="text-middle"> {LANG.config_maxfilemb}. {LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} </span></td>
-					</tr>
-					<tr class="is_addfile" {IS_ADDFILE}>
-						<td>{LANG.config_uploadedfolder}</td>
-						<td><input name="upload_dir" value="{DATA.upload_dir}" type="text" maxlength="100" class="form-control w200" /></td>
-					</tr>
-					<tr class="is_addfile" {IS_ADDFILE}>
-						<td>{LANG.config_queuefolder}</td>
-						<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" class="form-control w200" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_resume}</td>

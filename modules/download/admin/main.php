@@ -388,10 +388,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
     $array['id'] = $id;
 
-	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-	$result = $db->query( $sql );
-	$upload_dir = $result->fetchColumn();
-
 	if( empty( $array['filesize'] ) )
 	{
 	    $array['filesize'] = '';
@@ -411,7 +407,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
-	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $upload_dir );
+	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 
 	if( ! empty( $error ) )
 	{

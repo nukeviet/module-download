@@ -122,14 +122,11 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('per_page_home', '20'),
 ('per_page_child', '20'),
 ('is_addfile', '1'),
-('is_upload', '1'),
-('groups_upload', ''),
+('groups_upload', '4'),
 ('maxfilesize', '" . $maxfilesize . "'),
-('upload_filetype', 'doc,xls,zip,rar'),
-('upload_dir', 'files'),
-('temp_dir', 'temp'),
-('groups_addfile', ''),
-('is_zip', '1'),
+('upload_filetype', 'adobe,archives,audio,documents,flash,images,real,video'),
+('groups_addfile', '4'),
+('is_zip', '0'),
 ('is_resume', '1'),
 ('max_speed', '0')";
 

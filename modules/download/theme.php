@@ -60,13 +60,9 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 					}
 				}
 
-				if( $download_config['is_addfile_allow'] )
-				{
-					$xtpl->parse( 'main.catbox.subcatbox.is_addfile_allow' );
-				}
-
 				$xtpl->parse( 'main.catbox.subcatbox' );
 			}
+
 			$items = $cat['items'];
 			#parse the first items
 			$thefirstcat = current( $items );
@@ -82,6 +78,11 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 				$xtpl->assign( 'EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $thefirstcat['id'] );
 				$xtpl->assign( 'DEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 				$xtpl->parse( 'main.catbox.itemcat.adminlink' );
+			}
+
+			if( $download_config['is_addfile_allow'] )
+			{
+				$xtpl->parse( 'main.catbox.is_addfile_allow' );
 			}
 
 			$xtpl->parse( 'main.catbox.itemcat' );
