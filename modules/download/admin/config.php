@@ -83,7 +83,7 @@ $array_config['is_addfile'] = 0;
 $array_config['groups_addfile'] = '';
 $array_config['groups_upload'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
-$array_config['upload_filetype'] = '';
+$array_config['upload_filetype'] = array( 'images', 'archives' );
 $array_config['is_zip'] = 0;
 $array_config['readme'] = '';
 $array_config['is_resume'] = 0;
@@ -105,20 +105,6 @@ while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 $array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? ' checked="checked"' : '';
 $array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
 $array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
-
-$upload_filetype = ! empty( $array_config['upload_filetype'] ) ? explode( ',', $array_config['upload_filetype'] ) : array();
-$array_config['upload_filetype'] = array();
-if( ! empty( $array_exts ) )
-{
-	foreach( $array_exts as $ext => $mime )
-	{
-		$array_config['upload_filetype'][$ext] = array(
-			'ext' => $ext,
-			'title' => $ext . ' (mime: ' . $mime . ')',
-			'checked' => ( in_array( $ext, $upload_filetype ) ) ? ' checked="checked"' : ''
-		);
-	}
-}
 
 $groups_addfile = explode( ',', $array_config['groups_addfile'] );
 $array_config['groups_addfile'] = array();
@@ -153,12 +139,6 @@ $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 $xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
-
-foreach( $array_config['upload_filetype'] as $filetype )
-{
-	$xtpl->assign( 'UPLOAD_FILETYPE', $filetype );
-	$xtpl->parse( 'main.upload_filetype' );
-}
 
 foreach( $array_config['groups_addfile'] as $group )
 {
@@ -197,6 +177,19 @@ foreach( $array_viewlist_type as $key => $value )
 	$ck = $array_config['viewlist_type'] == $key ? 'checked="checked"' : '';
 	$xtpl->assign( 'VIEWLIST', array( 'key' => $key, 'value' => $value, 'checked' => $ck ) );
 	$xtpl->parse( 'main.viewlist_type' );
+}
+
+if( ! empty( $global_config['file_allowed_ext'] ) )
+{
+	$allow_files_type = array( $global_config['file_allowed_ext'], explode( ',', $array_config['upload_filetype'] ) );
+
+	foreach( $allow_files_type[0] as $tp )
+	{
+		$xtpl->assign( 'CHECKED', in_array( $tp, $allow_files_type[1] ) ? ' checked="checked"' : '' );
+		$xtpl->assign( 'TP', $tp );
+		$xtpl->parse( 'main.allow_files_type.loop' );
+	}
+	$xtpl->parse( 'main.allow_files_type' );
 }
 
 $xtpl->assign( 'IS_ADDFILE', !$array_config['is_addfile'] ? 'style="display: none"' : '' );

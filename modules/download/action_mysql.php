@@ -122,7 +122,7 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('is_addfile', '1'),
 ('groups_upload', '4'),
 ('maxfilesize', '2097152'),
-('upload_filetype', 'doc,xls,zip,rar'),
+('upload_filetype', 'adobe,archives,audio,documents,flash,images,real,video'),
 ('groups_addfile', '4'),
 ('is_zip', '1'),
 ('is_resume', '1'),

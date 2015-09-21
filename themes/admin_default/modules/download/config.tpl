@@ -61,16 +61,16 @@
 							<!-- END: groups_upload -->
 						</td>
 					</tr>
+					<!-- BEGIN: allow_files_type -->
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td class="top">{LANG.config_allowfiletype}</td>
 						<td>
-							<div class="dl-fixheight">
-								<!-- BEGIN: upload_filetype -->
-								<label><input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}</label><br />
-								<!-- END: upload_filetype -->
-							</div>
+						<!-- BEGIN: loop -->
+						<label><input name="upload_filetype[]" type="checkbox" value="{TP}" {CHECKED} /> {TP}</label>&nbsp;&nbsp;&nbsp;
+						<!-- END: loop -->
 						</td>
 					</tr>
+					<!-- END: allow_files_type -->
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_maxfilesize}</td>
 						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="pull-left form-control w200"/><span class="text-middle"> {LANG.config_maxfilemb}. {LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} </span></td>
