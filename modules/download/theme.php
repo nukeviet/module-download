@@ -106,7 +106,7 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 		{
 			$xtpl->assign( 'CAT_TITLE', sprintf( $lang_module['viewcat_listfile'], $cat_data['title'] ) );
 		}
-		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page ) );
+		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page, $cat_data ) );
 		$xtpl->parse( 'main.filelist' );
 	}
 
