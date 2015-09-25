@@ -40,11 +40,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$error = '';
 	
 	// Xử lý liên kết tĩnh
-	$alias = $nv_Request->get_title( 'alias', 'post', '' );
+	$alias = $nv_Request->get_title( 'alias', 'post', $row['alias'] );
 	if( empty( $alias ) )
 	{
 		$alias = change_alias( $row['title'] );
-
 	}
 	else
 	{
@@ -62,6 +61,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$array['alias'] = $alias;
 	}
+	
 	$array_keywords_old=array();
 	$_query_tag = $db->query( 'SELECT did, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' ORDER BY keyword ASC' );
 	while( $row_tag = $_query_tag->fetch( ) )
@@ -187,10 +187,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
             $array['filesize'] = intval( $array['filesize'] * 1048576 );
 		}
 
-		$alias = change_alias( $array['title'] );
-
 		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias= :alias ');
-		$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 		$stmt->execute();
 		$is_exists = $stmt->fetchColumn();
 
@@ -263,7 +261,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 WHERE id=" . $id );
 
 			$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
-			$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR, strlen( $array['description'] ) );
 			$stmt->bindParam( ':introtext', $array['introtext'], PDO::PARAM_STR, strlen( $array['introtext'] ) );
 			$stmt->bindParam( ':author_name', $array['author_name'], PDO::PARAM_STR );
