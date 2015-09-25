@@ -28,7 +28,6 @@ if( $nv_Request->isset_request( 'gettitle', 'post' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $alias;
 	include NV_ROOTDIR . '/includes/footer.php';
-
 }
 
 $page_title = $lang_module['file_addfile'];
@@ -155,10 +154,31 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
 	}
 
-	$alias = change_alias( $array['title'] );
-
+	// Xử lý liên kết tĩnh
+	$alias = $nv_Request->get_title( 'alias', 'post', $row['alias'] );
+	if( empty( $alias ) )
+	{
+		$alias = change_alias( $row['title'] );
+	}
+	else
+	{
+		$alias = change_alias( $alias );
+	}
+	
+	if( empty( $alias ) or !preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $alias ) )
+	{
+		if( empty( $array['alias'] ) )
+		{
+			$array['alias'] = 'post';
+		}
+	}
+	else
+	{
+		$array['alias'] = $alias;
+	}
+	
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
-	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 	$stmt->execute();
 	$is_exists = $stmt->fetchColumn();
 
@@ -237,7 +257,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		$data_insert = array();
 		$data_insert['title'] = $array['title'];
-		$data_insert['alias'] = $alias;
+		$data_insert['alias'] = $array['alias'];
 		$data_insert['description'] = $array['description'];
 		$data_insert['introtext'] = $array['introtext'];
 		$data_insert['username'] = $admin_info['username'];
