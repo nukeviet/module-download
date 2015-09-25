@@ -106,7 +106,7 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 		{
 			$xtpl->assign( 'CAT_TITLE', sprintf( $lang_module['viewcat_listfile'], $cat_data['title'] ) );
 		}
-		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page ) );
+		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page, $cat_data, false ) );
 		$xtpl->parse( 'main.filelist' );
 	}
 
@@ -122,15 +122,18 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
  * @param mixed $cat_data
  * @return
  */
-function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
+function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $subcat = true )
 {
 	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
 	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
 
-	if( !empty( $cat_data ) and $download_config['is_addfile_allow'] )
+	if( !empty( $cat_data ) )
 	{
-		$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
+		if( $download_config['is_addfile_allow'] )
+		{
+			$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
+		}
 	}
 
 	$xtpl = new XTemplate(  $viewcat. '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
@@ -148,7 +151,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 		}
 	}
 
-	if( !empty( $cat_data ) )
+	if( !empty( $cat_data ) and $subcat )
 	{
 		$xtpl->parse( 'main.cat_data' );
 	}
