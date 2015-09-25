@@ -24,31 +24,11 @@
 			</div>
 		</div>
 		<!-- END: is_image -->
-		<div class="introtext m-bottom">
-				{ROW.description}
-			</div>
-			<p class="text-center"><button id="expand" class="btn btn-primary btn-xs">{LANG.expand}</button></p>
-			<script>
-				if( $.trim( $(".introtext").html() ).length <= 100 )
-				{
-					$('#expand').hide();
-				}
-
-				$('#expand').click(function() {
-					if( $(this).hasClass('expand') ){
-						$(this).removeClass('expand');
-						$(this).html('{LANG.expand}');
-					}
-					else{
-						$(this).addClass('expand');
-						$(this).html('{LANG.collapse}');
-					}
-					$('.introtext').toggleClass("expand");
-				});
-			</script>
-		</div>
-	</div>
-		<!-- END: introtext -->
+		
+		<p>
+			{ROW.introtext}
+		</p>
+		
 		<!-- BEGIN: filepdf -->
 		<iframe frameborder="0" height="600" scrolling="yes" src="{FILEPDF}" width="100%"></iframe>
 		<!-- END: filepdf -->
@@ -151,7 +131,32 @@
 				<!-- END: comment_hits -->
 			</dl>
 		</div>
+		
+		<!-- BEGIN: description -->
+        <div class="introtext m-bottom">
+            {ROW.description}
+        </div>
+        <p class="text-center"><button id="expand" class="btn btn-primary btn-xs">{LANG.expand}</button></p>
+        <script>
+            if( $.trim( $(".introtext").html() ).length <= 100 )
+            {
+                $('#expand').hide();
+            }
 
+            $('#expand').click(function() {
+                if( $(this).hasClass('expand') ){
+                    $(this).removeClass('expand');
+                    $(this).html('{LANG.expand}');
+                }
+                else{
+                    $(this).addClass('expand');
+                    $(this).html('{LANG.collapse}');
+                }
+                $('.introtext').toggleClass("expand");
+            });
+        </script>
+        <!-- END: description -->
+            
 		<div class="info_download">
 			<!-- BEGIN: report -->
 			<div class="report pull-right">

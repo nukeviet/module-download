@@ -114,11 +114,6 @@ else
 	$row['author_url'] = $lang_module['unknown'];
 }
 
-if( empty( $row['description'] ) )
-{
-	$row['description'] = $row['introtext'];
-}
-
 if( empty( $row['version'] ) )
 {
 	$row['version'] = $lang_module['unknown'];
