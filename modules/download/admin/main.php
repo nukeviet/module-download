@@ -38,7 +38,39 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array = array();
 	$is_error = false;
 	$error = '';
+	
+	// Xử lý liên kết tĩnh
+	$alias = $nv_Request->get_title( 'alias', 'post', $row['alias'] );
+	if( empty( $alias ) )
+	{
+		$alias = change_alias( $row['title'] );
+	}
+	else
+	{
+		$alias = change_alias( $alias );
+	}
 
+	if( empty( $alias ) or !preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $alias ) )
+	{
+		if( empty( $array['alias'] ) )
+		{
+			$array['alias'] = 'post';
+		}
+	}
+	else
+	{
+		$array['alias'] = $alias;
+	}
+	
+	$array_keywords_old=array();
+	$_query_tag = $db->query( 'SELECT did, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' ORDER BY keyword ASC' );
+	while( $row_tag = $_query_tag->fetch( ) )
+	{
+		$array_keywords_old[$row_tag['did']] = $row_tag['keyword'];
+	}
+	$array['keywords'] = implode( ', ', $array_keywords_old );
+	$array['keywords_old'] = $array['keywords'];
+	
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
@@ -54,6 +86,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['fileimage'] = $nv_Request->get_title( 'fileimage', 'post', '' );
 		$array['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 		$array['is_del_report'] = $nv_Request->get_int( 'is_del_report', 'post', 0 );
+		
+		$array['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
+		$array['keywords'] = implode( ', ', $array['keywords'] );
 
 		$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
 		$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
@@ -152,10 +187,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
             $array['filesize'] = intval( $array['filesize'] * 1048576 );
 		}
 
-		$alias = change_alias( $array['title'] );
-
 		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias= :alias ');
-		$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 		$stmt->execute();
 		$is_exists = $stmt->fetchColumn();
 
@@ -228,7 +261,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 WHERE id=" . $id );
 
 			$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
-			$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR, strlen( $array['description'] ) );
 			$stmt->bindParam( ':introtext', $array['introtext'], PDO::PARAM_STR, strlen( $array['introtext'] ) );
 			$stmt->bindParam( ':author_name', $array['author_name'], PDO::PARAM_STR );
@@ -250,6 +283,65 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 			else
 			{
+				if( $array['keywords'] != $array['keywords_old'] )
+				{
+					// keywords
+					$keywords = explode( ',', $array['keywords'] );
+					$keywords = array_map( 'strip_punctuation', $keywords );
+					$keywords = array_map( 'trim', $keywords );
+					$keywords = array_diff( $keywords, array( '' ) );
+					$keywords = array_unique( $keywords );
+					foreach( $keywords as $keyword )
+					{
+						$alias_i = change_alias( $keyword );
+						$alias_i = nv_strtolower( $alias_i );
+						$sth = $db->prepare( 'SELECT did, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
+						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
+						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+						$sth->execute( );
+	
+						list( $did, $alias, $keywords_i ) = $sth->fetch( 3 );
+						if( empty( $did ) )
+						{
+							$array_insert = array( );
+							$array_insert['alias'] = $alias_i;
+							$array_insert['keyword'] = $keyword;
+	
+							$did = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert );
+						}
+						else
+						{
+							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did );
+						}
+						
+						$_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' AND did = ' . $did;
+						$_query = $db->query( $_sql );
+						$row = $_query->fetch();
+	
+						if( empty($row) )
+						{
+						  	$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval( $did ) . ', :keyword)' );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute( );
+						}
+						else 
+						{
+							$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval( $did ) );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute();
+						}
+						unset( $array_keywords_old[$did] );
+					}
+					foreach( $array_keywords_old as $did => $keyword )
+					{
+						if( ! in_array( $keyword, $keywords ) )
+						{
+							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did );
+							$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id . ' AND did=' . $did );
+						}
+					}
+				}
+				
 				if( $report and $array['is_del_report'] )
 				{
 					$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
@@ -396,7 +488,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['filesize'] = number_format( $array['filesize']/1048576, 2);
     }
-
+	
 	$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$report = $report ? '&amp;report=1' : '';
@@ -448,7 +540,17 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->assign( 'GROUPS_VIEW', $group );
 		$xtpl->parse( 'main.groups_view' );
 	}
-
+	
+	if( !empty( $array['keywords'] ) )
+	{
+		$keywords_array = explode( ',', $array['keywords'] );
+		foreach( $keywords_array as $keywords )
+		{
+			$xtpl->assign( 'KEYWORDS', $keywords );
+			$xtpl->parse( 'main.keywords' );
+		}
+	}
+	
 	foreach( $array['groups_download'] as $group )
 	{
 		$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
