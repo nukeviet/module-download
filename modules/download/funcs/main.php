@@ -104,7 +104,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 		{
 			$catid_i = $value['id'];
 			$allcats[] = $value['id'];
-
+			
 			if( empty( $value['subcats'] ) )
 			{
 				$in = 'catid=' . $catid_i;
@@ -117,7 +117,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 				$in = implode( ',', $in );
 				$in = 'catid IN (' . $in . ')';
 			}
-
+			
 			$db->sqlreset()
 				->select( 'COUNT(*)' )
 				->from( NV_PREFIXLANG . '_' . $module_data )
@@ -166,9 +166,9 @@ if( $viewcat == 'viewcat_main_bottom' )
 						'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
 					);
 				}
-
+				
 				$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode( ',', $allcats ) . ' )' )->fetchColumn();
-
+				
 				$array_cats[$catid_i] = array();
 				$array_cats[$catid_i]['catid'] = $value['id'];
 				$array_cats[$catid_i]['title'] = $value['title'];
