@@ -25,10 +25,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$groups_list = nv_groups_list();
-
-	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-	$result = $db->query( $sql );
-	$upload_dir = $result->fetchColumn();
+	nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $id );
 
 	$array = array();
 	$is_error = false;
@@ -262,15 +259,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 					$newfile2 = $newfile;
 					$i = 1;
-					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
+					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/files/' . $newfile2 ) )
 					{
 						$newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
 						++$i;
 					}
 
-					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
+					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/files/' . $newfile2 ) )
 					{
-						$array['fileupload'][] = '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2;
+						$array['fileupload'][] = '/' . $module_upload . '/files/' . $newfile2;
 					}
 				}
 			}
@@ -540,7 +537,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
-	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $upload_dir );
+	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 
 	if( ! empty( $error ) )
 	{
@@ -622,8 +619,8 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	$query = 'SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	list( $id, $fileupload, $fileimage ) = $db->query->fetch( 3 );
+	$query = $db->query( 'SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id );
+	list( $id, $fileupload, $fileimage ) = $query->fetch( 3 );
 	if( empty( $id ) )
 	{
 		die( 'NO' );
@@ -652,7 +649,10 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$db->query( $sql );
+	if( $db->query( $sql ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $id );
+	}
 
 	die( 'OK' );
 }
@@ -689,7 +689,14 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 		}
 	}
 
+	$result = $db->query( 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' );
+	while( list( $_id ) = $result->fetch( 3 ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'upload_new', $_id );
+	}
+
 	$db->query( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' );
+
 	die( 'OK' );
 }
 

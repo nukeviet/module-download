@@ -16,8 +16,19 @@ $download_config = nv_mod_down_config();
 
 if( ! $download_config['is_addfile_allow'] )
 {
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	exit();
+	if( !defined( 'NV_IS_USER' ) )
+	{
+		$alert_content = $lang_module['error_not_permission_upload_content_guest'];
+		$urlback = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] );
+		$lang_back = false;
+	}
+	else
+	{
+		$alert_content = $lang_module['error_not_permission_upload_content_user'];
+		$urlback = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
+		$lang_back = true;
+	}
+	nv_theme_alert( $lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back );
 }
 
 $list_cats = nv_list_cats( false, false );
@@ -30,6 +41,7 @@ if( empty( $list_cats ) )
 
 $is_error = false;
 $error = '';
+$array = array();
 
 if( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
@@ -40,8 +52,6 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 		exit();
 	}
-
-	$array = array();
 
 	$array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
 	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 255 );
@@ -154,43 +164,35 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		{
 			if( isset( $_FILES['upload_fileupload'] ) and is_uploaded_file( $_FILES['upload_fileupload']['tmp_name'] ) )
 			{
-				$upload = new upload( $global_config['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], $download_config['maxfilesize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-				$upload_info = $upload->save_file( $_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'], false );
+				$file_allowed_ext = !empty( $download_config['upload_filetype'] ) ? $download_config['upload_filetype'] : $global_config['file_allowed_ext'];
+				$upload = new upload( $file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], $download_config['maxfilesize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
+				$upload_info = $upload->save_file( $_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp', false );
 
 				@unlink( $_FILES['upload_fileupload']['tmp_name'] );
 
 				if( empty( $upload_info['error'] ) )
 				{
-					if( in_array( $upload_info['ext'], $download_config['upload_filetype'] ) )
+					mt_srand( ( double )microtime() * 1000000 );
+					$maxran = 1000000;
+					$random_num = mt_rand( 0, $maxran );
+					$random_num = md5( $random_num );
+					$nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
+					$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+
+					$rename = nv_renamefile( $upload_info['name'], $new_name );
+
+					if( $rename[0] == 1 )
 					{
-						mt_srand( ( double )microtime() * 1000000 );
-						$maxran = 1000000;
-						$random_num = mt_rand( 0, $maxran );
-						$random_num = md5( $random_num );
-						$nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
-						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
-
-						$rename = nv_renamefile( $upload_info['name'], $new_name );
-
-						if( $rename[0] == 1 )
-						{
-							$fileupload = $new_name;
-						}
-						else
-						{
-							$fileupload = $upload_info['name'];
-						}
-
-						@chmod( $fileupload, 0644 );
-						$fileupload = str_replace( NV_ROOTDIR . '/' . NV_UPLOADS_DIR, '', $fileupload );
-						$array['filesize'] = $upload_info['size'];
+						$fileupload = $new_name;
 					}
 					else
 					{
-						@nv_deletefile( $upload_info['name'] );
-						$is_error = true;
-						$error = $lang_module['upload_error4'];
+						$fileupload = $upload_info['name'];
 					}
+
+					@chmod( $fileupload, 0644 );
+					$fileupload = str_replace( NV_ROOTDIR . '/' . NV_UPLOADS_DIR, '', $fileupload );
+					$array['filesize'] = $upload_info['size'];
 				}
 				else
 				{
@@ -215,7 +217,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				if( isset( $_FILES['upload_fileimage'] ) and is_uploaded_file( $_FILES['upload_fileimage']['tmp_name'] ) )
 				{
 					$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-					$upload_info = $upload->save_file( $_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'], false );
+					$upload_info = $upload->save_file( $_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp', false );
 
 					@unlink( $_FILES['upload_fileimage']['tmp_name'] );
 
@@ -226,7 +228,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 						$random_num = mt_rand( 0, $maxran );
 						$random_num = md5( $random_num );
 						$nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
-						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
 
 						$rename = nv_renamefile( $upload_info['name'], $new_name );
 
@@ -280,18 +282,23 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$data_insert['fileimage'] = $fileimage;
 				$data_insert['copyright'] = $array['copyright'];
 
-				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
+				$file_id = $db->insert_id( $sql, 'id', $data_insert );
+
+				if( ! $file_id )
 				{
 					$is_error = true;
 					$error = $lang_module['upload_error3'];
 				}
 				else
 				{
-					$contents = "<div class=\"info_exit\">" . $lang_module['file_upload_ok'] . "</div>";
-					$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
-
 					$user_post = defined( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " . $client_info['ip'] . $user_post, 0 );
+
+					$user_post = defined( "NV_IS_USER" ) ? $user_info['userid'] : 0;
+					nv_insert_notification( $module_name, 'upload_new', array( 'title' => $array['title'] ), $file_id, 0, $user_post, 1 );
+
+					$url_back = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
+					nv_theme_alert( $lang_module['file_upload_success_title'], $lang_module['file_upload_success_content'], 'info', $url_back );
 
 					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_site_theme( $contents );
@@ -304,7 +311,8 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 }
 else
 {
-	$array['catid'] = $array['filesize'] = 0;
+	$array['catid'] = sizeof( $array_op ) == 2 ? (int)$array_op[1] : 0;
+	$array['filesize'] = 0;
 	$array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['linkdirect'] = $array['version'] = $array['copyright'] = $array['user_name'] = '';
 	if( defined( 'NV_IS_USER' ) )
 	{

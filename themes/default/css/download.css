@@ -13,12 +13,20 @@
 
 .block_download .introtext {
 	font: normal 13px arial, verdana, sans-serif;
-	padding: 10px 5px 5px 10px;
-	text-align: justify
+	text-align: justify;
+    max-height: 105px;
+    overflow: hidden;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+.block_download div.expand {
+    max-height: 900px;
 }
 
 .block_download .dl-horizontal dt, .block_download .dl-horizontal dd {
-	padding: 8px;
+	padding: 3px;
 }
 
 .block_download .rating {
@@ -45,12 +53,12 @@
 	width: 100%;
 }
 
-.category .glyphicon { 
-	margin-right:10px; 
+.category .glyphicon {
+	margin-right:10px;
 }
 
 .category .panel-body {
-	padding:0px; 
+	padding:0px;
 }
 .category .panel-body table tr td {
 	padding-left: 15px
@@ -58,4 +66,56 @@
 
 .category .panel-body .table {
 	margin-bottom: 0px;
+}
+
+.viewcat_list .list-title{
+	margin: 10px 0 5px 0
+}
+
+.viewcat_list .list-content{
+	border-top: 1px dotted #DDDDDD;
+	margin: 0 5px 0 5px;
+	padding: 10px 0 10px 0;
+}
+
+.viewcat_list .pagination{
+	margin-top: 0
+}
+
+/* div table */
+.divTable {
+	width: 100%;
+	display: table;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.divTable .divTitle {
+	display: table-caption;
+	text-align: center;
+	font-weight: bold;
+	font-size: larger;
+}
+.divTable .divHeading {
+	display: table-row;
+	font-weight: bold;
+	border-bottom-width: 2px;
+}
+.divTable .divHeading .Cell {
+	border-bottom-width: 2px;
+}
+.divTable .Row {
+	display: table-row;
+}
+.divTable .Row:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+.divTable .Row:hover {
+	background-color: #f5f5f5;
+	cursor: default
+}
+.divTable .Cell {
+	display: table-cell;
+	border: 1px solid #ddd;
+	border-width: thin;
+	padding: 8px;
 }

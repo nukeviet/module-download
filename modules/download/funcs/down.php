@@ -30,12 +30,11 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['linkdirect'][$code]['id'] );
 	$db->query( $sql );
 
-	$content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+	$content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 	$content .= sprintf( $lang_module['download_wait2'], $session_files['linkdirect'][$code]['link'] );
 	$content .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $session_files['linkdirect'][$code]['link'] . "\" />";
 
 	nv_info_die( $lang_module['download_detail'], $lang_module['download_wait'], $content );
-
 	die();
 }
 
@@ -77,11 +76,7 @@ $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
-	if( $row['config_name'] == 'upload_dir' )
-	{
-		$upload_dir = $row['config_value'];
-	}
-	elseif( $row['config_name'] == 'is_zip' )
+	if( $row['config_name'] == 'is_zip' )
 	{
 		$is_zip = ( $filepdf == 2 ) ? false : ( bool )$row['config_value'];
 	}

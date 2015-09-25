@@ -14,52 +14,66 @@
 				</tfoot>
 				<tbody>
 					<tr>
-						<td>{LANG.config_is_addfile}</td>
-						<td><input name="is_addfile" value="1" type="checkbox"{DATA.is_addfile} /></td>
+						<td>{LANG.config_indexfile}</td>
+						<td>
+							<select class="form-control" name="indexfile">
+								<!-- BEGIN: indexfile -->
+								<option value="{INDEXFILE.key}" {INDEXFILE.selected}>{INDEXFILE.value}</option>
+								<!-- END: indexfile -->
+							</select>
+						</td>
 					</tr>
 					<tr>
+						<td>{LANG.config_viewlist_type}</td>
+						<td>
+							<!-- BEGIN: viewlist_type -->
+							<label><input type="radio" name="viewlist_type" value="{VIEWLIST.key}" {VIEWLIST.checked} />{VIEWLIST.value}</label>&nbsp;&nbsp;&nbsp;
+							<!-- END: viewlist_type -->
+						</td>
+					</tr>
+					<tr>
+						<td>{LANG.config_per_page_home}</td>
+						<td><input type="number" name="per_page_home" value="{DATA.per_page_home}" class="form-control" /></td>
+					</tr>
+					<tr>
+						<td>{LANG.config_per_page_child}</td>
+						<td><input type="number" name="per_page_child" value="{DATA.per_page_child}" class="form-control" /></td>
+					</tr>
+					<tr>
+						<td>{LANG.config_is_addfile}</td>
+						<td>
+							<label><input name="is_addfile" value="1" id="is_addfile" type="checkbox"{DATA.is_addfile} />{LANG.config_is_addfile_note}</label>
+						</td>
+					</tr>
+					<tr class="config_is_addfile is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
 							<!-- BEGIN: groups_addfile -->
-							<input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
-							<br />
+							<label class="show"><input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}</label>
 							<!-- END: groups_addfile -->
 						</td>
 					</tr>
-					<tr>
-						<td>{LANG.config_is_uploadfile}</td>
-						<td><input name="is_upload" value="1" type="checkbox"{DATA.is_upload} /></td>
-					</tr>
-					<tr>
+					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
 							<!-- BEGIN: groups_upload -->
-							<input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}
-							<br />
+							<label class="show"><input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}</label>
 							<!-- END: groups_upload -->
 						</td>
 					</tr>
-					<tr>
+					<!-- BEGIN: allow_files_type -->
+					<tr class="is_addfile" {IS_ADDFILE}>
 						<td class="top">{LANG.config_allowfiletype}</td>
 						<td>
-							<div class="dl-fixheight">
-								<!-- BEGIN: upload_filetype -->
-								<label><input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}</label><br />
-								<!-- END: upload_filetype -->
-							</div>
+						<!-- BEGIN: loop -->
+						<label><input name="upload_filetype[]" type="checkbox" value="{TP}" {CHECKED} /> {TP}</label>&nbsp;&nbsp;&nbsp;
+						<!-- END: loop -->
 						</td>
 					</tr>
-					<tr>
+					<!-- END: allow_files_type -->
+					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_maxfilesize}</td>
 						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="pull-left form-control w200"/><span class="text-middle"> {LANG.config_maxfilemb}. {LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} </span></td>
-					</tr>
-					<tr>
-						<td>{LANG.config_uploadedfolder}</td>
-						<td><input name="upload_dir" value="{DATA.upload_dir}" type="text" maxlength="100" class="form-control w200" /></td>
-					</tr>
-					<tr>
-						<td>{LANG.config_queuefolder}</td>
-						<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" class="form-control w200" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_resume}</td>
@@ -67,7 +81,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.max_speed}</td>
-						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" /><span class="text-middle"> {LANG.kb_sec} </span></td>
+						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" />&nbsp;<span class="text-middle"> {LANG.kb_sec} </span></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_zip}</td>
@@ -82,4 +96,9 @@
 		</div>
 	</form>
 </div>
+<script>
+	$('#is_addfile').click(function(){
+		$('.is_addfile').toggle();
+	});
+</script>
 <!-- END: main -->

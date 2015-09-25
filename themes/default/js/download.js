@@ -6,41 +6,6 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-// Viewfile
-$(document).ready(function() {
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
-
-	$('.hover-star').rating({
-		focus : function(value, link) {
-			var tip = $('#hover-test');
-			if (sr != 2) {
-				tip[0].data = tip[0].data || tip.html();
-				tip.html(file_your_rating + ': ' + link.title || 'value: ' + value);
-				sr = 1;
-			}
-		},
-		blur : function(value, link) {
-			var tip = $('#hover-test');
-			if (sr != 2) {
-				$('#hover-test').html(tip[0].data || '');
-				sr = 1;
-			}
-		},
-		callback : function(value, link) {
-			if (sr == 1) {
-				sr = 2;
-				$('.hover-star').rating('disable');
-				nv_sendrating(id, value);
-			}
-		}
-	});
-
-	$('.hover-star').rating('select', rating_point);
-});
-
 // Upload
 $('#upload_fileupload').change(function(){
      $('#file_name').val($(this).val().match(/[-_\w]+[.][\w]+$/i)[0]);
@@ -71,7 +36,7 @@ function nv_download_file(fr, flnm) {
 	download_hits = download_hits + 1;
 	document.getElementById('download_hits').innerHTML = download_hits;
 
-	window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&filename=" + flnm;
+	window.location.href = nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&filename=" + flnm;
 	return false;
 }
 
@@ -83,16 +48,16 @@ function nv_linkdirect(code) {
 	download_hits = download_hits + 1;
 	document.getElementById('download_hits').innerHTML = download_hits;
 
-	win = window.open(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=down&code=' + code, 'mydownload');
+	win = window.open(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=down&code=' + code, 'mydownload');
 	win.focus();
 	return false;
 }
 
 //  ---------------------------------------
 
-function nv_link_report(fid) {
-	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
-		alert(report_thanks_mess);
+function nv_link_report($_this, fid) {
+	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
+		alert($_this.data('thanks'));
 	});
 	return false;
 }
@@ -101,7 +66,7 @@ function nv_link_report(fid) {
 
 function nv_sendrating(fid, point) {
 	if (fid > 0 && point > 0 && point < 6) {
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'rating=' + fid + '_' + point, function(res) {
+		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'rating=' + fid + '_' + point, function(res) {
 			$("#stringrating").html(res);
 		});
 	}

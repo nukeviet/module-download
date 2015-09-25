@@ -63,7 +63,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- catid smallint(5) unsigned NOT NULL DEFAULT '0',
+ catid int(10) unsigned NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  description mediumtext NOT NULL,
  introtext text NOT NULL,
@@ -92,6 +92,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  description text,
  groups_view varchar(255) DEFAULT '',
  groups_download varchar(255) DEFAULT '',
+ viewcat varchar(100) DEFAULT 'viewcat_list_new',
+ numlink smallint(4) DEFAULT '3',
  weight smallint(4) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
@@ -112,16 +114,19 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  UNIQUE KEY config_name (config_name)
 )ENGINE=MyISAM";
 
+$maxfilesize = min( $global_config['nv_max_size'], nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
+
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
+('indexfile', 'viewcat_main_bottom'),
+('viewlist_type', 'list'),
+('per_page_home', '20'),
+('per_page_child', '20'),
 ('is_addfile', '1'),
-('is_upload', '1'),
-('groups_upload', ''),
-('maxfilesize', '2097152'),
-('upload_filetype', 'doc,xls,zip,rar'),
-('upload_dir', 'files'),
-('temp_dir', 'temp'),
-('groups_addfile', ''),
-('is_zip', '1'),
+('groups_upload', '4'),
+('maxfilesize', '" . $maxfilesize . "'),
+('upload_filetype', 'adobe,archives,audio,documents,flash,images,real,video'),
+('groups_addfile', '4'),
+('is_zip', '0'),
 ('is_resume', '1'),
 ('max_speed', '0')";
 
