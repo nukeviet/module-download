@@ -1,3 +1,7 @@
+/.project
+/.settings/
+/.buildpath
+
 /README.md
 /favicon.ico
 /index.php
@@ -11,7 +15,6 @@
 /includes/
 /install/
 /uploads/
-/.project
 /.htaccess
 /CHANGELOG.txt
 /config.php

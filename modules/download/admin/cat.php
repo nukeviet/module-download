@@ -147,14 +147,15 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				}
 			}
 		}
+		
+		$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+		$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
+		$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
+		$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+			
 		if( ! $is_error )
 		{
-			$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
-			$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
-
-			$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
-			$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 			$sql = 'SELECT MAX(weight) AS new_weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $array['parentid'];
 			$new_weight = $db->query( $sql )->fetchColumn();
@@ -404,8 +405,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['alias'] = $row['alias'];
 		$array['description'] = $row['description'];
 
-		$array['groups_view'] = explode( ',', $row['groups_view'] );
-		$array['groups_download'] = explode( ',', $row['groups_download'] );
+		$array['groups_view'] = $row['groups_view'];
+		$array['groups_download'] = $row['groups_download'];
 	}
 
 	$listcats = array(
@@ -416,8 +417,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		)
 	);
 	$listcats = $listcats + nv_listcats( $array['parentid'], $catid );
-
-	$groups_view = $array['groups_view'];
+	
+	$groups_view = explode( ',', $array['groups_view'] );
 	$array['groups_view'] = array();
 	foreach( $groups_list as $key => $title )
 	{
@@ -427,8 +428,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 		);
 	}
-
-	$groups_download = $array['groups_download'];
+	
+	$groups_download = explode( ',', $array['groups_download'] );
 	$array['groups_download'] = array();
 	foreach( $groups_list as $key => $title )
 	{

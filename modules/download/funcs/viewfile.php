@@ -258,6 +258,16 @@ if( ! in_array( $row['id'], $dfile ) )
 	++$row['view_hits'];
 }
 
+$array_keyword = array();
+$_query = $db->query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 
+			INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 
+			ON a1.did=a2.did WHERE a1.id=' . $row['id'] );
+while( $_row = $_query->fetch() )
+{
+	$array_keyword[] = $_row;
+	$meta_property['article:tag'][] = $_row['keyword'];
+}
+	
 // comment
 $content_comment = '';
 if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) )
@@ -304,7 +314,7 @@ $page_title = $row['title'];
 $key_words = $module_info['keywords'];
 $description = $row['description'];
 
-$contents = view_file( $row, $download_config, $content_comment );
+$contents = view_file( $row, $download_config, $content_comment, $array_keyword );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

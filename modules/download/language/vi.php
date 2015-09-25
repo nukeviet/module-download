@@ -109,3 +109,5 @@ $lang_module['error_not_permission_content'] = 'Quản trị không cho phép b�
 $lang_module['error_not_permission_title'] = 'Bạn không có quyền truy cập vào khu vực này';
 $lang_module['error_not_permission_upload_content_guest'] = 'Bạn không được phép truy cập vào khu vực này, vui lòng đăng nhập để hệ thống xác định quyền hạn tải lên tập tin, chúng tôi sẽ chuyển bạn đến trang đăng nhập trong giây lát...';
 $lang_module['error_not_permission_upload_content_user'] = 'Nhóm thành viên bạn đang tham gia không được cấp phép để truy cập vào khu vực này, vui lòng liên hệ với người quản trị để biết thêm thông tin.';
+
+$lang_module['keywords'] = 'Từ khóa';
