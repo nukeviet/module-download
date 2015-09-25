@@ -12,7 +12,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array(
 	'name' => 'Download',
-	'modfuncs' => 'main,viewcat,viewfile,down,upload,report,search',
+	'modfuncs' => 'main,viewcat,viewfile,down,upload,report,search,tag',
 	'change_alias' => 'upload, search',
 	'submenu' => 'main,upload,search',
 	'is_sysmod' => 0,
