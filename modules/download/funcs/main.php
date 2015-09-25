@@ -100,6 +100,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 	$array_cats = $allcats =  array();
 	foreach( $list_cats as $value )
 	{
+		$allcats = array();
 		if( empty( $value['parentid'] ) )
 		{
 			$catid_i = $value['id'];
