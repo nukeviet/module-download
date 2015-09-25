@@ -276,3 +276,58 @@ function nv_viewcat_change( catid, mod ) {
 	});
 	return;
 }
+
+function split(val) {
+	return val.split(/,\s*/);
+}
+
+function extractLast(term) {
+	return split(term).pop();
+}
+
+$(document).ready(function() {
+	$("input[name='catids[]']").click(function() {
+		var catid = $("input:radio[name=catid]:checked").val();
+		var radios_catid = $("input:radio[name=catid]");
+		var catids = [];
+		$("input[name='catids[]']").each(function() {
+			if ($(this).prop('checked')) {
+				$("#catright_" + $(this).val()).show();
+				catids.push($(this).val());
+			} else {
+				$("#catright_" + $(this).val()).hide();
+				if ($(this).val() == catid) {
+					radios_catid.filter("[value=" + catid + "]").prop("checked", false);
+				}
+			}
+		});
+
+		if (catids.length > 1) {
+			for ( i = 0; i < catids.length; i++) {
+				$("#catright_" + catids[i]).show();
+			};
+			catid = parseInt($("input:radio[name=catid]:checked").val() + "");
+			if (!catid) {
+				radios_catid.filter("[value=" + catids[0] + "]").prop("checked", true);
+			}
+		}
+	});
+});
+
+function nv_search_tag(did) {
+	$("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10));
+	return false;
+}
+
+function nv_del_tags(did) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&del_did=" + did + "&num=" + nv_randomPassword(10));
+	}
+	return false;
+}
+
+function nv_add_element( idElment, key, value ){
+   var html = "<span title=\"" + value + "\" class=\"uiToken removable\" ondblclick=\"$(this).remove();\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
+    $("#" + idElment).append( html );
+	return false;
+}

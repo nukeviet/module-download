@@ -10,6 +10,26 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+//get alias
+if( $nv_Request->isset_request( 'gettitle', 'post' ) )
+{
+	$title = $nv_Request->get_title( 'gettitle', 'post','' );
+	$alias = change_alias( $title );
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories where alias = :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	 if( $stmt->fetchColumn() )
+	 {
+		$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories' )->fetchColumn();
+		$weight = intval( $weight ) + 1;
+		$alias = $alias . '-' . $weight;
+	 }
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $alias;
+	include NV_ROOTDIR . '/includes/footer.php';
+}
+
 /**
  * nv_FixWeightCat()
  *
@@ -217,6 +237,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;add=1' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array );
+	$xtpl->assign( 'ONCHANGE', 'onchange="get_alias();"' );
 
 	if( ! empty( $error ) )
 	{

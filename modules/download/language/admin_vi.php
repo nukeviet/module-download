@@ -135,3 +135,20 @@ $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ kiểm duy�
 
 $lang_module['notification_report'] = '<strong>%s</strong> đã thông báo tập tin <strong>%s</strong> bị lỗi';
 $lang_module['notification_upload'] = '<strong>%s</strong> đã gửi tập tin <strong>%s</strong> lên hệ thống';
+
+$lang_module['search_key'] = 'Từ khóa tìm kiếm';
+$lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
+$lang_module['keywords'] = 'Từ khóa';
+$lang_module['numlinks'] = 'Số liên kết';
+$lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
+$lang_module['content_homeimg'] = 'Hình minh họa';
+$lang_module['save'] = 'Lưu thay đổi';
+$lang_module['download_tags'] = 'Quản lý Tags';
+$lang_module['add_tags'] = 'Thêm Tags';
+$lang_module['edit_tags'] = 'Sửa Tags';
+$lang_module['tags_no_description'] = 'Chưa có mô tả';
+$lang_module['tags_alias'] = 'Lọc bỏ dấu tiếng việt, các ký tự khác a-z, 0-9, - trong Liên kết tĩnh của tags';
+$lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
+$lang_module['tags_all_link'] = 'Chế độ xem các tags chưa có mô tả đang được kích hoạt, nhấp vào đây để xem tất cả các tags';
+$lang_module['content_tag'] = 'Các tag cho file';
+$lang_module['input_keyword_tags'] = 'Nhập từ khóa...';

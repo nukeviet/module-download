@@ -455,3 +455,39 @@ function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_
 	include (NV_ROOTDIR . "/includes/footer.php");
 	exit( );
 }
+
+/**
+ * view_items_tag()
+ *
+ * @param mixed $array_item
+ * @return
+ */
+function view_items_tag( $array_item, $generate_page )
+{
+	global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config;
+
+	$xtpl = new XTemplate( 'topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+
+	foreach ($array_item as $array_item_i)
+	{
+		$array_item_i['uploadtime']=date( 'H:i d/m/Y', $array_item_i['uploadtime'] );
+		$xtpl->assign( 'ITEM', $array_item_i );
+		
+		if(!empty($array_item_i['fileimage']))
+		{
+			$xtpl->parse( 'main.loop.image' );
+		}
+		
+		$xtpl->parse( 'main.loop' );
+	}
+
+	if( ! empty( $generate_page ) )
+	{
+		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
+		$xtpl->parse( 'main.generate_page' );
+	}
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
