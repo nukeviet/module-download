@@ -120,11 +120,6 @@ function nv_mod_down_config()
 	$download_config['upload_filetype'] = ! empty( $download_config['upload_filetype'] ) ? explode( ',', $download_config['upload_filetype'] ) : array();
 	if( ! empty( $download_config['upload_filetype'] ) ) $download_config['upload_filetype'] = array_map( 'trim', $download_config['upload_filetype'] );
 
-	if( empty( $download_config['upload_filetype'] ) )
-	{
-		$download_config['is_upload'] = 0;
-	}
-
 	if( $download_config['is_addfile'] )
 	{
 		$download_config['is_addfile_allow'] = nv_user_in_groups( $download_config['groups_addfile'] );
@@ -134,7 +129,7 @@ function nv_mod_down_config()
 		$download_config['is_addfile_allow'] = false;
 	}
 
-	if( $download_config['is_addfile_allow'] and $download_config['is_upload'] )
+	if( $download_config['is_addfile_allow'] )
 	{
 		$download_config['is_upload_allow'] = nv_user_in_groups( $download_config['groups_upload'] );
 	}
@@ -149,7 +144,6 @@ function nv_mod_down_config()
 if( $op == 'main' )
 {
 	$page = 1; // Trang mặc định
-	$per_page = 20; // Số lượng bản ghi trên một trang
 	$catalias = '';
 	$filealias = '';
 	$catid = 0;

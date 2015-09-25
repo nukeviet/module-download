@@ -12,5 +12,13 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 $lang_siteinfo = nv_get_lang_module( $mod );
 
-$data['title'] = sprintf( $lang_siteinfo['notification_report'], $data['send_from'], $data['content']['title'] );
-$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;edit=1&amp;id=' . $data['obid'] . '&amp;report=1';
+if( $data['type'] == 'report_new' )
+{
+	$data['title'] = sprintf( $lang_siteinfo['notification_report'], $data['send_from'], $data['content']['title'] );
+	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;edit=1&amp;id=' . $data['obid'] . '&amp;report=1';
+}
+elseif( $data['type'] == 'upload_new' )
+{
+	$data['title'] = sprintf( $lang_siteinfo['notification_upload'], $data['send_from'], $data['content']['title'] );
+	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=filequeue&amp;edit=1&amp;id=' . $data['obid'];
+}

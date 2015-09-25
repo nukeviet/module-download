@@ -21,6 +21,7 @@ if( empty( $list_cats ) )
 
 $contents = '';
 $download_config = nv_mod_down_config();
+$per_page = $download_config['per_page_home'];
 
 $today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 $yesterday = $today - 86400;
@@ -96,12 +97,14 @@ $contents = '';
 if( $viewcat == 'viewcat_main_bottom' )
 {
 	// View cat
-	$array_cats = array();
+	$array_cats = $allcats =  array();
 	foreach( $list_cats as $value )
 	{
 		if( empty( $value['parentid'] ) )
 		{
 			$catid_i = $value['id'];
+			$allcats[] = $value['id'];
+
 			if( empty( $value['subcats'] ) )
 			{
 				$in = 'catid=' . $catid_i;
@@ -110,6 +113,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 			{
 				$in = $value['subcats'];
 				$in[] = $catid_i;
+				$allcats = $in;
 				$in = implode( ',', $in );
 				$in = 'catid IN (' . $in . ')';
 			}
@@ -163,11 +167,15 @@ if( $viewcat == 'viewcat_main_bottom' )
 					);
 				}
 
+				$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode( ',', $allcats ) . ' )' )->fetchColumn();
+
 				$array_cats[$catid_i] = array();
-				$array_cats[$catid_i]['id'] = $value['id'];
+				$array_cats[$catid_i]['catid'] = $value['id'];
 				$array_cats[$catid_i]['title'] = $value['title'];
 				$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
 				$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
+				$array_cats[$catid_i]['numfile'] = $numfile;
+				$array_cats[$catid_i]['viewcat'] = $list_cats[$value['id']]['viewcat'];
 				$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
 				$array_cats[$catid_i]['items'] = $array_item;
 			}

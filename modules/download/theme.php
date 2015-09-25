@@ -19,9 +19,9 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
  * @param mixed $download_config
  * @return
  */
-function theme_viewcat_main( $viewcat, $array_cats )
+function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat_data = array(), $generate_page = '' )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
+	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config, $list_cats;
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -33,6 +33,10 @@ function theme_viewcat_main( $viewcat, $array_cats )
 	{
 		if( empty( $cat['parentid'] ) )
 		{
+			if( $download_config['is_addfile_allow'] )
+			{
+				$cat['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat['catid'];
+			}
 			$xtpl->assign( 'catbox', $cat );
 
 			if( ! empty( $cat['subcats'] ) )
@@ -40,12 +44,12 @@ function theme_viewcat_main( $viewcat, $array_cats )
 				$i = 0;
 				foreach( $list_cats as $subcat )
 				{
-					if( $subcat['parentid'] == $cat['id'] )
+					if( $subcat['parentid'] == $cat['catid'] )
 					{
 						$subcat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $subcat['alias'];
 						$xtpl->assign( 'listsubcat', $subcat );
 
-						if( ++$i >= 4 )
+						if( ++$i >= 3 )
 						{
 							$xtpl->assign( 'MORE', $cat['link'] );
 							$xtpl->parse( 'main.catbox.subcatbox.more' );
@@ -55,8 +59,10 @@ function theme_viewcat_main( $viewcat, $array_cats )
 						$xtpl->parse( 'main.catbox.subcatbox.listsubcat' );
 					}
 				}
+
 				$xtpl->parse( 'main.catbox.subcatbox' );
 			}
+
 			$items = $cat['items'];
 			#parse the first items
 			$thefirstcat = current( $items );
@@ -74,6 +80,11 @@ function theme_viewcat_main( $viewcat, $array_cats )
 				$xtpl->parse( 'main.catbox.itemcat.adminlink' );
 			}
 
+			if( $download_config['is_addfile_allow'] )
+			{
+				$xtpl->parse( 'main.catbox.is_addfile_allow' );
+			}
+
 			$xtpl->parse( 'main.catbox.itemcat' );
 			foreach( $items as $item )
 			{
@@ -86,6 +97,17 @@ function theme_viewcat_main( $viewcat, $array_cats )
 			$xtpl->parse( 'main.catbox.related' );
 			$xtpl->parse( 'main.catbox' );
 		}
+	}
+
+	// Danh sach file trong chu de
+	if( ! empty( $array_files ) )
+	{
+		if( !empty( $cat_data ) )
+		{
+			$xtpl->assign( 'CAT_TITLE', sprintf( $lang_module['viewcat_listfile'], $cat_data['title'] ) );
+		}
+		$xtpl->assign( 'FILE_LIST', theme_viewcat_list( $array_files, $generate_page ) );
+		$xtpl->parse( 'main.filelist' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -102,9 +124,16 @@ function theme_viewcat_main( $viewcat, $array_cats )
  */
 function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
+	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
-	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
+	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
+
+	if( !empty( $cat_data ) and $download_config['is_addfile_allow'] )
+	{
+		$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
+	}
+
+	$xtpl = new XTemplate(  $viewcat. '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'CAT', $cat_data );
@@ -124,83 +153,15 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array() )
 		$xtpl->parse( 'main.cat_data' );
 	}
 
+	if( $download_config['is_addfile_allow'] )
+	{
+		$xtpl->parse( 'main.is_addfile_allow' );
+	}
+
 	if( !empty( $page ) )
 	{
 		$xtpl->assign( 'PAGE', $page );
 		$xtpl->parse( 'main.page' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-function theme_viewcat_catmain( $viewcat, $array, $subs, $generate_page )
-{
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $download_config, $list_cats;
-
-	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/download/' );
-	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
-
-	if( $download_config['is_addfile_allow'] )
-	{
-		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
-		$xtpl->parse( 'main.is_addfile_allow' );
-	}
-
-	// Hien thi chu de con
-	if( ! empty( $subs ) )
-	{
-		if( $viewcat == 'viewcat_main_bottom' )
-		{
-			$xtpl->assign( 'SUBCAT', theme_viewcat_main( $viewcat, $subs ) );
-			$xtpl->parse( 'main.viewcat_main' );
-		}
-		elseif( $viewcat == 'viewcat_list_new' )
-		{
-			foreach( $subs as $subcat )
-			{
-				if( !empty( $subcat['items'] ) )
-				{
-					$xtpl->assign( 'SUBCAT', theme_viewcat_list( $subcat['items'], '', $subcat ) );
-					$xtpl->parse( 'main.viewcat_list' );
-				}
-			}
-		}
-	}
-
-	// Danh sach file trong chu de
-	if( ! empty( $array ) )
-	{
-		foreach( $array as $row )
-		{
-			$xtpl->assign( 'listpostcat', $row );
-
-			if( ! empty( $row['author_name'] ) )
-			{
-				$xtpl->parse( 'main.row.author_name' );
-			}
-
-			if( ! empty( $row['imagesrc'] ) )
-			{
-				$xtpl->parse( 'main.listpostcat.image' );
-			}
-
-			if( ! empty( $row['edit_link'] ) )
-			{
-				$xtpl->parse( 'main.listpostcat.is_admin' );
-			}
-
-			$xtpl->parse( 'main.listpostcat' );
-		}
-	}
-
-	if( ! empty( $generate_page ) )
-	{
-		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-		$xtpl->parse( 'main.generate_page' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -425,6 +386,108 @@ function theme_viewpdf( $filename )
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'PDF_JS_DIR', NV_BASE_SITEURL . 'themes/default/js/pdf.js/' );
 	$xtpl->assign( 'PDF_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=down&filepdf=2&filename=' . $filename );
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * nv_theme_alert()
+ *
+ * @param mixed $message_title
+ * @param mixed $message_content
+ * @param mixed $type
+ * @param mixed $url_back
+ * @param mixed $time_back
+ * @return
+ */
+function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true )
+{
+	global $module_file, $module_info, $lang_module, $page_title;
+
+	$xtpl = new XTemplate( 'alert.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'CONTENT', $message_content );
+
+	if( $type == 'success' )
+	{
+		$xtpl->parse( 'main.success' );
+	}
+	elseif( $type == 'warning' )
+	{
+		$xtpl->parse( 'main.warning' );
+	}
+	elseif( $type == 'danger' )
+	{
+		$xtpl->parse( 'main.danger' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.info' );
+	}
+
+	if( !empty( $message_title ) )
+	{
+		$page_title = $message_title;
+		$xtpl->assign( 'TITLE', $message_title );
+		$xtpl->parse( 'main.title' );
+	}
+	else
+	{
+		$page_title = $module_info['custom_title'];
+	}
+
+	if( !empty( $url_back ) )
+	{
+		$xtpl->assign( 'TIME', $time_back );
+		$xtpl->assign( 'URL', $url_back );
+		$xtpl->parse( 'main.url_back' );
+		if( $lang_back )
+		{
+			$xtpl->parse( 'main.url_back_button' );
+		}
+	}
+
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include (NV_ROOTDIR . "/includes/header.php");
+	echo nv_site_theme( $contents );
+	include (NV_ROOTDIR . "/includes/footer.php");
+	exit( );
+}
+
+/**
+ * view_items_tag()
+ *
+ * @param mixed $array_item
+ * @return
+ */
+function view_items_tag( $array_item, $generate_page )
+{
+	global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config;
+
+	$xtpl = new XTemplate( 'topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+
+	foreach ($array_item as $array_item_i)
+	{
+		$array_item_i['uploadtime']=date( 'H:i d/m/Y', $array_item_i['uploadtime'] );
+		$xtpl->assign( 'ITEM', $array_item_i );
+		
+		if(!empty($array_item_i['fileimage']))
+		{
+			$xtpl->parse( 'main.loop.image' );
+		}
+		
+		$xtpl->parse( 'main.loop' );
+	}
+
+	if( ! empty( $generate_page ) )
+	{
+		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
+		$xtpl->parse( 'main.generate_page' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
