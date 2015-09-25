@@ -134,17 +134,13 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-6 control-label">{LANG.file_upload_captcha}</label>
-				<div class="col-sm-18">
+				<label class="col-sm-6 control-label">{LANG.file_upload_captcha2}</label>
+				<div class="col-sm-13">
+					<input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
+				</div>
+				<div class="col-sm-5">
 					<img style="vertical-align: middle" height="22" name="upload_vimg" class="captchaImg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{GLANG.captcha}" />
 					<img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" class="refresh" onclick="change_captcha('#upload_seccode_iavim');" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-sm-6 control-label">{LANG.file_upload_captcha2}</label>
-				<div class="col-sm-18">
-					<input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
 				</div>
 			</div>
 
