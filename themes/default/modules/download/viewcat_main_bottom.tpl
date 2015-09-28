@@ -56,7 +56,7 @@
 <!-- END: catbox -->
 
 <!-- BEGIN: filelist -->
-<h2 class="m-bottom">{CAT_TITLE}</h2>
+<h2 class="m-bottom pull-left">{CAT_TITLE}</h2>
 {FILE_LIST}
 <!-- END: filelist -->
 
