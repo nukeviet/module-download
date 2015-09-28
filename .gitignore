@@ -33,7 +33,7 @@
 !/themes/admin_default/modules/download
 !/themes/admin_default/modules/download/*
 !/themes/default/css/download.css
-!/themes/default/js/download.js
+!/themes/default/js/download*.js
 !/themes/default/images/download
 !/themes/default/images/download/*
 !/themes/default/modules/download
