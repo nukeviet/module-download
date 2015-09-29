@@ -188,6 +188,9 @@ function view_file( $row, $download_config, $content_comment, $array_keyword )
 
 	$xtpl = new XTemplate( 'viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'MODULE_FILE', $module_file );
+	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'ROW', $row );
 

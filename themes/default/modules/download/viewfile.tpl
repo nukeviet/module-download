@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_FILE}_jquery.shorten.js"></script>
+
 <div class="block_download">
 	<h2 class="m-bottom">{ROW.title}</h2>
 	<!-- BEGIN: introtext -->
@@ -27,26 +29,16 @@
 		<div class="introtext m-bottom">
 				{ROW.description}
 			</div>
-			<p class="text-center"><button id="expand" class="btn btn-primary btn-xs">{LANG.expand}</button></p>
-			<script>
-				if( $.trim( $(".introtext").html() ).length <= 100 )
-				{
-					$('#expand').hide();
-				}
-
-				$('#expand').click(function() {
-					if( $(this).hasClass('expand') ){
-						$(this).removeClass('expand');
-						$(this).html('{LANG.expand}');
-					}
-					else{
-						$(this).addClass('expand');
-						$(this).html('{LANG.collapse}');
-					}
-					$('.introtext').toggleClass("expand");
-				});
-			</script>
 		</div>
+		<script>
+		$(document).ready(function() {
+			$('.introtext').shorten({
+				showChars: 300,
+				moreText: '<p class="text-center"><button class="btn btn-primary btn-xs">{LANG.expand}</button></p>',
+				lessText: '<p class="text-center"><button class="btn btn-primary btn-xs">{LANG.collapse}</button></p>',
+			});
+		});
+		</script>
 	</div>
 		<!-- END: introtext -->
 		<!-- BEGIN: filepdf -->
@@ -289,7 +281,7 @@
 			{LANG.file_admin}:
 		</div>
 		<!-- END: is_admin -->
-	
+
 	<!-- BEGIN: comment -->
 	<div class="panel panel-default">
 		<div class="panel-body">
