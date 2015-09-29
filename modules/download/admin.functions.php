@@ -14,6 +14,14 @@ $allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'vie
 
 define( 'NV_IS_FILE_ADMIN', true );
 
+//load config module
+$_sql_config = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config ';
+$_query_config = $db->query( $_sql_config );
+while( $row_config = $_query_config->fetch() )
+{
+	$module_config[$module_name][$row_config['config_name']]=$row_config['config_value'];
+}
+
 /**
  * get_allow_exts()
  *

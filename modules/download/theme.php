@@ -178,7 +178,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
  * @param mixed $download_config
  * @return
  */
-function view_file( $row, $download_config, $content_comment )
+function view_file( $row, $download_config, $content_comment, $array_keyword )
 {
 	global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
@@ -264,7 +264,20 @@ function view_file( $row, $download_config, $content_comment )
 	{
 		$xtpl->parse( 'main.disablerating' );
 	}
-
+	
+	if( ! empty( $array_keyword ) )
+	{
+		$t = sizeof( $array_keyword ) - 1;
+		foreach( $array_keyword as $i => $value )
+		{
+			$xtpl->assign( 'KEYWORD', $value['keyword'] );
+			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode( $value['alias'] ) );
+			$xtpl->assign( 'SLASH', ( $t == $i ) ? '' : ', ' );
+			$xtpl->parse( 'main.keywords.loop' );
+		}
+		$xtpl->parse( 'main.keywords' );
+	}
+	
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
 		$xtpl->parse( 'main.is_admin' );

@@ -144,6 +144,7 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('maxfilesize', '" . $maxfilesize . "'),
 ('upload_filetype', 'adobe,archives,audio,documents,flash,images,real,video'),
 ('groups_addfile', '4'),
+('tags_alias', '0'),
 ('is_zip', '0'),
 ('is_resume', '1'),
 ('max_speed', '0')";

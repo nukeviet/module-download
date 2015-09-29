@@ -285,7 +285,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$keywords = array_unique( $keywords );
 			foreach( $keywords as  $keyword )
 			{
-				$alias_i = change_alias( $keyword );
+				$alias_i = ( $module_config[$module_name]['tags_alias'] ) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
 				$alias_i = nv_strtolower( $alias_i );
 				$sth = $db->prepare( 'SELECT did, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 				$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
