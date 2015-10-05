@@ -2,6 +2,9 @@
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script>
+	var uploadForm = true;
+</script>
 
 <!-- BEGIN: is_error -->
 <div class="alert alert-danger">
