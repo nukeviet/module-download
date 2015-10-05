@@ -294,68 +294,14 @@ function view_file( $row, $download_config, $content_comment )
  */
 function theme_upload( $array, $list_cats, $download_config, $error )
 {
-	global $module_info, $module_name, $module_file, $lang_module, $lang_global, $my_head;
-
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.validate.min.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
-	$my_head .= "$(document).ready(function(){
-    $('#uploadForm').validate({
-        rules: {
-        upload_title: {
-        required: true,
-        rangelength: [3, 255]
-    },
-
-    upload_author_name: {
-        rangelength: [3, 100]
-    },
-
-    upload_author_email: {
-        email: true
-    },
-
-    upload_author_url: {
-        url: true
-    },
-
-    upload_fileupload: {
-        accept: '" . implode( "|", $download_config['upload_filetype'] ) . "'
-    },
-
-    upload_filesize: {
-        number: true
-    },
-
-    upload_fileimage: {
-        accept: 'jpg|gif|png'
-    },
-
-    upload_introtext: {
-        maxlength: 500
-    },
-
-    upload_description: {
-        maxlength: 5000
-    },
-
-    upload_user_name: {
-        required: true,
-        rangelength: [3, 60]
-    },
-
-    upload_seccode: {
-        required: true,
-        minlength: 6
-    }
-    }
-    });
-    });";
-	$my_head .= " </script>\n";
+	global $module_info, $module_name, $module_file, $lang_module, $lang_global;
 
 	$xtpl = new XTemplate( 'upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'DOWNLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 	$xtpl->assign( 'UPLOAD', $array );
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );

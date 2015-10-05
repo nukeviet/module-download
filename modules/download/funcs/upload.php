@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['upload'];
+$array_mod_title[] = array( 'title' => $page_title );
 
 $download_config = nv_mod_down_config();
 
@@ -332,6 +333,7 @@ if( defined( 'NV_IS_USER' ) )
 	$array['disabled'] = ' disabled="disabled"';
 }
 $array['addfile'] = md5( $client_info['session_id'] );
+$array['upload_filetype'] = implode( "|", $download_config['upload_filetype'] );
 
 $contents = theme_upload( $array, $list_cats, $download_config, $error );
 
