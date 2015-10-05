@@ -128,11 +128,15 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 
 	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
 
-	if( !empty( $cat_data ) )
+	if( $download_config['is_addfile_allow'] )
 	{
-		if( $download_config['is_addfile_allow'] )
+		if( !empty( $cat_data ) )
 		{
 			$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
+		}
+		else
+		{
+			$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'];
 		}
 	}
 

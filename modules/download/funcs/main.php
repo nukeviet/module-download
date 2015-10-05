@@ -239,7 +239,7 @@ elseif( $viewcat == 'viewcat_list_new' )
 	}
 	$page_title = $page > 1 ? $page_title . ' - ' . $lang_module['page'] . ' ' . $page : $page_title;
 	$page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-	$contents = theme_viewcat_list( $array_files, $page );
+	$contents = theme_viewcat_list( $array_files, $page, array(), 0 );
 }
 
 include NV_ROOTDIR . '/includes/header.php';
