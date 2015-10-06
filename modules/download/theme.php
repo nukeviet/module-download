@@ -319,12 +319,25 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 		$xtpl->parse( 'main.is_error' );
 	}
 
-	foreach( $list_cats as $cat )
+	if( !empty( $list_cats ) )
 	{
-		$cat['selected'] = $array['catid'] == $cat['id'] ? " selected=\"selected\"" : "";
-		$xtpl->assign( 'LISTCATS', $cat );
-		$xtpl->parse( 'main.catid' );
+		foreach( $list_cats as $catid => $value )
+		{
+			$value['space'] = '';
+			if( $value['lev'] > 0 )
+			{
+				for( $i = 1; $i <= $value['lev']; $i++ )
+				{
+					$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				}
+			}
+			$value['selected'] = $catid == $array['catid'] ? ' selected="selected"' : '';
+
+			$xtpl->assign( 'LISTCATS', $value );
+			$xtpl->parse( 'main.catid' );
+		}
 	}
+
 	if( $download_config['is_upload_allow'] )
 	{
 		$xtpl->parse( 'main.is_upload_allow' );

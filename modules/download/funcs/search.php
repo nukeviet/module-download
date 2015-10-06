@@ -12,7 +12,6 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 
-$list_cats = nv_list_cats( true );
 $download_config = nv_mod_down_config();
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
@@ -37,11 +36,11 @@ if( ! empty( $key ) )
 }
 if( ! empty( $cat ) and isset( $list_cats[$cat] ) )
 {
-	$allcat = $list_cats[$cat]['subcats'];
+	$allcat = $list_cats[$cat]['subcatid'];
 	if( ! empty( $allcat ) )
 	{
-		$allcat[] = $cat;
-		$array_where[] = 'catid IN (' . implode( ',', $allcat ) . ')';
+		$allcat .= ',' . $cat;
+		$array_where[] = 'catid IN (' . $allcat . ')';
 	}
 	else
 	{

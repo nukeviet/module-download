@@ -28,11 +28,10 @@ if( isset( $array_op[1] ) )
 $page_title = trim( str_replace( '-', ' ', $alias ) );
 $per_page=10;
 
-$list_cats = nv_list_cats( true );
 if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 {
 	$array_item=array();
-	
+
 	$stmt = $db->prepare( 'SELECT did, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
@@ -45,34 +44,34 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 		{
 			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 		}
-		
+
 		$array_mod_title[] = array(
 			'catid' => 0,
 			'title' => $page_title,
 			'link' => $base_url
 		);
-		
+
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data )
 			->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE did=' . $tid . ')' );
-		
+
 		$num_items = $db->query( $db->sql() )->fetchColumn();
-		
+
 		$db->select( '*' )
 			->order( 'uploadtime DESC' )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
-		
+
 		while( $rows = $result->fetch() )
 		{
 			$rows['fileimage']=( ! empty( $rows['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $rows['fileimage'] : '';
 			$rows['more_link']=NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$rows['catid']]['alias'] . '/' . $rows['alias'] . $global_config['rewrite_exturl'];
 			$array_item[$rows['id']]=$rows;
 		}
-		
+
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 	}
 

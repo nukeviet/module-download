@@ -31,26 +31,6 @@ if( $nv_Request->isset_request( 'gettitle', 'post' ) )
 }
 
 /**
- * nv_FixWeightCat()
- *
- * @param integer $parentid
- * @return
- */
-function nv_FixWeightCat( $parentid = 0 )
-{
-	global $db, $module_data;
-
-	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
-	$result = $db->query( $sql );
-	$weight = 0;
-	while( $row = $result->fetch() )
-	{
-		++$weight;
-		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ' WHERE id=' . $row['id'] );
-	}
-}
-
-/**
  * nv_del_cat()
  *
  * @param mixed $catid
@@ -185,6 +165,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			}
 			else
 			{
+				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'], $array['title'], $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 
@@ -384,11 +365,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 			else
 			{
-				if( $array['parentid'] != $row['parentid'] )
-				{
-					nv_FixWeightCat( $row['parentid'] );
-				}
-
+				nv_fix_cat_order();
 				nv_del_moduleCache( $module_name );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editcat_cat'], $array['title'], $admin_info['userid'] );
 
@@ -495,7 +472,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	nv_del_cat( $catid );
-	nv_FixWeightCat( $parentid );
+	nv_fix_cat_order();
 	nv_del_moduleCache( $module_name );
 
 	die( 'OK' );

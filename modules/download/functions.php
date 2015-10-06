@@ -13,92 +13,6 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 define( 'NV_IS_MOD_DOWNLOAD', true );
 
 /**
- * nv_setcats()
- *
- * @param mixed $id
- * @param mixed $list
- * @param mixed $name
- * @param mixed $is_parentlink
- * @return
- */
-function nv_setcats( $id, $list, $name, $is_parentlink )
-{
-	global $module_name;
-
-	if( $is_parentlink )
-	{
-		$name = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list[$id]['alias'] . '">' . $list[$id]['title'] . '</a> &raquo; ' . $name;
-	}
-	else
-	{
-		$name = $list[$id]['title'] . ' &raquo; ' . $name;
-	}
-	$parentid = $list[$id]['parentid'];
-	if( $parentid )
-	{
-		$name = nv_setcats( $parentid, $list, $name, $is_parentlink );
-	}
-
-	return $name;
-}
-
-/**
- * nv_list_cats()
- *
- * @param bool $is_link
- * @param bool $is_parentlink
- * @return
- */
-function nv_list_cats( $is_link = false, $is_parentlink = true )
-{
-	global $module_data, $module_name, $module_info;
-
-	$sql = 'SELECT id,title,alias,description,groups_view,groups_download,viewcat,numlink,parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1 ORDER BY parentid,weight ASC';
-
-	$list = nv_db_cache( $sql, 'id' );
-
-	$list_cats = array();
-
-	if( ! empty( $list ) )
-	{
-		foreach( $list as $row )
-		{
-			if( nv_user_in_groups( $row['groups_view'] ) )
-			{
-				if( ! $row['parentid'] or isset( $list[$row['parentid']] ) )
-				{
-					$list_cats[$row['id']] = $list[$row['id']];
-					$list_cats[$row['id']]['name'] = $list[$row['id']]['title'];
-					$list_cats[$row['id']]['is_download_allow'] =  nv_user_in_groups( $row['groups_download'] );
-					$list_cats[$row['id']]['subcats'] = array();
-
-					if( $is_link )
-					{
-						$list_cats[$row['id']]['name'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['id']]['alias'] . '">' . $list_cats[$row['id']]['name'] . '</a>';
-					}
-
-					if( $row['parentid'] )
-					{
-						if( isset( $list_cats[$row['parentid']] ) )
-						{
-							$list_cats[$row['parentid']]['subcats'][] = $row['id'];
-						}
-						$list_cats[$row['id']]['name'] = nv_setcats( $row['parentid'], $list, $list_cats[$row['id']]['name'], $is_parentlink );
-					}
-
-					if( $is_parentlink )
-					{
-						$list_cats[$row['id']]['name'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $module_info['custom_title'] . '</a> &raquo; ' . $list_cats[$row['id']]['name'];
-					}
-				}
-			}
-		}
-	}
-
-	return $list_cats;
-}
-
-/**
  * nv_mod_down_config()
  *
  * @return
@@ -141,6 +55,9 @@ function nv_mod_down_config()
 	return $download_config;
 }
 
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
+$list_cats = nv_db_cache( $sql, 'id', $module_name );
+
 if( $op == 'main' )
 {
 	$page = 1; // Trang mặc định
@@ -149,7 +66,6 @@ if( $op == 'main' )
 	$catid = 0;
 	$nv_vertical_menu = array();
 
-	$list_cats = nv_list_cats( true );
 	if( ! empty( $list_cats ) )
 	{
 		if( ! empty( $array_op ) )
@@ -184,9 +100,10 @@ if( $op == 'main' )
 			{
 				$sub_menu = array();
 				$act = ( $c['id'] == $catid ) ? 1 : 0;
-				if( $act or ( $catid > 0 and $c['id'] == $list_cats[$catid]['parentid'] ) )
+				if( !empty( $c['subcatid'] ) and $act or ( $catid > 0 and $c['id'] == $list_cats[$catid]['parentid'] ) )
 				{
-					foreach( $c['subcats'] as $catid_i )
+					$c['subcatid'] = explode( ',', $c['subcatid'] );
+					foreach( $c['subcatid'] as $catid_i )
 					{
 						$s_c = $list_cats[$catid_i];
 						$s_act = ( $s_c['alias'] == $catalias ) ? 1 : 0;
