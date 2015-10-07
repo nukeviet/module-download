@@ -33,9 +33,16 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
 	{
 		if( empty( $cat['parentid'] ) )
 		{
-			if( $download_config['is_addfile_allow'] )
+			if( defined( 'NV_IS_ADMIN' ) or $download_config['is_addfile_allow'] )
 			{
-				$cat['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat['catid'];
+				if( defined( 'NV_IS_ADMIN' ) )
+				{
+					$cat['uploadurl'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add&amp;catid=' . $cat['catid'];
+				}
+				else
+				{
+					$cat['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat['catid'];
+				}
 			}
 			$xtpl->assign( 'catbox', $cat );
 
@@ -128,9 +135,13 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 
 	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
 
-	if( $download_config['is_addfile_allow'] )
+	if( defined( 'NV_IS_ADMIN' ) or ( $download_config['is_addfile_allow'] and $upload ) )
 	{
-		if( !empty( $cat_data ) )
+		if( defined( 'NV_IS_ADMIN' ) )
+		{
+			$cat_data['uploadurl'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add&amp;catid=' . $cat_data['id'];
+		}
+		elseif( !empty( $cat_data ) )
 		{
 			$cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
 		}
@@ -160,7 +171,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 		$xtpl->parse( 'main.cat_data' );
 	}
 
-	if( $download_config['is_addfile_allow'] and $upload )
+	if( defined( 'NV_IS_ADMIN' ) or ( $download_config['is_addfile_allow'] and $upload ) )
 	{
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}

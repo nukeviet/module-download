@@ -14,6 +14,9 @@ $allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'vie
 
 define( 'NV_IS_FILE_ADMIN', true );
 
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
+$list_cats = nv_db_cache( $sql, 'id', $module_name );
+
 //load config module
 $_sql_config = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config ';
 $_query_config = $db->query( $_sql_config );
