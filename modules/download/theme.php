@@ -122,7 +122,7 @@ function theme_viewcat_main( $viewcat, $array_cats, $array_files = array(), $cat
  * @param mixed $cat_data
  * @return
  */
-function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $subcat = true )
+function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $subcat = true, $upload = true )
 {
 	global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $download_config;
 
@@ -160,7 +160,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 		$xtpl->parse( 'main.cat_data' );
 	}
 
-	if( $download_config['is_addfile_allow'] )
+	if( $download_config['is_addfile_allow'] and $upload )
 	{
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
@@ -271,7 +271,7 @@ function view_file( $row, $download_config, $content_comment, $array_keyword )
 	{
 		$xtpl->parse( 'main.disablerating' );
 	}
-	
+
 	if( ! empty( $array_keyword ) )
 	{
 		$t = sizeof( $array_keyword ) - 1;
@@ -284,7 +284,7 @@ function view_file( $row, $download_config, $content_comment, $array_keyword )
 		}
 		$xtpl->parse( 'main.keywords' );
 	}
-	
+
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
 		$xtpl->parse( 'main.is_admin' );
@@ -355,6 +355,43 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 	{
 		$xtpl->parse( 'main.is_upload_allow' );
 	}
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * theme_search()
+ *
+ * @param mixed $array
+ * @param mixed $generate_page
+ * @param mixed $is_search
+ * @return
+ */
+function theme_search( $array, $generate_page, $is_search )
+{
+	global $module_info, $module_name, $module_file, $lang_module, $lang_global;
+
+	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
+	$xtpl->assign( 'LANG', $lang_module );
+
+	if( $is_search )
+	{
+		if( !empty( $array ) )
+		{
+			$xtpl->assign( 'SEARCH', theme_viewcat_list( $array, $generate_page, array(), false, false ) );
+			$xtpl->parse( 'main.is_search.data' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.is_search.empty' );
+		}
+		$xtpl->parse( 'main.is_search' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.not_search' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
