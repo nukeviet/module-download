@@ -169,14 +169,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'], $array['title'], $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid'] );
 				exit();
 			}
 		}
 	}
 	else
 	{
-		$array['parentid'] = 0;
+		$array['parentid'] = $nv_Request->get_int( 'pid', 'get', 0 );
 		$array['title'] = '';
 		$array['alias'] = '';
 		$array['description'] = '';
@@ -369,7 +369,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				nv_del_moduleCache( $module_name );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editcat_cat'], $array['title'], $admin_info['userid'] );
 
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid'] );
 				exit();
 			}
 		}
@@ -599,7 +599,7 @@ foreach ( $_array_cat as $row )
 }
 
 $xtpl = new XTemplate( 'cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'ADD_NEW_CAT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;add=1' );
+$xtpl->assign( 'ADD_NEW_CAT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;add=1&amp;pid=' . $row['parentid'] );
 $xtpl->assign( 'TABLE_CAPTION', $caption );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'LANG', $lang_module );
