@@ -55,8 +55,24 @@ function nv_mod_down_config()
 	return $download_config;
 }
 
+$list_cats = array();
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
-$list_cats = nv_db_cache( $sql, 'id', $module_name );
+$list = nv_db_cache( $sql, 'id', $module_name );
+if( !empty( $list ) )
+{
+	foreach( $list as $catid => $catvalue )
+	{
+		if( ! $catvalue['parentid'] or isset( $list_cats[$catvalue['parentid']] ) )
+		{
+			if( nv_user_in_groups( $catvalue['groups_view'] ) )
+			{
+				$catvalue['is_download_allow'] =  nv_user_in_groups( $catvalue['groups_download'] );
+				$list_cats[$catid] = $catvalue;
+			}
+		}
+	}
+	unset( $list );
+}
 
 if( $op == 'main' )
 {
