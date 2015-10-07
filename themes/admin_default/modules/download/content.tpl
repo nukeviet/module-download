@@ -4,6 +4,8 @@
 	{ERROR}
 </div>
 <!-- END: error -->
+
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.css" rel="stylesheet" />
@@ -26,9 +28,9 @@
 						<tr>
 							<td> {LANG.category_cat_parent} </td>
 							<td>
-							<select name="catid" class="form-control w200">
+							<select name="catid" id="catid" class="form-control w200">
 								<!-- BEGIN: catid -->
-								<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+								<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 								<!-- END: catid -->
 							</select></td>
 						</tr>
@@ -183,7 +185,7 @@
 	</div>
 	<div style="text-align:center;padding-top:15px">
 		<!-- BEGIN: is_del_report -->
-		<input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp; 
+		<input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
 		<!-- END: is_del_report -->
 		<input type="submit" name="submit" value="{LANG.confirm}" class="btn btn-primary" />
 	</div>
@@ -218,6 +220,8 @@
 	});
 </script>
 <!-- END: get_alias -->
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.min.js"></script>
@@ -225,71 +229,73 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-	$("#keywords-search").bind("keydown", function(event) {
-		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
-			event.preventDefault();
-		}
+		$('#catid').select2();
 
-        if(event.keyCode==13){
-            var keywords_add= $("#keywords-search").val();
-            keywords_add = trim( keywords_add );
-            if( keywords_add != '' ){
-                nv_add_element( 'keywords', keywords_add, keywords_add );
-                $(this).val('');
-            }
-            return false;
-    	}
-
-	}).autocomplete({
-		source : function(request, response) {
-			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
-				term : extractLast(request.term)
-			}, response);
-		},
-		search : function() {
-			// custom minLength
-			var term = extractLast(this.value);
-			if (term.length < 2) {
-				return false;
+		$("#keywords-search").bind("keydown", function(event) {
+			if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
+				event.preventDefault();
 			}
-		},
-		focus : function() {
-		  //no action
-		},
-		select : function(event, ui) {
+
+	        if(event.keyCode==13){
+	            var keywords_add= $("#keywords-search").val();
+	            keywords_add = trim( keywords_add );
+	            if( keywords_add != '' ){
+	                nv_add_element( 'keywords', keywords_add, keywords_add );
+	                $(this).val('');
+	            }
+	            return false;
+	    	}
+
+		}).autocomplete({
+			source : function(request, response) {
+				$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
+					term : extractLast(request.term)
+				}, response);
+			},
+			search : function() {
+				// custom minLength
+				var term = extractLast(this.value);
+				if (term.length < 2) {
+					return false;
+				}
+			},
+			focus : function() {
+			  //no action
+			},
+			select : function(event, ui) {
+				// add placeholder to get the comma-and-space at the end
+				if(event.keyCode!=13){
+		            nv_add_element( 'keywords', ui.item.value, ui.item.value );
+		            $(this).val('');
+		           }
+	            return false;
+			}
+		});
+		$("#keywords-search").blur(function() {
 			// add placeholder to get the comma-and-space at the end
-			if(event.keyCode!=13){
-	            nv_add_element( 'keywords', ui.item.value, ui.item.value );
+	        var keywords_add= $("#keywords-search").val();
+	        keywords_add = trim( keywords_add );
+	        if( keywords_add != '' ){
+	            nv_add_element( 'keywords', keywords_add, keywords_add );
 	            $(this).val('');
-	           }
-            return false;
-		}
+	        }
+	        return false;
+		});
+	    $("#keywords-search").bind("keyup", function(event) {
+			var keywords_add= $("#keywords-search").val();
+	        if(keywords_add.search(',') > 0 )
+	        {
+	            keywords_add = keywords_add.split(",");
+	            for (i = 0; i < keywords_add.length; i++) {
+	                var str_keyword = trim( keywords_add[i] );
+	                if( str_keyword != '' ){
+	                    nv_add_element( 'keywords', str_keyword, str_keyword );
+	                }
+	            }
+	            $(this).val('');
+	        }
+	        return false;
+		});
 	});
-	$("#keywords-search").blur(function() {
-		// add placeholder to get the comma-and-space at the end
-        var keywords_add= $("#keywords-search").val();
-        keywords_add = trim( keywords_add );
-        if( keywords_add != '' ){
-            nv_add_element( 'keywords', keywords_add, keywords_add );
-            $(this).val('');
-        }
-        return false;
-	});
-    $("#keywords-search").bind("keyup", function(event) {
-		var keywords_add= $("#keywords-search").val();
-        if(keywords_add.search(',') > 0 )
-        {
-            keywords_add = keywords_add.split(",");
-            for (i = 0; i < keywords_add.length; i++) {
-                var str_keyword = trim( keywords_add[i] );
-                if( str_keyword != '' ){
-                    nv_add_element( 'keywords', str_keyword, str_keyword );
-                }
-            }
-            $(this).val('');
-        }
-        return false;
-	});
-});
 </script>
 <!-- END: main -->

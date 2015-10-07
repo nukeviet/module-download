@@ -56,7 +56,6 @@ else
 	$canonicalUrl = $base_url_rewrite;
 }
 
-
 $row['cattitle'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '">' . $list_cats[$row['catid']]['title'] . '</a>';
 
 $row['uploadtime'] = ( int )$row['uploadtime'];
@@ -129,10 +128,10 @@ if( empty( $row['copyright'] ) )
 	$row['copyright'] = $lang_module['unknown'];
 }
 
-$row['catname'] = $list_cats[$row['catid']]['name'];
+$row['catname'] = $list_cats[$row['catid']]['title'];
 
 //phan quyen tai file tai danh muc
-$row['is_download_allow'] = $list_cats[$row['catid']]['is_download_allow'];
+$row['is_download_allow'] =  nv_user_in_groups( $list_cats[$row['catid']]['groups_download'] );
 
 //neu danh muc cho phep tai file thi kiem tra tiep phan quyen tai file trong chi tiet file
 if( $row['is_download_allow'] )

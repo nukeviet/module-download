@@ -14,6 +14,9 @@ $allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'vie
 
 define( 'NV_IS_FILE_ADMIN', true );
 
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
+$list_cats = nv_db_cache( $sql, 'id', $module_name );
+
 //load config module
 $_sql_config = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config ';
 $_query_config = $db->query( $_sql_config );
@@ -195,4 +198,59 @@ if( $nv_Request->isset_request( 'fdownload', 'get' ) )
 		$download->download_file();
 	}
 	exit();
+}
+
+/**
+ * nv_fix_cat_order()
+ *
+ * @param integer $parentid
+ * @param integer $order
+ * @param integer $lev
+ * @return
+ */
+function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
+{
+	global $db, $module_data;
+
+	$sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
+	$result = $db->query( $sql );
+	$array_cat_order = array();
+	while( $row = $result->fetch() )
+	{
+		$array_cat_order[] = $row['id'];
+	}
+	$result->closeCursor();
+	$weight = 0;
+	if( $parentid > 0 )
+	{
+		++$lev;
+	}
+	else
+	{
+		$lev = 0;
+	}
+	foreach( $array_cat_order as $catid_i )
+	{
+		++$order;
+		++$weight;
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE id=' . intval( $catid_i );
+		$db->query( $sql );
+		$order = nv_fix_cat_order( $catid_i, $order, $lev );
+	}
+	$numsubcat = $weight;
+	if( $parentid > 0 )
+	{
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET numsubcat=' . $numsubcat;
+		if( $numsubcat == 0 )
+		{
+			$sql .= ",subcatid='', viewcat='viewcat_list_new'";
+		}
+		else
+		{
+			$sql .= ",subcatid='" . implode( ',', $array_cat_order ) . "'";
+		}
+		$sql .= ' WHERE id=' . intval( $parentid );
+		$db->query( $sql );
+	}
+	return $order;
 }

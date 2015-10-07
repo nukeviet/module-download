@@ -17,8 +17,6 @@ $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = ! empty( $module_info['description'] ) ? $module_info['description'] : $global_config['site_description'];
 
-$list_cats = nv_list_cats();
-
 if( ! empty( $list_cats ) )
 {
 	$catalias = isset( $array_op[1] ) ? $array_op[1] : '';

@@ -1,10 +1,5 @@
 <!-- BEGIN: main -->
-
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<script>
-	var uploadForm = true;
-</script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
 <!-- BEGIN: is_error -->
 <div class="alert alert-danger">
@@ -30,7 +25,7 @@
 				<div class="col-sm-18">
 					<select name="upload_catid" id="upload_catid" class="form-control">
 						<!-- BEGIN: catid -->
-						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 						<!-- END: catid -->
 					</select>
 				</div>
@@ -160,4 +155,11 @@
 		</div>
 	</div>
 </form>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script>
+	var uploadForm = true;
+	$('#upload_catid').select2();
+</script>
 <!-- END: main -->

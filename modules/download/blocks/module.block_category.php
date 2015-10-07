@@ -16,7 +16,6 @@ $mainmenu = 20; // Do dai tieu de menu chinh
 $submenu = 30; // Do dai tieu de menu con
 
 $download_config = nv_mod_down_config();
-$list_cats = nv_list_cats();
 
 $xtpl = new XTemplate( 'block_category.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -40,7 +39,7 @@ foreach( $list_cats as $cat )
 		$xtpl->assign( 'catparent', $cat );
 		$xtpl->assign( 'catbox', $cat );
 
-		if( ! empty( $cat['subcats'] ) )
+		if( ! empty( $cat['subcatid'] ) )
 		{
 			foreach( $list_cats as $subcat )
 			{
