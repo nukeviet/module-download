@@ -293,7 +293,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 					$keywords = array_unique( $keywords );
 					foreach( $keywords as $keyword )
 					{
-						$alias_i = change_alias( $keyword );
+						$alias_i = ( $module_config[$module_name]['tags_alias'] ) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
 						$alias_i = nv_strtolower( $alias_i );
 						$sth = $db->prepare( 'SELECT did, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
@@ -336,8 +336,17 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 					{
 						if( ! in_array( $keyword, $keywords ) )
 						{
-							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did );
 							$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id . ' AND did=' . $did );
+							
+							$count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE did=' . $did);
+							if( $count_tag->fetchColumn() )
+							{
+							  	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did );
+							}
+							else
+							{
+								$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE did=' . $did );
+							}
 						}
 					}
 				}
@@ -696,6 +705,7 @@ $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'SEARCH', $array_search );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
+$xtpl->assign( 'ADD_NEW_FILE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
 
 if( ! empty( $array ) )
 {

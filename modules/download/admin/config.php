@@ -32,6 +32,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['readme'] = strip_tags( $array_config['readme'] );
 	$array_config['is_resume'] = $nv_Request->get_int( 'is_resume', 'post', 0 );
 	$array_config['max_speed'] = $nv_Request->get_int( 'max_speed', 'post', 0 );
+	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 
 	$_groups_post = $nv_Request->get_array( 'groups_addfile', 'post', array() );
 	$array_config['groups_addfile'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
@@ -72,7 +73,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			@nv_deletefile( $readme_file );
 		}
 	}
-
+	
+	nv_del_moduleCache( 'settings' );
 	nv_del_moduleCache( $module_name );
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -88,6 +90,7 @@ $array_config['is_zip'] = 0;
 $array_config['readme'] = '';
 $array_config['is_resume'] = 0;
 $array_config['max_speed'] = 0;
+$array_config['tags_alias'] = 0;
 
 if( file_exists( $readme_file ) )
 {
@@ -105,6 +108,7 @@ while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 $array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? ' checked="checked"' : '';
 $array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
 $array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
+$array_config['tags_alias'] = ! empty( $array_config['tags_alias'] ) ? ' checked="checked"' : '';
 
 $groups_addfile = explode( ',', $array_config['groups_addfile'] );
 $array_config['groups_addfile'] = array();

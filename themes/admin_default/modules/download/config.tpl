@@ -4,7 +4,7 @@
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<colgroup>
-					<col style="width: 260px" />
+					<col style="width: 360px" />
 					<col/>
 				</colgroup>
 				<tfoot>
@@ -84,8 +84,12 @@
 						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" />&nbsp;<span class="text-middle"> {LANG.kb_sec} </span></td>
 					</tr>
 					<tr>
+						<td>{LANG.tags_alias}</td>
+						<td><input type="checkbox" value="1" name="tags_alias" {DATA.tags_alias}/></td>
+					</tr>
+					<tr>
 						<td>{LANG.is_zip}</td>
-						<td><input name="is_zip" value="1" type="checkbox"{DATA.is_zip} /></td>
+						<td><input name="is_zip" value="1" type="checkbox" {DATA.is_zip} /></td>
 					</tr>
 					<tr>
 						<td class="top">{LANG.zip_readme}</td>
