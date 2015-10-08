@@ -108,7 +108,7 @@ if( $cat_data['viewcat'] == 'viewcat_main_bottom' )
 		$cat_data['subcatid'] = explode( ',', $cat_data['subcatid'] );
 		foreach( $cat_data['subcatid'] as $sub )
 		{
-			$allcats = $sub;
+			$array_cat = GetCatidInParent( $sub );
 
 			$db->sqlreset()
 				->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
@@ -116,13 +116,8 @@ if( $cat_data['viewcat'] == 'viewcat_main_bottom' )
 				->order( 'uploadtime DESC' )
 				->limit( $list_cats[$sub]['numlink'] );
 
-			if( !empty( $list_cats[$sub]['subcatid'] ) )
-			{
-				$allcats .= ',' . $list_cats[$sub]['subcatid'];
-			}
-
 			$array_item = array();
-			$result = $db->query( $db->where( 'catid=' . $sub . ' AND status=1' )->sql() );
+			$result = $db->query( $db->where( 'catid IN (' . implode( ',', $array_cat ) . ') AND status=1' )->sql() );
 			$i = 0;
 			while( $row = $result->fetch() )
 			{
@@ -146,7 +141,7 @@ if( $cat_data['viewcat'] == 'viewcat_main_bottom' )
 				);
 			}
 
-			$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . $allcats . ' )' )->fetchColumn();
+			$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode( ',', $array_cat ) . ' )' )->fetchColumn();
 
 			if( $i )
 			{
@@ -168,10 +163,12 @@ if( $cat_data['viewcat'] == 'viewcat_main_bottom' )
 }
 elseif( $cat_data['viewcat'] == 'viewcat_list_new' )
 {
+	$array_cat = GetCatidInParent( $cat_data['id'] );
+
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data )
-		->where( 'catid=' . $cat_data['id'] . ' AND status=1' );
+		->where( 'catid IN (' . implode( ',', $array_cat ) . ') AND status=1' );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
 	$cat_data['numfile'] = $num_items;
