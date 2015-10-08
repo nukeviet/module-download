@@ -18,7 +18,7 @@
 					<select class="form-control" name="catid" id="catid">
 						<option value="">---{LANG.category_cat_c}---</option>
 						<!-- BEGIN: catid -->
-						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 						<!-- END: catid -->
 					</select>
 				</div>

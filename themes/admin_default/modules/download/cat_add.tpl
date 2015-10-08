@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
@@ -24,9 +26,9 @@
 				<tr>
 					<td> {LANG.category_cat_parent} </td>
 					<td>
-					<select name="parentid" class="form-control w200">
+					<select name="parentid" id="parentid" class="form-control w300">
 						<!-- BEGIN: parentid -->
-						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 						<!-- END: parentid -->
 					</select></td>
 				</tr>
@@ -56,7 +58,9 @@
 	</div>
 </form>
 
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script>
+	$('#parentid').select2();
 	function get_alias() {
 	var title = strip_tags(document.getElementById('title').value);
 	if (title != '') {

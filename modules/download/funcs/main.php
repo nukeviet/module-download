@@ -96,30 +96,16 @@ $contents = '';
 
 if( $viewcat == 'viewcat_main_bottom' )
 {
-	$array_cats = array();
 	foreach( $list_cats as $value )
 	{
-		$allcats = '';
 		if( empty( $value['parentid'] ) )
 		{
-			$catid_i = $value['id'];
-			$allcats = $value['id'];
-
-			if( empty( $value['subcatid'] ) )
-			{
-				$in = 'catid=' . $catid_i;
-			}
-			else
-			{
-				$in = $value['subcatid'];
-				$allcats .= ',' . $in;
-				$in = 'catid IN (' . $in . ')';
-			}
+			$array_cat = GetCatidInParent( $value['id'] );
 
 			$db->sqlreset()
 				->select( 'COUNT(*)' )
 				->from( NV_PREFIXLANG . '_' . $module_data )
-				->where( $in . ' AND status=1 ' );
+				->where( 'status=1 AND catid IN (' . implode( ',', $array_cat ) . ')' );
 
 			$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -164,17 +150,18 @@ if( $viewcat == 'viewcat_main_bottom' )
 						'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
 					);
 				}
-				$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . $allcats . ' )' )->fetchColumn();
 
-				$array_cats[$catid_i] = array();
-				$array_cats[$catid_i]['catid'] = $value['id'];
-				$array_cats[$catid_i]['title'] = $value['title'];
-				$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
-				$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
-				$array_cats[$catid_i]['numfile'] = $numfile;
-				$array_cats[$catid_i]['viewcat'] = $list_cats[$value['id']]['viewcat'];
-				$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcatid'];
-				$array_cats[$catid_i]['items'] = $array_item;
+				$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode( ',', $array_cat ) . ' )' )->fetchColumn();
+
+				$array_cats[$value['id']] = array();
+				$array_cats[$value['id']]['catid'] = $value['id'];
+				$array_cats[$value['id']]['title'] = $value['title'];
+				$array_cats[$value['id']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
+				$array_cats[$value['id']]['description'] = $list_cats[$value['id']]['description'];
+				$array_cats[$value['id']]['numfile'] = $numfile;
+				$array_cats[$value['id']]['viewcat'] = $list_cats[$value['id']]['viewcat'];
+				$array_cats[$value['id']]['subcats'] = $list_cats[$value['id']]['subcatid'];
+				$array_cats[$value['id']]['items'] = $array_item;
 			}
 		}
 	}

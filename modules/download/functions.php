@@ -11,6 +11,7 @@
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_DOWNLOAD', true );
+require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 /**
  * nv_mod_down_config()
@@ -22,7 +23,6 @@ function nv_mod_down_config()
 	global $module_name, $module_data, $module_name;
 
 	$sql = 'SELECT config_name,config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
-
 	$list = nv_db_cache( $sql );
 
 	$download_config = array();
@@ -55,8 +55,23 @@ function nv_mod_down_config()
 	return $download_config;
 }
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
-$list_cats = nv_db_cache( $sql, 'id', $module_name );
+$list_cats_tmp = $list_cats;
+$list_cats = array();
+if( !empty( $list_cats_tmp ) )
+{
+	foreach( $list_cats_tmp as $catid => $catvalue )
+	{
+		if( ! $catvalue['parentid'] or isset( $list_cats[$catvalue['parentid']] ) )
+		{
+			if( nv_user_in_groups( $catvalue['groups_view'] ) )
+			{
+				$catvalue['is_download_allow'] =  nv_user_in_groups( $catvalue['groups_download'] );
+				$list_cats[$catid] = $catvalue;
+			}
+		}
+	}
+	unset( $list_cats_tmp );
+}
 
 if( $op == 'main' )
 {

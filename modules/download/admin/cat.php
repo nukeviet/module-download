@@ -127,13 +127,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				}
 			}
 		}
-		
+
 		$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
 		$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 		$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
 		$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
-			
+
 		if( ! $is_error )
 		{
 
@@ -187,11 +187,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$listcats = array(
 		array(
 			'id' => 0,
-			'name' => $lang_module['category_cat_maincat'],
+			'title' => $lang_module['category_cat_maincat'],
+			'lev' => 0,
 			'selected' => ''
 		)
 	);
-	$listcats = $listcats + nv_listcats( $array['parentid'] );
+	$list_cats = $listcats + $list_cats;
 
 	$groups_view = explode( ',', $array['groups_view'] );
 	$array['groups_view'] = array();
@@ -227,9 +228,19 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$xtpl->parse( 'main.error' );
 	}
 
-	foreach( $listcats as $cat )
+	foreach( $list_cats as $catid => $value )
 	{
-		$xtpl->assign( 'LISTCATS', $cat );
+		$value['space'] = '';
+		if( $value['lev'] > 0 )
+		{
+			for( $i = 1; $i <= $value['lev']; $i++ )
+			{
+				$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		$value['selected'] = $catid == $array['parentid'] ? ' selected="selected"' : '';
+
+		$xtpl->assign( 'LISTCATS', $value );
 		$xtpl->parse( 'main.parentid' );
 	}
 
@@ -389,12 +400,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$listcats = array(
 		array(
 			'id' => 0,
-			'name' => $lang_module['category_cat_maincat'],
+			'title' => $lang_module['category_cat_maincat'],
+			'lev' => 0,
 			'selected' => ''
 		)
 	);
-	$listcats = $listcats + nv_listcats( $array['parentid'], $catid );
-	
+	$list_cats = $listcats + $list_cats;
+
 	$groups_view = explode( ',', $array['groups_view'] );
 	$array['groups_view'] = array();
 	foreach( $groups_list as $key => $title )
@@ -405,7 +417,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 		);
 	}
-	
+
 	$groups_download = explode( ',', $array['groups_download'] );
 	$array['groups_download'] = array();
 	foreach( $groups_list as $key => $title )
@@ -428,9 +440,19 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->parse( 'main.error' );
 	}
 
-	foreach( $listcats as $cat )
+	foreach( $list_cats as $catid => $value )
 	{
-		$xtpl->assign( 'LISTCATS', $cat );
+		$value['space'] = '';
+		if( $value['lev'] > 0 )
+		{
+			for( $i = 1; $i <= $value['lev']; $i++ )
+			{
+				$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		$value['selected'] = $catid == $array['parentid'] ? ' selected="selected"' : '';
+
+		$xtpl->assign( 'LISTCATS', $value );
 		$xtpl->parse( 'main.parentid' );
 	}
 

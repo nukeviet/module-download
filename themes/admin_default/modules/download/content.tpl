@@ -28,7 +28,7 @@
 						<tr>
 							<td> {LANG.category_cat_parent} </td>
 							<td>
-							<select name="catid" id="catid" class="form-control w200">
+							<select name="catid" id="catid" class="form-control w300">
 								<!-- BEGIN: catid -->
 								<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 								<!-- END: catid -->

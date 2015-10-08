@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+
 <!-- BEGIN: error -->
 <div class="quote">
 	<blockquote class="error">
@@ -18,9 +20,9 @@
 				<tr>
 					<td> {LANG.category_cat_parent} </td>
 					<td>
-					<select name="catid" class="form-control w200">
+					<select name="catid" id="catid" class="form-control w300">
 						<!-- BEGIN: catid -->
-						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 						<!-- END: catid -->
 					</select></td>
 				</tr>
@@ -154,7 +156,10 @@
 		<input type="button" value="{LANG.download_filequeue_del}" name="delfile" class="btn btn-danger" />
 	</div>
 </form>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript">
+	$('#catid').select2();
 	$("input[name=selectimg]").click(function() {
 		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage2&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;

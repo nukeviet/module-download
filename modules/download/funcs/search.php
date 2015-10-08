@@ -40,16 +40,8 @@ if( ! empty( $key ) )
 if( ! empty( $cat ) and isset( $list_cats[$cat] ) )
 {
 	$base_url .= '&cat=' . $cat;
-	$allcat = $list_cats[$cat]['subcatid'];
-	if( ! empty( $allcat ) )
-	{
-		$allcat .= ',' . $cat;
-		$where .= ' AND catid IN (' . $allcat . ')';
-	}
-	else
-	{
-		$where .= ' AND catid = ' . $cat;
-	}
+	$array_cat = GetCatidInParent( $cat );
+	$where .= ' AND catid IN (' . implode( ',', $array_cat ) . ')';
 }
 else
 {
