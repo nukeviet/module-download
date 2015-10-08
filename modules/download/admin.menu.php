@@ -10,8 +10,6 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'view', 'tags', 'tagsajax', 'change_cat' );
-
 $submenu['add'] = $lang_module['file_addfile'];
 $submenu['filequeue'] = $lang_module['download_filequeue'];
 $submenu['report'] = $lang_module['download_report'];

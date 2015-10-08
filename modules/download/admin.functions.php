@@ -13,6 +13,8 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 define( 'NV_IS_FILE_ADMIN', true );
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
+$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'view', 'tags', 'tagsajax', 'change_cat' );
+
 //load config module
 $_sql_config = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config ';
 $_query_config = $db->query( $_sql_config );
