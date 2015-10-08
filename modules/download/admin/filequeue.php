@@ -465,8 +465,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 	}
 
-	$listcats = nv_listcats( $array['catid'] );
-	if( empty( $listcats ) )
+	if( empty( $list_cats ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 		exit();
@@ -536,6 +535,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->assign( 'DATA', $array );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
 	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 
@@ -545,9 +546,19 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->parse( 'main.error' );
 	}
 
-	foreach( $listcats as $cat )
+	foreach( $list_cats as $catid => $value )
 	{
-		$xtpl->assign( 'LISTCATS', $cat );
+		$value['space'] = '';
+		if( $value['lev'] > 0 )
+		{
+			for( $i = 1; $i <= $value['lev']; $i++ )
+			{
+				$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		$value['selected'] = $catid == $array['catid'] ? ' selected="selected"' : '';
+
+		$xtpl->assign( 'LISTCATS', $value );
 		$xtpl->parse( 'main.catid' );
 	}
 
@@ -722,8 +733,7 @@ if( ! $all_file )
 	exit();
 }
 
-$listcats = nv_listcats( 0 );
-if( empty( $listcats ) )
+if( empty( $list_cats ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
@@ -739,7 +749,7 @@ while( $row = $result2->fetch() )
 	$array[$row['id']] = array(
 		'id' => ( int )$row['id'],
 		'title' => $row['title'],
-		'cattitle' => $listcats[$row['catid']]['title'],
+		'cattitle' => $list_cats[$row['catid']]['title'],
 		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
 		'uploadtime' => nv_date( 'd/m/Y H:i', $row['uploadtime'] )
 	);

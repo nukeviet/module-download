@@ -135,7 +135,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 
 	$viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
 
-	if( defined( 'NV_IS_ADMIN' ) or ( $download_config['is_addfile_allow'] and $upload ) )
+	if( ( defined( 'NV_IS_ADMIN' or $download_config['is_addfile_allow'] ) ) and $upload )
 	{
 		if( defined( 'NV_IS_ADMIN' ) )
 		{
@@ -171,7 +171,7 @@ function theme_viewcat_list( $array_files, $page = '', $cat_data = array(), $sub
 		$xtpl->parse( 'main.cat_data' );
 	}
 
-	if( defined( 'NV_IS_ADMIN' ) or ( $download_config['is_addfile_allow'] and $upload ) )
+	if( ( defined( 'NV_IS_ADMIN' or $download_config['is_addfile_allow'] ) ) and $upload )
 	{
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
