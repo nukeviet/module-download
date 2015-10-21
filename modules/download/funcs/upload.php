@@ -53,7 +53,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 	}
 
 	$array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
-	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 255 );
+	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 250 );
 	$array['description'] = $nv_Request->get_editor( 'upload_description', '', NV_ALLOWED_HTML_TAGS );
 	$array['introtext'] = $nv_Request->get_textarea( 'upload_introtext', '', NV_ALLOWED_HTML_TAGS );
 	$array['author_name'] = nv_substr( $nv_Request->get_title( 'upload_author_name', 'post', '', 1 ), 0, 100 );
@@ -106,7 +106,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		$array['linkdirect'] = ! empty( $array['linkdirect'] ) ? implode( "\n", $array['linkdirect'] ) : '';
 	}
 
-	$alias = change_alias( $array['title'] );
+	$alias = nv_substr( change_alias( $array['title'] ), 0, 250 );
 
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );

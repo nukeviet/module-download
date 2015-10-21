@@ -19,11 +19,11 @@
 					<tbody>
 						<tr>
 							<td class="w250"> {LANG.file_title} <sup class="required">(*)</sup></td>
-							<td><input class="w300 form-control" type="text" value="{DATA.title}" name="title" id="title" {ONCHANGE}/></td>
+							<td><input class="w300 form-control" type="text" value="{DATA.title}" name="title" id="title" maxlength="250" {ONCHANGE}/></td>
 						</tr>
 						<tr>
 							<td> {LANG.alias} </td>
-							<td><input class="w300 form-control pull-left" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="100" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
+							<td><input class="w300 form-control pull-left" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="250" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
 						</tr>
 						<tr>
 							<td> {LANG.category_cat_parent} </td>

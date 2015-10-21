@@ -16,7 +16,7 @@
 			<div class="form-group">
 				<label class="col-sm-6 control-label">{LANG.file_title}</label>
 				<div class="col-sm-18">
-					<input type="text" class="form-control" name="upload_title" id="upload_title" value="{UPLOAD.title}">
+					<input type="text" class="form-control" name="upload_title" id="upload_title" value="{UPLOAD.title}" maxlength="250">
 				</div>
 			</div>
 
