@@ -10,20 +10,29 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-//get alias
+// get alias
 if( $nv_Request->isset_request( 'gettitle', 'post' ) )
 {
-	$title = $nv_Request->get_title( 'gettitle', 'post','' );
+	$title = $nv_Request->get_title( 'gettitle', 'post', '' );
 	$alias = change_alias( $title );
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories where alias = :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
-	 if( $stmt->fetchColumn() )
-	 {
-		$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories' )->fetchColumn();
-		$weight = intval( $weight ) + 1;
-		$alias = $alias . '-' . $weight;
-	 }
+	if( $stmt->fetchColumn() )
+	{
+		$parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
+		if( $parentid > 0)
+		{
+			$main_alias = $db->query( 'SELECT alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $parentid )->fetchColumn();
+			$alias = $main_alias . '-' . $alias;
+		}
+		else
+		{
+			$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories' )->fetchColumn();
+			$weight = intval( $weight ) + 1;
+			$alias = $alias . '-' . $weight;
+		}
+	}
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $alias;

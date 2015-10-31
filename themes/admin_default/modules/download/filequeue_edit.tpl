@@ -15,7 +15,7 @@
 			<tbody>
 				<tr>
 					<td class="w250"> {LANG.file_title} </td>
-					<td><input class="w300 form-control" value="{DATA.title}" name="title" id="title" /></td>
+					<td><input class="w300 form-control" value="{DATA.title}" name="title" id="title" maxlength="250"/></td>
 				</tr>
 				<tr>
 					<td> {LANG.category_cat_parent} </td>
