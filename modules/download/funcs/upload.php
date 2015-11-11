@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['upload'];
+$array_mod_title[] = array( 'title' => $page_title );
 
 $download_config = nv_mod_down_config();
 
@@ -30,8 +31,6 @@ if( ! $download_config['is_addfile_allow'] )
 	}
 	nv_theme_alert( $lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back );
 }
-
-$list_cats = nv_list_cats( false, false );
 
 if( empty( $list_cats ) )
 {
@@ -54,7 +53,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 	}
 
 	$array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
-	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 255 );
+	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 250 );
 	$array['description'] = $nv_Request->get_editor( 'upload_description', '', NV_ALLOWED_HTML_TAGS );
 	$array['introtext'] = $nv_Request->get_textarea( 'upload_introtext', '', NV_ALLOWED_HTML_TAGS );
 	$array['author_name'] = nv_substr( $nv_Request->get_title( 'upload_author_name', 'post', '', 1 ), 0, 100 );
@@ -107,7 +106,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		$array['linkdirect'] = ! empty( $array['linkdirect'] ) ? implode( "\n", $array['linkdirect'] ) : '';
 	}
 
-	$alias = change_alias( $array['title'] );
+	$alias = nv_substr( change_alias( $array['title'] ), 0, 250 );
 
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
@@ -332,6 +331,7 @@ if( defined( 'NV_IS_USER' ) )
 	$array['disabled'] = ' disabled="disabled"';
 }
 $array['addfile'] = md5( $client_info['session_id'] );
+$array['upload_filetype'] = implode( "|", $download_config['upload_filetype'] );
 
 $contents = theme_upload( $array, $list_cats, $download_config, $error );
 

@@ -6,6 +6,61 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+$(document).ready(function(){
+	if( typeof uploadForm !== 'undefined' )
+	{
+		$('#uploadForm').validate({
+		    rules: {
+		    	upload_title: {
+			    required: true,
+			    rangelength: [3, 255]
+			},
+			upload_author_name: {
+			    rangelength: [3, 100]
+			},
+
+			upload_author_email: {
+			    email: true
+			},
+
+			upload_author_url: {
+			    url: true
+			},
+
+			upload_fileupload: {
+			    accept: $(this).data('upload_filetype')
+			},
+
+			upload_filesize: {
+			    number: true
+			},
+
+			upload_fileimage: {
+			    accept: 'jpg|gif|png'
+			},
+
+			upload_introtext: {
+			    maxlength: 500
+			},
+
+			upload_description: {
+			    maxlength: 5000
+			},
+
+			upload_user_name: {
+			    required: true,
+			    rangelength: [3, 60]
+			},
+
+			upload_seccode: {
+			    required: true,
+			    minlength: $('#upload_seccode_iavim').attr('maxlength')
+			}
+		}
+		});
+	}
+});
+
 // Upload
 $('#upload_fileupload').change(function(){
      $('#file_name').val($(this).val().match(/[-_\w]+[.][\w]+$/i)[0]);

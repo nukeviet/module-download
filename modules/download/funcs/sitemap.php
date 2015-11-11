@@ -20,7 +20,6 @@ if( ( $cache = nv_get_cache( $module_name, $cacheFile ) ) != false and filemtime
 }
 else
 {
-	$list_cats = nv_list_cats();
 	$in = array_keys( $list_cats );
 	$in = implode( ',', $in );
 

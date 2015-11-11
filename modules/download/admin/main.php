@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array = array();
 	$is_error = false;
 	$error = '';
-	
+
 	// Xử lý liên kết tĩnh
 	$alias = $nv_Request->get_title( 'alias', 'post', $row['alias'] );
 	if( empty( $alias ) )
@@ -61,7 +61,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$array['alias'] = $alias;
 	}
-	
+
 	$array_keywords_old=array();
 	$_query_tag = $db->query( 'SELECT did, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' ORDER BY keyword ASC' );
 	while( $row_tag = $_query_tag->fetch( ) )
@@ -70,7 +70,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 	$array['keywords'] = implode( ', ', $array_keywords_old );
 	$array['keywords_old'] = $array['keywords'];
-	
+
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['fileimage'] = $nv_Request->get_title( 'fileimage', 'post', '' );
 		$array['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 		$array['is_del_report'] = $nv_Request->get_int( 'is_del_report', 'post', 0 );
-		
+
 		$array['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
 		$array['keywords'] = implode( ', ', $array['keywords'] );
 
@@ -299,32 +299,32 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
 						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 						$sth->execute( );
-	
+
 						list( $did, $alias, $keywords_i ) = $sth->fetch( 3 );
 						if( empty( $did ) )
 						{
 							$array_insert = array( );
 							$array_insert['alias'] = $alias_i;
 							$array_insert['keyword'] = $keyword;
-	
+
 							$did = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert );
 						}
 						else
 						{
 							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did );
 						}
-						
+
 						$_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' AND did = ' . $did;
 						$_query = $db->query( $_sql );
 						$row = $_query->fetch();
-	
+
 						if( empty($row) )
 						{
 						  	$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval( $did ) . ', :keyword)' );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute( );
 						}
-						else 
+						else
 						{
 							$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval( $did ) );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
@@ -337,7 +337,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 						if( ! in_array( $keyword, $keywords ) )
 						{
 							$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id . ' AND did=' . $did );
-							
+
 							$count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE did=' . $did);
 							if( $count_tag->fetchColumn() )
 							{
@@ -350,7 +350,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 						}
 					}
 				}
-				
+
 				if( $report and $array['is_del_report'] )
 				{
 					$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
@@ -432,8 +432,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	if( ! sizeof( $array['fileupload'] ) ) array_push( $array['fileupload'], '' );
 	if( ! sizeof( $array['linkdirect'] ) ) array_push( $array['linkdirect'], '' );
 
-	$listcats = nv_listcats( $array['catid'] );
-	if( empty( $listcats ) )
+	if( empty( $list_cats ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 		exit();
@@ -497,7 +496,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['filesize'] = number_format( $array['filesize']/1048576, 2);
     }
-	
+
 	$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$report = $report ? '&amp;report=1' : '';
@@ -516,9 +515,19 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->parse( 'main.error' );
 	}
 
-	foreach( $listcats as $cat )
+	foreach( $list_cats as $catid => $value )
 	{
-		$xtpl->assign( 'LISTCATS', $cat );
+		$value['space'] = '';
+		if( $value['lev'] > 0 )
+		{
+			for( $i = 1; $i <= $value['lev']; $i++ )
+			{
+				$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		$value['selected'] = $catid == $array['catid'] ? ' selected="selected"' : '';
+
+		$xtpl->assign( 'LISTCATS', $value );
 		$xtpl->parse( 'main.catid' );
 	}
 
@@ -549,7 +558,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->assign( 'GROUPS_VIEW', $group );
 		$xtpl->parse( 'main.groups_view' );
 	}
-	
+
 	if( !empty( $array['keywords'] ) )
 	{
 		$keywords_array = explode( ',', $array['keywords'] );
@@ -559,7 +568,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$xtpl->parse( 'main.keywords' );
 		}
 	}
-	
+
 	foreach( $array['groups_download'] as $group )
 	{
 		$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
@@ -632,8 +641,7 @@ $array_search = array(
 	'per_page' => $nv_Request->get_int( 'per_page', 'get', '30' )
 );
 
-$listcats = nv_listcats( 0 );
-if( empty( $listcats ) )
+if( empty( $list_cats ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
@@ -647,7 +655,7 @@ if( !empty( $array_search['q'] ) )
 if( !empty( $array_search['catid'] ) )
 {
 	$base_url .= '&catid=' . $array_search['catid'];
-	$where .= ' AND catid=' . $array_search['catid'];
+	$where .= ' AND catid IN (' . implode( ',', GetCatidInParent( $array_search['catid'] ) ) . ')';
 }
 if( $array_search['active'] >= 0 )
 {
@@ -679,8 +687,8 @@ while( $row = $result2->fetch() )
 	$array[$row['id']] = array(
 		'id' => $row['id'],
 		'title' => $row['title'],
-		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $listcats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
-		'cattitle' => $listcats[$row['catid']]['title'],
+		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
+		'cattitle' => $list_cats[$row['catid']]['title'],
 		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
 		'uploadtime' => nv_date( 'd/m/Y H:i', $row['uploadtime'] ),
 		'status' => $row['status'] ? ' checked="checked"' : '',
@@ -717,10 +725,19 @@ if( ! empty( $array ) )
 	}
 }
 
-foreach( $listcats as $cat )
+foreach( $list_cats as $catid => $value )
 {
-	$cat['selected'] = $cat['id'] == $array_search['catid'] ? 'selected="selected"' : '';
-	$xtpl->assign( 'LISTCATS', $cat );
+	$value['space'] = '';
+	if( $value['lev'] > 0 )
+	{
+		for( $i = 1; $i <= $value['lev']; $i++ )
+		{
+			$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
+	}
+	$value['selected'] = $catid == $array_search['catid'] ? ' selected="selected"' : '';
+
+	$xtpl->assign( 'LISTCATS', $value );
 	$xtpl->parse( 'main.catid' );
 }
 

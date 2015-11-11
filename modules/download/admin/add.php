@@ -62,10 +62,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$_groups_post = $nv_Request->get_array( 'groups_comment', 'post', array() );
 	$array['groups_comment'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
-	
+
 	$array['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
 	$array['keywords'] = implode( ', ', $array['keywords'] );
-	
+
 	if( ! empty( $array['author_url'] ) )
 	{
 		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['author_url'] ) )
@@ -164,7 +164,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$alias = change_alias( $alias );
 	}
-	
+
 	if( empty( $alias ) or !preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $alias ) )
 	{
 		if( empty( $array['alias'] ) )
@@ -176,7 +176,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['alias'] = $alias;
 	}
-	
+
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 	$stmt->execute();
@@ -272,9 +272,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$data_insert['groups_comment'] = $array['groups_comment'];
 		$data_insert['groups_view'] = $array['groups_view'];
 		$data_insert['groups_download'] = $array['groups_download'];
-		
+
 		$id = $db->insert_id( $sql, 'id', $data_insert );
-		
+
 		if( $id != 0 )
 		{
 			// keywords
@@ -339,8 +339,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 					$sth->execute( );
 				}
-			}	
-				
+			}
+
 			nv_del_moduleCache( $module_name );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
@@ -356,7 +356,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 else
 {
-	$array['catid'] = 0;
+	$array['catid'] = $nv_Request->get_int( 'catid', 'get', 0 );
 	$array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['version'] = $array['fileimage'] = '';
 	$array['fileupload'] = $array['linkdirect'] = array();
 	$array['groups_comment'] = $module_config[$module_name]['setcomm'];
@@ -398,8 +398,7 @@ if( ! empty( $array['fileupload'] ) )
 if( ! sizeof( $array['linkdirect'] ) ) array_push( $array['linkdirect'], '' );
 if( ! sizeof( $array['fileupload'] ) ) array_push( $array['fileupload'], '' );
 
-$listcats = nv_listcats( $array['catid'] );
-if( empty( $listcats ) )
+if( empty( $list_cats ) )
 {
 	$redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1';
 	$contents = '<p class="note_cat">' . $lang_module['note_cat'] . '</p>';
@@ -463,13 +462,12 @@ $array['id'] = 0;
 if( ! $array['filesize'] ) $array['filesize'] = '';
 
 $xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
-
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 $xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
 $xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 $xtpl->assign( 'ONCHANGE', 'onchange="get_alias();"' );
@@ -480,10 +478,23 @@ if( ! empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-foreach( $listcats as $cat )
+if( !empty( $list_cats ) )
 {
-	$xtpl->assign( 'LISTCATS', $cat );
-	$xtpl->parse( 'main.catid' );
+	foreach( $list_cats as $catid => $value )
+	{
+		$value['space'] = '';
+		if( $value['lev'] > 0 )
+		{
+			for( $i = 1; $i <= $value['lev']; $i++ )
+			{
+				$value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		$value['selected'] = $catid == $array['catid'] ? ' selected="selected"' : '';
+
+		$xtpl->assign( 'LISTCATS', $value );
+		$xtpl->parse( 'main.catid' );
+	}
 }
 
 $a = 0;

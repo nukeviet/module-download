@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
 <!-- BEGIN: is_error -->
 <div class="alert alert-danger">
@@ -6,7 +7,7 @@
 </div>
 <!-- END: is_error -->
 
-<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			{LANG.upload}
@@ -15,7 +16,7 @@
 			<div class="form-group">
 				<label class="col-sm-6 control-label">{LANG.file_title}</label>
 				<div class="col-sm-18">
-					<input type="text" class="form-control" name="upload_title" id="upload_title" value="{UPLOAD.title}">
+					<input type="text" class="form-control" name="upload_title" id="upload_title" value="{UPLOAD.title}" maxlength="250">
 				</div>
 			</div>
 
@@ -24,7 +25,7 @@
 				<div class="col-sm-18">
 					<select name="upload_catid" id="upload_catid" class="form-control">
 						<!-- BEGIN: catid -->
-						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
 						<!-- END: catid -->
 					</select>
 				</div>
@@ -54,7 +55,7 @@
 			<!-- BEGIN: is_upload_allow -->
 			<div class="form-group">
 				<label class="col-sm-6 control-label">{LANG.upload_files}</label>
-				<div class="col-sm-12">
+				<div class="col-sm-18">
 					<div class="input-group">
 						<input type="text" class="form-control" id="file_name" disabled>
 						<span class="input-group-btn">
@@ -92,7 +93,7 @@
 
 			<div class="form-group">
 				<label class="col-sm-6 control-label">{LANG.fileimage}</label>
-				<div class="col-lg-12">
+				<div class="col-lg-18">
 					<div class="input-group">
 						<input type="text" class="form-control" id="photo_name" disabled>
 						<span class="input-group-btn">
@@ -134,7 +135,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-6 control-label">{LANG.file_upload_captcha2}</label>
+				<label class="col-sm-6 control-label">{LANG.file_upload_captcha}</label>
 				<div class="col-sm-13">
 					<input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
 				</div>
@@ -154,4 +155,11 @@
 		</div>
 	</div>
 </form>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script>
+	var uploadForm = true;
+	$('#upload_catid').select2();
+</script>
 <!-- END: main -->

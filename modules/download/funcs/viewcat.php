@@ -25,7 +25,6 @@ $download_config = nv_mod_down_config();
 $today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 $yesterday = $today - 86400;
 
-// View cat
 if( empty( $catid ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
@@ -33,28 +32,24 @@ if( empty( $catid ) )
 }
 
 $array = array();
-$subcats = array();
 $contents = '';
+$cat_data = $list_cats[$catid];
 
-$c = $list_cats[$catid];
-$subcats = $c['subcats'];
-$viewcat = $c['viewcat'];
-
-$page_title = $mod_title = $c['title'];
+$page_title = $mod_title = $cat_data['title'];
 $key_words = $module_info['keywords'];
-$description = $c['description'];
+$description = $cat_data['description'];
 
 $per_page = $download_config['per_page_child'];
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias;
 
-if( $viewcat == 'viewcat_main_bottom' )
+if( $cat_data['viewcat'] == 'viewcat_main_bottom' )
 {
-	$allcats = array( $c['id'] );
+	$allcats = array( $cat_data['id'] );
 
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data )
-		->where( 'catid=' . $c['id'] . ' AND status=1' );
+		->where( 'catid=' . $cat_data['id'] . ' AND status=1' );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -108,11 +103,12 @@ if( $viewcat == 'viewcat_main_bottom' )
 	}
 
 	$subs = array();
-	if( ! empty( $subcats ) )
+	if( ! empty( $cat_data['subcatid'] ) )
 	{
-		foreach( $subcats as $sub )
+		$cat_data['subcatid'] = explode( ',', $cat_data['subcatid'] );
+		foreach( $cat_data['subcatid'] as $sub )
 		{
-			$allcats = $sub;
+			$array_cat = GetCatidInParent( $sub );
 
 			$db->sqlreset()
 				->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
@@ -120,13 +116,8 @@ if( $viewcat == 'viewcat_main_bottom' )
 				->order( 'uploadtime DESC' )
 				->limit( $list_cats[$sub]['numlink'] );
 
-			if( !empty( $list_cats[$sub]['subcats'] ) )
-			{
-				$allcats .= ',' . implode( ',', $list_cats[$sub]['subcats'] );
-			}
-
 			$array_item = array();
-			$result = $db->query( $db->where( 'catid=' . $sub . ' AND status=1' )->sql() );
+			$result = $db->query( $db->where( 'catid IN (' . implode( ',', $array_cat ) . ') AND status=1' )->sql() );
 			$i = 0;
 			while( $row = $result->fetch() )
 			{
@@ -150,7 +141,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 				);
 			}
 
-			$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . $allcats . ' )' )->fetchColumn();
+			$numfile = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode( ',', $array_cat ) . ' )' )->fetchColumn();
 
 			if( $i )
 			{
@@ -159,7 +150,7 @@ if( $viewcat == 'viewcat_main_bottom' )
 					'title' => $list_cats[$sub]['title'],
 					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$sub]['alias'],
 					'description' => $list_cats[$sub]['description'],
-					'subcats' => $list_cats[$sub]['subcats'],
+					'subcats' => $list_cats[$sub]['subcatid'],
 					'numfile' => $numfile,
 					'items' => $array_item
 				);
@@ -168,24 +159,19 @@ if( $viewcat == 'viewcat_main_bottom' )
 		}
 	}
 
-	// Chuyen huong neu khong co noi dung gi
-	if( empty( $num_items ) and empty( $subs ) )
-	{
-		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-		exit();
-	}
-
-	$contents = theme_viewcat_main( $viewcat, $subs, $array, $c, $generate_page );
+	$contents = theme_viewcat_main( $cat_data['viewcat'], $subs, $array, $cat_data, $generate_page );
 }
-elseif( $viewcat == 'viewcat_list_new' )
+elseif( $cat_data['viewcat'] == 'viewcat_list_new' )
 {
+	$array_cat = GetCatidInParent( $cat_data['id'] );
+
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data )
-		->where( 'catid=' . $c['id'] . ' AND status=1' );
+		->where( 'catid IN (' . implode( ',', $array_cat ) . ') AND status=1' );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
-	$c['numfile'] = $num_items;
+	$cat_data['numfile'] = $num_items;
 
 	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
 		->order( 'uploadtime DESC' )
@@ -236,7 +222,7 @@ elseif( $viewcat == 'viewcat_list_new' )
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
 
-	$contents = theme_viewcat_list( $array, $generate_page, $c );
+	$contents = theme_viewcat_list( $array, $generate_page, $cat_data );
 }
 
 include NV_ROOTDIR . '/includes/header.php';

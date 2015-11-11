@@ -131,8 +131,7 @@ if( ! $num )
 	exit();
 }
 
-$listcats = nv_listcats( 0 );
-if( empty( $listcats ) )
+if( empty( $list_cats ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
@@ -144,7 +143,7 @@ foreach( $_array_report as $row)
 	$array[$row['id']] = array(
 		'id' => ( int )$row['id'],
 		'title' => $row['title'],
-		'cattitle' => $listcats[$row['catid']]['title'],
+		'cattitle' => $list_cats[$row['catid']]['title'],
 		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
 		'post_time' => nv_date( 'd/m/Y H:i', $row['post_time'] ),
 		'post_ip' => $row['post_ip']
