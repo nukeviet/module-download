@@ -421,7 +421,7 @@ function theme_viewpdf( $filename )
 }
 
 /**
- * nv_theme_alert()
+ * nv_download_theme_alert()
  *
  * @param mixed $message_title
  * @param mixed $message_content
@@ -430,7 +430,7 @@ function theme_viewpdf( $filename )
  * @param mixed $time_back
  * @return
  */
-function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true )
+function nv_download_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true )
 {
 	global $module_file, $module_info, $lang_module, $page_title;
 

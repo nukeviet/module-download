@@ -29,7 +29,7 @@ if( ! $download_config['is_addfile_allow'] )
 		$urlback = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
 		$lang_back = true;
 	}
-	nv_theme_alert( $lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back );
+	nv_download_theme_alert( $lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back );
 }
 
 if( empty( $list_cats ) )
@@ -297,7 +297,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 					nv_insert_notification( $module_name, 'upload_new', array( 'title' => $array['title'] ), $file_id, 0, $user_post, 1 );
 
 					$url_back = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
-					nv_theme_alert( $lang_module['file_upload_success_title'], $lang_module['file_upload_success_content'], 'info', $url_back );
+					nv_download_theme_alert( $lang_module['file_upload_success_title'], $lang_module['file_upload_success_content'], 'info', $url_back );
 
 					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_site_theme( $contents );
