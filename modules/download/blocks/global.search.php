@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	global $site_mods, $module_name, $module_info, $lang_module, $nv_Request;
+	global $site_mods, $module_name, $module_info, $lang_module, $nv_Request, $nv_Cache;
 
 	$module = $block_config['module'];
 
@@ -32,7 +32,7 @@ if( defined( 'NV_SYSTEM' ) )
 		}
 
 		$sql = "SELECT id, title, alias, parentid FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories WHERE parentid=0 ORDER BY weight";
-		$list = nv_db_cache( $sql, '', $module );
+		$list = $nv_Cache->db( $sql, '', $module );
 
 		$key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );
 		$cat = $nv_Request->get_int( 'cat', 'get' );

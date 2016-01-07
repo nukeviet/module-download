@@ -11,7 +11,7 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY sort ASC';
-$list_cats = nv_db_cache( $sql, 'id', $module_name );
+$list_cats = $nv_Cache->db( $sql, 'id', $module_name );
 
 /**
  * GetCatidInParent()

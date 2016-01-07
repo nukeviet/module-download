@@ -20,10 +20,10 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
  */
 function nv_mod_down_config()
 {
-	global $module_name, $module_data, $module_name;
+	global $module_name, $module_data, $module_name, $nv_Cache;
 
 	$sql = 'SELECT config_name,config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
-	$list = nv_db_cache( $sql );
+	$list = $nv_Cache->db( $sql, '', $module_name );
 
 	$download_config = array();
 	foreach( $list as $values )

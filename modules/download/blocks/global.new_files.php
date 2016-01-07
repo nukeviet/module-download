@@ -51,14 +51,14 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 	function nv_bdown_news( $block_config )
 	{
-		global $db, $module_info, $site_mods, $global_config;
+		global $db, $module_info, $site_mods, $global_config, $nv_Cache;
 
 		$module = $block_config['module'];
 		$file = $site_mods[$module]['module_file'];
 
 		// Lay thong tin phan quyen
 		$sql = 'SELECT id, alias, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_categories WHERE status=1';
-		$_tmp = nv_db_cache( $sql, 'id', $module );
+		$_tmp = $nv_Cache->db( $sql, 'id', $module );
 		$list_cat = array();
 		if( $_tmp )
 		{
@@ -78,7 +78,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 				->order( 'updatetime DESC' )
 				->limit( $block_config['numrow'] );
 
-			$list = nv_db_cache( $db->sql(), 'id', $module );
+			$list = $nv_Cache->db( $db->sql(), 'id', $module );
 
 			if( ! empty( $list ) )
 			{
