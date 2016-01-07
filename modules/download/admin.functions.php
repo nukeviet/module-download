@@ -102,7 +102,7 @@ if( $nv_Request->isset_request( 'fdownload', 'get' ) )
 		$file = substr( $file, strlen( NV_BASE_SITEURL ) );
 		$file = NV_ROOTDIR . '/' . $file;
 
-		$download = new download( $file, NV_UPLOADS_REAL_DIR );
+		$download = new NukeViet\Files\Download( $file, NV_UPLOADS_REAL_DIR );
 
 		$download->download_file();
 	}
