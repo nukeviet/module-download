@@ -15,11 +15,14 @@
 /includes/
 /install/
 /uploads/
+/vendor/
 /.htaccess
 /CHANGELOG.txt
 /config.php
 /CONTRIBUTING.md
 /COPYRIGHT.txt
+/.gitattributes
+/composer.json
 
 # Ignore fix module files and directories.
 /modules/*
