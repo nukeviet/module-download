@@ -8,35 +8,36 @@
  * @Createdate 3-6-2010 0:30
  */
 
-if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
-
-if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-
-$id = $nv_Request->get_int( 'id', 'post', 0 );
-
-$dlrp = $nv_Request->get_string( 'dlrp', 'session', '' );
-
-$dlrp = ! empty( $dlrp ) ? unserialize( $dlrp ) : array();
-
-if( $id and ! in_array( $id, $dlrp ) )
-{
-	$dlrp[] = $id;
-	$dlrp = serialize( $dlrp );
-	$nv_Request->set_Session( 'dlrp', $dlrp );
-
-	$query = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	list( $id, $title ) = $db->query( $query )->fetch( 3 );
-	if( $id )
-	{
-		$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
-		$stmt->bindParam( ':ip', $client_info['ip'], PDO::PARAM_STR );
-		if( $stmt->execute() )
-		{
-			// Them vao thong bao
-			$sender_id = !empty( $user_info ) ? $user_info['userid'] : 0;
-			nv_insert_notification( $module_name, 'report', array( 'title' => $title ), $id, 0, $sender_id, 1 );
-		}
-	}
+if (! defined('NV_IS_MOD_DOWNLOAD')) {
+    die('Stop!!!');
 }
 
-die( 'OK' );
+if (! defined('NV_IS_AJAX')) {
+    die('Wrong URL');
+}
+
+$id = $nv_Request->get_int('id', 'post', 0);
+
+$dlrp = $nv_Request->get_string('dlrp', 'session', '');
+
+$dlrp = ! empty($dlrp) ? unserialize($dlrp) : array();
+
+if ($id and ! in_array($id, $dlrp)) {
+    $dlrp[] = $id;
+    $dlrp = serialize($dlrp);
+    $nv_Request->set_Session('dlrp', $dlrp);
+
+    $query = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    list($id, $title) = $db->query($query)->fetch(3);
+    if ($id) {
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
+        $stmt->bindParam(':ip', $client_info['ip'], PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            // Them vao thong bao
+            $sender_id = !empty($user_info) ? $user_info['userid'] : 0;
+            nv_insert_notification($module_name, 'report', array( 'title' => $title ), $id, 0, $sender_id, 1);
+        }
+    }
+}
+
+die('OK');
