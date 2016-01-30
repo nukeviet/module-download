@@ -8,17 +8,18 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_categories ORDER BY parentid, weight ASC';
-$result = $db->query( $sql );
-While( $row = $result->fetch() )
-{
-	$array_item[$row['id']] = array(
-		'parentid' => $row['parentid'],
-		'groups_view' => $row['groups_view'],
-		'key' => $row['id'],
-		'title' => $row['title'],
-		'alias' => $row['alias']
-	);
+$result = $db->query($sql);
+while ($row = $result->fetch()) {
+    $array_item[$row['id']] = array(
+        'parentid' => $row['parentid'],
+        'groups_view' => $row['groups_view'],
+        'key' => $row['id'],
+        'title' => $row['title'],
+        'alias' => $row['alias']
+    );
 }
