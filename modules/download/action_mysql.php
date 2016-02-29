@@ -134,7 +134,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (
   id int(11) NOT NULL,
   did mediumint(9) NOT NULL,
-  keyword varchar(65) NOT NULL
+  keyword varchar(65) NOT NULL,
   UNIQUE KEY id_tid (id,did),
   KEY did (did)
 )ENGINE=MyISAM";
