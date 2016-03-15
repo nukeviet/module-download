@@ -29,10 +29,6 @@ if (! nv_function_exists('nv_bdown_news')) {
         $html .= '	<td>' . $lang_block['class_name'] . '</td>';
         $html .= '	<td><input type="text" name="config_class_name" size="5" value="' . $data_block['class_name'] . '"/></td>';
         $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['img_bullet'] . '</td>';
-        $html .= '	<td><input type="text" name="config_img_bullet" size="5" value="' . $data_block['img_bullet'] . '"/></td>';
-        $html .= '</tr>';
         return $html;
     }
 
@@ -45,7 +41,6 @@ if (! nv_function_exists('nv_bdown_news')) {
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 5);
         $return['config']['class_name'] = $nv_Request->get_title('config_class_name', 'post', 'list_item');
-        $return['config']['img_bullet'] = $nv_Request->get_title('config_img_bullet', 'post', '');
         return $return;
     }
 
@@ -95,10 +90,6 @@ if (! nv_function_exists('nv_bdown_news')) {
                     $row['stitle'] = nv_clean60($row['title'], $block_config['title_length']);
 
                     $xtpl->assign('ROW', $row);
-
-                    if ($block_config['img_bullet']) {
-                        $xtpl->parse('main.loop.bullet');
-                    }
 
                     $xtpl->parse('main.loop');
                 }
