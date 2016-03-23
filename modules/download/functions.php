@@ -56,7 +56,7 @@ $list_cats_tmp = $list_cats;
 $list_cats = array();
 if (!empty($list_cats_tmp)) {
     foreach ($list_cats_tmp as $catid => $catvalue) {
-        if (! $catvalue['parentid'] or isset($list_cats[$catvalue['parentid']])) {
+        if (! $catvalue['parentid'] or isset($list_cats_tmp[$catvalue['parentid']])) {
             if (nv_user_in_groups($catvalue['groups_view'])) {
                 $catvalue['is_download_allow'] =  nv_user_in_groups($catvalue['groups_download']);
                 $list_cats[$catid] = $catvalue;
