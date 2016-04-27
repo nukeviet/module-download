@@ -86,6 +86,7 @@ $viewcat = $download_config['indexfile'];
 $contents = '';
 
 if ($viewcat == 'viewcat_main_bottom') {
+    $array_cats = array();
     foreach ($list_cats as $value) {
         if (empty($value['parentid'])) {
             $array_cat = GetCatidInParent($value['id']);
