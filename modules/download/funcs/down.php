@@ -26,7 +26,7 @@ if ($nv_Request->isset_request('code', 'get')) {
         die('Wrong URL');
     }
 
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['linkdirect'][$code]['id']);
+    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['linkdirect'][$code]['id']);
     $db->query($sql);
 
     $content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
@@ -61,11 +61,11 @@ if ($filepdf == 1) {
     $html = theme_viewpdf($filename);
     die($html);
 } elseif (empty($filepdf)) {
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['fileupload'][$filename]['id']);
+    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['fileupload'][$filename]['id']);
     $db->query($sql);
 }
 
-$sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir' OR config_name='is_zip' OR config_name='is_resume' OR config_name='max_speed'";
+$sql = "SELECT config_name, config_value FROM " . NV_MOD_TABLE . "_config WHERE config_name='upload_dir' OR config_name='is_zip' OR config_name='is_resume' OR config_name='max_speed'";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     if ($row['config_name'] == 'is_zip') {

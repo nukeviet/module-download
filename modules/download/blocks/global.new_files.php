@@ -50,9 +50,10 @@ if (! nv_function_exists('nv_bdown_news')) {
 
         $module = $block_config['module'];
         $file = $site_mods[$module]['module_file'];
+        $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
 
         // Lay thong tin phan quyen
-        $sql = 'SELECT id, alias, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_categories WHERE status=1';
+        $sql = 'SELECT id, alias, groups_view FROM ' . $_mod_table . '_categories WHERE status=1';
         $_tmp = $nv_Cache->db($sql, 'id', $module);
         $list_cat = array();
         if ($_tmp) {
@@ -67,7 +68,7 @@ if (! nv_function_exists('nv_bdown_news')) {
         if ($list_cat) {
             $db->sqlreset()
                 ->select('id, catid, title, alias, updatetime')
-                ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])
+                ->from($_mod_table)
                 ->where('status AND catid IN (' . implode(',', array_keys($list_cat)) . ')')
                 ->order('updatetime DESC')
                 ->limit($block_config['numrow']);

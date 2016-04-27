@@ -16,11 +16,11 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 if ($nv_Request->isset_request('gettitle', 'post')) {
     $title = $nv_Request->get_title('gettitle', 'post', '');
     $alias = change_alias($title);
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' where alias = :alias');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        $weight = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+        $weight = $db->query('SELECT MAX(id) FROM ' . NV_MOD_TABLE)->fetchColumn();
         $weight = intval($weight) + 1;
         $alias = $alias . '-' . $weight;
     }
@@ -148,13 +148,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array['alias'] = $alias;
     }
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE alias= :alias');
     $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
     $stmt->execute();
     $is_exists = $stmt->fetchColumn();
 
     if (! $is_exists) {
-        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tmp WHERE title= :title');
         $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
         $stmt->execute();
         $is_exists = $stmt->fetchColumn();
@@ -185,7 +185,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $array['linkdirect'] = '';
         }
 
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_download, comment_hits, rating_detail) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_download, comment_hits, rating_detail) VALUES (
 			 " . $array['catid'] . ",
 			 :title,
 			 :alias ,
@@ -241,7 +241,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             foreach ($keywords as  $keyword) {
                 $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
                 $alias_i = nv_strtolower($alias_i);
-                $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
+                $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_MOD_TABLE . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                 $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
                 $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                 $sth->execute();
@@ -252,7 +252,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $array_insert['alias'] = $alias_i;
                     $array_insert['keyword'] = $keyword;
 
-                    $did = $db->insert_id("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
+                    $did = $db->insert_id("INSERT INTO " . NV_MOD_TABLE . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
                 } else {
                     if ($alias != $alias_i) {
                         if (!empty($keywords_i)) {
@@ -263,21 +263,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
                             $keywords_i2 = $keyword;
                         }
                         if ($keywords_i != $keywords_i2) {
-                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET keywords= :keywords WHERE did =' . $did);
+                            $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags SET keywords= :keywords WHERE did =' . $did);
                             $sth->bindParam(':keywords', $keywords_i2, PDO::PARAM_STR);
                             $sth->execute();
                         }
                     }
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
+                    $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
                 }
 
                 // insert keyword for table _tags_id
                 try {
-                    $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval($did) . ', :keyword)');
+                    $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval($did) . ', :keyword)');
                     $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                     $sth->execute();
                 } catch (PDOException $e) {
-                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval($did));
+                    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval($did));
                     $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                     $sth->execute();
                 }

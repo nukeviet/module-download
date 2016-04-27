@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'report', $id);
     }
 
-    $query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (empty($row)) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -55,7 +55,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
     }
 
     $array_keywords_old=array();
-    $_query_tag = $db->query('SELECT did, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' ORDER BY keyword ASC');
+    $_query_tag = $db->query('SELECT did, keyword FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $id . ' ORDER BY keyword ASC');
     while ($row_tag = $_query_tag->fetch()) {
         $array_keywords_old[$row_tag['did']] = $row_tag['keyword'];
     }
@@ -156,13 +156,13 @@ if ($nv_Request->isset_request('edit', 'get')) {
             $array['filesize'] = intval($array['filesize'] * 1048576);
         }
 
-        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias= :alias ');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE id!=' . $id . ' AND alias= :alias ');
         $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
         $stmt->execute();
         $is_exists = $stmt->fetchColumn();
 
         if (! $is_exists) {
-            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title');
+            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tmp WHERE title= :title');
             $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
             $stmt->execute();
             $is_exists = $stmt->fetchColumn();
@@ -193,7 +193,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
                 $array['linkdirect'] = '';
             }
 
-            $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
+            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
 				 catid=" . $array['catid'] . ",
 				 title= :title,
 				 alias= :alias,
@@ -244,7 +244,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
                     foreach ($keywords as $keyword) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
                         $alias_i = nv_strtolower($alias_i);
-                        $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
+                        $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_MOD_TABLE . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
                         $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                         $sth->execute();
@@ -255,21 +255,21 @@ if ($nv_Request->isset_request('edit', 'get')) {
                             $array_insert['alias'] = $alias_i;
                             $array_insert['keyword'] = $keyword;
 
-                            $did = $db->insert_id("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
+                            $did = $db->insert_id("INSERT INTO " . NV_MOD_TABLE . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
                         } else {
-                            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
+                            $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
                         }
 
-                        $_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ' AND did = ' . $did;
+                        $_sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $id . ' AND did = ' . $did;
                         $_query = $db->query($_sql);
                         $row = $_query->fetch();
 
                         if (empty($row)) {
-                            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval($did) . ', :keyword)');
+                            $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_tags_id (id, did, keyword) VALUES (' . $id . ', ' . intval($did) . ', :keyword)');
                             $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                             $sth->execute();
                         } else {
-                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval($did));
+                            $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags_id SET keyword = :keyword WHERE id = ' . $id . ' AND did=' . intval($did));
                             $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                             $sth->execute();
                         }
@@ -277,20 +277,20 @@ if ($nv_Request->isset_request('edit', 'get')) {
                     }
                     foreach ($array_keywords_old as $did => $keyword) {
                         if (! in_array($keyword, $keywords)) {
-                            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id . ' AND did=' . $did);
+                            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id = ' . $id . ' AND did=' . $did);
 
-                            $count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE did=' . $did);
+                            $count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $did);
                             if ($count_tag->fetchColumn()) {
-                                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did);
+                                $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did);
                             } else {
-                                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE did=' . $did);
+                                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE did=' . $did);
                             }
                         }
                     }
                 }
 
                 if ($report and $array['is_del_report']) {
-                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id);
+                    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
                 }
 
                 $nv_Cache->delMod($module_name);
@@ -503,7 +503,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    $query = 'SELECT status FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (empty($row)) {
         die('NO');
@@ -511,7 +511,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $status = $row['status'] ? 0 : 1;
 
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id);
+    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET status=' . $status . ' WHERE id=' . $id);
 
     $nv_Cache->delMod($module_name);
     die('OK');
@@ -525,15 +525,15 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT fileupload, fileimage, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    $query = 'SELECT fileupload, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (empty($row)) {
         die('NO');
     }
 
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id=' . $id);
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id);
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id);
 
     // Xoa thong bao loi
     nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
@@ -576,7 +576,7 @@ if ($array_search['active'] >= 0) {
 
 $db->sqlreset()
     ->select('COUNT(*)')
-    ->from(NV_PREFIXLANG . '_' . $module_data)
+    ->from(NV_MOD_TABLE)
     ->where('1=1' . $where);
 
 $num_items = $db->query($db->sql())->fetchColumn();

@@ -20,7 +20,7 @@ if ($nv_Request->isset_request('linkcheck', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT id, fileupload, linkdirect FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    $query = 'SELECT id, fileupload, linkdirect FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
     list($_id, $fileupload, $linkdirect) = $db->query($query)->fetch(3);
 
     if (empty($_id)) {
@@ -78,13 +78,13 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
+    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id;
     $numrows = $db->query($query)->fetchColumn();
     if ($numrows != 1) {
         die('NO');
     }
 
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
     nv_status_notification(NV_LANG_DATA, $module_name, 'report', $id);
 
     die('OK');
@@ -92,18 +92,18 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 //All del
 if ($nv_Request->isset_request('alldel', 'post')) {
-    $query = $db->query('SELECT fid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report');
+    $query = $db->query('SELECT fid FROM ' . NV_MOD_TABLE . '_report');
     while (list($fid) = $query->fetch(3)) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'report', $fid);
     }
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report');
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report');
     die('OK');
 }
 
 //List
 $page_title = $lang_module['download_report'];
 
-$sql = 'SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report a INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid=b.id ORDER BY a.post_time DESC';
+$sql = 'SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM ' . NV_MOD_TABLE . '_report a INNER JOIN ' . NV_MOD_TABLE . ' b ON a.fid=b.id ORDER BY a.post_time DESC';
 $_array_report = $db->query($sql)->fetchAll();
 $num = sizeof($_array_report);
 if (! $num) {

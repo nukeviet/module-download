@@ -21,13 +21,13 @@ if (! defined('NV_IS_FILE_ADMIN')) {
  */
 function nv_show_tags_list($q = '', $incomplete = false)
 {
-    global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
+    global $db, $lang_module, $lang_global, $module_name, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
     
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name. '&' . NV_OP_VARIABLE . '='.$op;
     
     $db->sqlreset()
         ->select('*')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+        ->from(NV_MOD_TABLE . '_tags')
         ->order('alias ASC');
         
     if (! empty($q)) {
@@ -93,8 +93,8 @@ function nv_show_tags_list($q = '', $incomplete = false)
 if ($nv_Request->isset_request('del_did', 'get')) {
     $did = $nv_Request->get_int('del_did', 'get', 0);
     if ($did) {
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE did=' . $did);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE did=' . $did);
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE did=' . $did);
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $did);
     }
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_show_tags_list();
@@ -142,10 +142,10 @@ if (! empty($savecat)) {
         $error = $lang_module['error_name'];
     } else {
         if ($did == 0) {
-            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numdownload, alias, description, image, keywords) VALUES (0, :alias, :description, :image, :keywords)');
+            $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_tags (numdownload, alias, description, image, keywords) VALUES (0, :alias, :description, :image, :keywords)');
             $msg_lg = 'add_tags';
         } else {
-            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE did =' . $did);
+            $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE did =' . $did);
             $msg_lg = 'edit_tags';
         }
 
@@ -168,7 +168,7 @@ if (! empty($savecat)) {
 $did = $nv_Request->get_int('did', 'get', 0);
 
 if ($did > 0) {
-    list($did, $alias, $description, $image, $keywords) = $db->query('SELECT did, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where did=' . $did)->fetch(3);
+    list($did, $alias, $description, $image, $keywords) = $db->query('SELECT did, alias, description, image, keywords FROM ' . NV_MOD_TABLE . '_tags where did=' . $did)->fetch(3);
     $lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 

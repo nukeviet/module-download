@@ -17,7 +17,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
     $page_title = $lang_module['download_filequeue'];
 
     $id = $nv_Request->get_int('id', 'get', 0);
-    $query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
+    $query = 'SELECT * FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (empty($row)) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue');
@@ -165,7 +165,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
             $array['linkdirect'] = array_unique($array['linkdirect']);
         }
 
-        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE title= :title ');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE title= :title ');
         $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
         $stmt->execute();
         $is_exists = $stmt->fetchColumn();
@@ -252,7 +252,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
                 }
             }
 
-            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_download, comment_hits, rating_detail) VALUES (
+            $sql = "INSERT INTO " . NV_MOD_TABLE . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_download, comment_hits, rating_detail) VALUES (
 				 " . $array['catid'] . ", :title, :alias, :description, :introtext, " . $row['uploadtime'] . ", " . NV_CURRENTTIME . ", " . $row['user_id'] . ", :user_name, :author_name, :author_email, :author_url, :fileupload, :linkdirect, :version, " . $array['filesize'] . ", :fileimage, 1, :copyright, 0, 0, :groups_comment, :groups_view, :groups_download, 0, '')";
 
             $data_insert = array();
@@ -296,7 +296,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
                     }
                 }
 
-                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id);
+                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $id);
 
                 $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue');
@@ -528,7 +528,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = $db->query('SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id);
+    $query = $db->query('SELECT id, fileupload, fileimage FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $id);
     list($id, $fileupload, $fileimage) = $query->fetch(3);
     if (empty($id)) {
         die('NO');
@@ -551,7 +551,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
     }
 
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
+    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $id;
     if ($db->query($sql)) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'upload_new', $id);
     }
@@ -565,7 +565,7 @@ if ($nv_Request->isset_request('alldel', 'post')) {
         die('Wrong URL');
     }
 
-    $query = 'SELECT fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
+    $query = 'SELECT fileupload, fileimage FROM ' . NV_MOD_TABLE . '_tmp';
     $result = $db->query($query);
     while (list($fileupload, $fileimage) = $result->fetch(3)) {
         if (! empty($fileupload)) {
@@ -586,12 +586,12 @@ if ($nv_Request->isset_request('alldel', 'post')) {
         }
     }
 
-    $result = $db->query('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp');
+    $result = $db->query('SELECT id FROM ' . NV_MOD_TABLE . '_tmp');
     while (list($_id) = $result->fetch(3)) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'upload_new', $_id);
     }
 
-    $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp');
+    $db->query('TRUNCATE TABLE ' . NV_MOD_TABLE . '_tmp');
 
     die('OK');
 }
@@ -599,7 +599,7 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 //List files
 $page_title = $lang_module['download_filequeue'];
 
-$sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
+$sql = 'FROM ' . NV_MOD_TABLE . '_tmp';
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
 $result1 = $db->query($sql1);

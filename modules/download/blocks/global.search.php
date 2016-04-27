@@ -27,8 +27,9 @@ if (defined('NV_SYSTEM')) {
             $lang_block_module = $lang_module;
             $lang_module = $temp_lang_module;
         }
-
-        $sql = "SELECT id, title, alias, parentid FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories WHERE parentid=0 ORDER BY weight";
+        $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
+        
+        $sql = "SELECT id, title, alias, parentid FROM " . $_mod_table . "_categories WHERE parentid=0 ORDER BY weight";
         $list = $nv_Cache->db($sql, '', $module);
 
         $key = nv_substr($nv_Request->get_title('q', 'get', '', 1), 0, NV_MAX_SEARCH_LENGTH);
