@@ -22,7 +22,9 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_keywods'] = 'Từ khóa tìm kiếm';
 $lang_module['search_per_page'] = 'Số file hiển thị';
+
 $lang_module['download_config'] = 'Cấu hình module';
+$lang_module['config_confirm'] = 'Chấp nhận';
 $lang_module['config_indexfile'] = 'Phương án hiển thị trên trang chủ';
 $lang_module['config_indexfile_main_bottom'] = 'Chuyên mục, tập tin khác nằm bên dưới';
 $lang_module['config_indexfile_list_new'] = 'Danh sách, tập tin mới lên trên';
@@ -41,7 +43,14 @@ $lang_module['config_maxfilemb'] = 'MB';
 $lang_module['config_maxfilesizesys'] = 'Giới hạn tải lên hệ thống của bạn là';
 $lang_module['config_whouploadfile'] = 'Ai được upload file';
 $lang_module['config_whoaddfile'] = 'Ai được thêm file';
-$lang_module['config_confirm'] = 'Chấp nhận';
+$lang_module['config_delfile_mode'] = 'Thao tác với tệp tin khi xóa tài liệu';
+$lang_module['config_delfile_mode0'] = 'Giữ lại tệp tin';
+$lang_module['config_delfile_mode1'] = 'Xóa luôn tệp tin';
+$lang_module['config_delfile_mode2'] = 'Hỏi người xóa hình thức thực hiện';
+$lang_module['config_scorm_handle_mode'] = 'Sau khi giải nén SCORM thì';
+$lang_module['config_scorm_handle_mode0'] = 'Xóa luôn file gốc';
+$lang_module['config_scorm_handle_mode1'] = 'Giữ lại file gốc';
+
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
 $lang_module['error_cat2'] = 'Lỗi: Chủ đề chưa được khai báo !';

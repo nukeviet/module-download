@@ -157,7 +157,11 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('tags_alias', '0'),
         ('is_zip', '0'),
         ('is_resume', '1'),
-        ('max_speed', '0')";
+        ('max_speed', '0'),
+        ('delfile_mode', '0'),
+        ('structure_upload', 'Ym'),
+        ('scorm_handle_mode', '0')
+    ";
     
     // Comments
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
