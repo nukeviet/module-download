@@ -7,6 +7,7 @@
 <form action="{FORM_ACTION}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
+            <col class="w300"/>
 			<tbody>
 				<tr>
 					<td> {LANG.category_cat_name} </td>
@@ -35,19 +36,34 @@
 				<tr>
 					<td style="vertical-align:top"> {LANG.groups_view} </td>
 					<td>
-						<!-- BEGIN: groups_view -->
-						<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
-						<br />
-						<!-- END: groups_view -->
+                        <div class="groups-allow-area">
+    						<!-- BEGIN: groups_view -->
+    						<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
+    						<br />
+    						<!-- END: groups_view -->
+                        </div>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top"> {LANG.groups_onlineview} </td>
+					<td>
+                        <div class="groups-allow-area">
+    						<!-- BEGIN: groups_onlineview -->
+    						<input name="groups_onlineview[]" value="{GROUPS_ONLINEVIEW.key}" type="checkbox"{GROUPS_ONLINEVIEW.checked} /> {GROUPS_ONLINEVIEW.title}
+    						<br />
+    						<!-- END: groups_onlineview -->
+                        </div>
 					</td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top"> {LANG.groups_download} </td>
 					<td>
-						<!-- BEGIN: groups_download -->
-						<input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
-						<br />
-						<!-- END: groups_download -->
+                        <div class="groups-allow-area">
+    						<!-- BEGIN: groups_download -->
+    						<input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
+    						<br />
+    						<!-- END: groups_download -->
+                        </div>
 					</td>
 				</tr>
 				<tr>

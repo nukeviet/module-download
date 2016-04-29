@@ -48,26 +48,30 @@
 					<tr class="config_is_addfile is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
-							<!-- BEGIN: groups_addfile -->
-							<label class="show"><input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}</label>
-							<!-- END: groups_addfile -->
+                            <div class="groups-allow-area">
+    							<!-- BEGIN: groups_addfile -->
+    							<label class="show"><input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}</label>
+    							<!-- END: groups_addfile -->
+                            </div>
 						</td>
 					</tr>
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
-							<!-- BEGIN: groups_upload -->
-							<label class="show"><input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}</label>
-							<!-- END: groups_upload -->
+                            <div class="groups-allow-area">
+    							<!-- BEGIN: groups_upload -->
+    							<label class="show"><input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}</label>
+    							<!-- END: groups_upload -->
+                            </div>
 						</td>
 					</tr>
 					<!-- BEGIN: allow_files_type -->
 					<tr class="is_addfile" {IS_ADDFILE}>
 						<td class="top">{LANG.config_allowfiletype}</td>
 						<td>
-						<!-- BEGIN: loop -->
-						<label><input name="upload_filetype[]" type="checkbox" value="{TP}" {CHECKED} /> {TP}</label>&nbsp;&nbsp;&nbsp;
-						<!-- END: loop -->
+    						<!-- BEGIN: loop -->
+    						<label><input name="upload_filetype[]" type="checkbox" value="{TP}" {CHECKED} /> {TP}</label>&nbsp;&nbsp;&nbsp;
+    						<!-- END: loop -->
 						</td>
 					</tr>
 					<!-- END: allow_files_type -->

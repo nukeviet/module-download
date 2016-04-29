@@ -12,7 +12,7 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['add'] = $lang_module['file_addfile'];
+$submenu['content'] = $lang_module['file_addfile'];
 $submenu['filequeue'] = $lang_module['download_filequeue'];
 $submenu['report'] = $lang_module['download_report'];
 $submenu['tags'] = $lang_module['download_tags'];

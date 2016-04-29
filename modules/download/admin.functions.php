@@ -15,9 +15,9 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 define('NV_IS_FILE_ADMIN', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'view', 'tags', 'tagsajax', 'change_cat' );
+$allow_func = array('main', 'content', 'filequeue', 'report', 'config', 'cat', 'cat-content', 'view', 'tags', 'tagsajax', 'change_cat');
 
-//load config module
+// Load config module
 $_sql_config = 'SELECT * FROM ' . NV_MOD_TABLE . '_config ';
 $_query_config = $db->query($_sql_config);
 while ($row_config = $_query_config->fetch()) {
@@ -52,7 +52,7 @@ function get_allow_exts()
     return $exts;
 }
 
-//Check file
+// Check file
 if ($nv_Request->isset_request('check', 'post')) {
     if (! defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('check', 'post')) {
     die($lang_module['file_checkUrl_ok']);
 }
 
-//Download file
+// Download file
 if ($nv_Request->isset_request('fdownload', 'get')) {
     $file = $nv_Request->get_string('fdownload', 'get', '');
     if (! empty($file)) {

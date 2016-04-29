@@ -74,28 +74,40 @@
 			<div class="row">
 				<div class="col-sm-12 col-md-24">
 					<label>{LANG.groups_view}</label>
+                    <div class="groups-allow-area">
+    					<!-- BEGIN: groups_view -->
+    					<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
+    					<br />
+    					<!-- END: groups_view -->
+                    </div>
+
 					<br />
-					<!-- BEGIN: groups_view -->
-					<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
-					<br />
-					<!-- END: groups_view -->
+					<label>{LANG.groups_onlineview}</label>
+                    <div class="groups-allow-area">
+    					<!-- BEGIN: groups_onlineview -->
+    					<input name="groups_onlineview[]" value="{GROUPS_ONLINEVIEW.key}" type="checkbox"{GROUPS_ONLINEVIEW.checked} /> {GROUPS_ONLINEVIEW.title}
+    					<br />
+    					<!-- END: groups_onlineview -->
+                    </div>
 
 					<br />
 					<label>{LANG.groups_download}</label>
-					<br />
-					<!-- BEGIN: groups_download -->
-					<input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
-					<br />
-					<!-- END: groups_download -->
+                    <div class="groups-allow-area">
+    					<!-- BEGIN: groups_download -->
+    					<input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
+    					<br />
+    					<!-- END: groups_download -->
+                    </div>
 					<br />
 				</div>
 				<div class="col-sm-12 col-md-24">
 					<label>{LANG.file_whocomment}</label>
-					<br />
-					<!-- BEGIN: groups_comment -->
-					<input name="groups_comment[]" value="{GROUPS_COMMENT.key}" type="checkbox"{GROUPS_COMMENT.checked} /> {GROUPS_COMMENT.title}
-					<br />
-					<!-- END: groups_comment -->
+                    <div class="groups-allow-area">
+    					<!-- BEGIN: groups_comment -->
+    					<input name="groups_comment[]" value="{GROUPS_COMMENT.key}" type="checkbox"{GROUPS_COMMENT.checked} /> {GROUPS_COMMENT.title}
+    					<br />
+    					<!-- END: groups_comment -->
+                    </div>
 				</div>
 				<div class="col-sm-12 col-md-24">
 					<br />
@@ -192,21 +204,19 @@
 		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-</script>
-<script>
-	function get_alias() {
-		var title = strip_tags(document.getElementById('title').value);
-		if (title != '') {
-			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title), function(res) {
-				if (res != "") {
-					document.getElementById('alias').value = res;
-				} else {
-					document.getElementById('alias').value = '';
-				}
-			});
-		}
-		return false;
-	}
+    function get_alias() {
+    	var title = strip_tags(document.getElementById('title').value);
+    	if (title != '') {
+    		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title), function(res) {
+    			if (res != "") {
+    				document.getElementById('alias').value = res;
+    			} else {
+    				document.getElementById('alias').value = '';
+    			}
+    		});
+    	}
+    	return false;
+    }
 </script>
 <!-- BEGIN: get_alias -->
 <script type="text/javascript">
@@ -248,17 +258,14 @@
 				}, response);
 			},
 			search : function() {
-				// custom minLength
 				var term = extractLast(this.value);
 				if (term.length < 2) {
 					return false;
 				}
 			},
 			focus : function() {
-			  //no action
 			},
 			select : function(event, ui) {
-				// add placeholder to get the comma-and-space at the end
 				if(event.keyCode!=13){
 		            nv_add_element( 'keywords', ui.item.value, ui.item.value );
 		            $(this).val('');
@@ -267,7 +274,6 @@
 			}
 		});
 		$("#keywords-search").blur(function() {
-			// add placeholder to get the comma-and-space at the end
 	        var keywords_add= $("#keywords-search").val();
 	        keywords_add = trim( keywords_add );
 	        if( keywords_add != '' ){

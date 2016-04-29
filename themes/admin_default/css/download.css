@@ -105,3 +105,7 @@
     padding: 2px 6px 1px;
     text-align: center;
 }
+.groups-allow-area{
+    max-height: 200px;
+    overflow: auto;
+}
