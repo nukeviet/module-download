@@ -59,6 +59,7 @@ if (!empty($list_cats_tmp)) {
         if (! $catvalue['parentid'] or isset($list_cats_tmp[$catvalue['parentid']])) {
             if (nv_user_in_groups($catvalue['groups_view'])) {
                 $catvalue['is_download_allow'] =  nv_user_in_groups($catvalue['groups_download']);
+                $catvalue['is_onlineview_allow'] =  nv_user_in_groups($catvalue['groups_onlineview']);
                 $list_cats[$catid] = $catvalue;
             }
         }

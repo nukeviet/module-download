@@ -105,12 +105,16 @@ if (empty($row['copyright'])) {
 
 $row['catname'] = $list_cats[$row['catid']]['title'];
 
-//phan quyen tai file tai danh muc
+// Phan quyen tai file tai danh muc
 $row['is_download_allow'] =  nv_user_in_groups($list_cats[$row['catid']]['groups_download']);
+$row['is_onlineview_allow'] =  nv_user_in_groups($list_cats[$row['catid']]['groups_onlineview']);
 
-//neu danh muc cho phep tai file thi kiem tra tiep phan quyen tai file trong chi tiet file
+// Neu danh muc cho phep tai file thi kiem tra tiep phan quyen tai file trong chi tiet file
 if ($row['is_download_allow']) {
     $row['is_download_allow'] = nv_user_in_groups($row['groups_download']);
+}
+if ($row['is_onlineview_allow']) {
+    $row['is_onlineview_allow'] = nv_user_in_groups($row['groups_onlineview']);
 }
 
 $session_files = array();
@@ -119,6 +123,9 @@ $session_files['linkdirect'] = array();
 $row['filepdf'] = '';
 
 if ($row['is_download_allow']) {
+    $session_files['tokend'] = md5($global_config['sitekey'] . session_id() . $row['id'] . $row['alias']);
+    $session_files['id'] = $row['id'];
+    
     if (! empty($row['fileupload'])) {
         $fileupload = explode('[NV]', $row['fileupload']);
         $row['fileupload'] = array();

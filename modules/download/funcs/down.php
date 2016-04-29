@@ -19,6 +19,24 @@ if (empty($session_files)) {
 
 $session_files = unserialize($session_files);
 
+if (empty($session_files['id']) or empty($session_files['tokend'])) {
+    die('Wrong URL');
+}
+
+$row = $db->query("SELECT * FROM " . NV_MOD_TABLE . " WHERE status=1 AND id=" . intval($session_files['id']))->fetch();
+if (empty($row)) {
+    die('Wrong URL');
+}
+
+if (!nv_user_in_groups($row['groups_view']) 
+    or !nv_user_in_groups($row['groups_download'])
+    or !isset($list_cats[$row['catid']]) 
+    or !nv_user_in_groups($list_cats[$row['catid']]['groups_view']) 
+    or !nv_user_in_groups($list_cats[$row['catid']]['groups_download'])
+    or $session_files['tokend'] != md5($global_config['sitekey'] . session_id() . $row['id'] . $row['alias'])) {
+    die('Wrong URL');
+}
+
 if ($nv_Request->isset_request('code', 'get')) {
     $code = $nv_Request->get_string('code', 'get', '');
 
@@ -36,7 +54,6 @@ if ($nv_Request->isset_request('code', 'get')) {
     nv_info_die($lang_module['download_detail'], $lang_module['download_wait'], $content);
     die();
 }
-
 
 $filename = $nv_Request->get_string('filename', 'get', '');
 if (empty($filename) or ! isset($session_files['fileupload'][$filename])) {
@@ -57,7 +74,12 @@ $is_resume = false;
 $max_speed = 0;
 
 $filepdf = $nv_Request->get_int('filepdf', 'get', 0);
+
 if ($filepdf == 1) {
+    if (!nv_user_in_groups($row['groups_onlineview']) or !nv_user_in_groups($list_cats[$row['catid']]['groups_onlineview'])) {
+        die('Wrong URL');
+    }
+    
     $html = theme_viewpdf($filename);
     die($html);
 } elseif (empty($filepdf)) {

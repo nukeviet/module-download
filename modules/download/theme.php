@@ -202,7 +202,8 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
 
     if ($row['is_download_allow']) {
         $xtpl->parse('main.report');
-        if (! empty($row['filepdf'])) {
+        
+        if (! empty($row['filepdf']) and $row['is_onlineview_allow']) {
             $xtpl->assign('FILEPDF', $row['filepdf']);
             $xtpl->parse('main.filepdf');
         }
