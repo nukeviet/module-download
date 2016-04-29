@@ -18,7 +18,7 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 $allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'view', 'tags', 'tagsajax', 'change_cat' );
 
 //load config module
-$_sql_config = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config ';
+$_sql_config = 'SELECT * FROM ' . NV_MOD_TABLE . '_config ';
 $_query_config = $db->query($_sql_config);
 while ($row_config = $_query_config->fetch()) {
     $module_config[$module_name][$row_config['config_name']]=$row_config['config_value'];
@@ -117,9 +117,9 @@ if ($nv_Request->isset_request('fdownload', 'get')) {
  */
 function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 {
-    global $db, $module_data;
+    global $db;
 
-    $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
+    $sql = 'SELECT id, parentid FROM ' . NV_MOD_TABLE . '_categories WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
     $array_cat_order = array();
     while ($row = $result->fetch()) {
@@ -135,13 +135,13 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE id=' . intval($catid_i);
+        $sql = 'UPDATE ' . NV_MOD_TABLE . '_categories SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE id=' . intval($catid_i);
         $db->query($sql);
         $order = nv_fix_cat_order($catid_i, $order, $lev);
     }
     $numsubcat = $weight;
     if ($parentid > 0) {
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET numsubcat=' . $numsubcat;
+        $sql = 'UPDATE ' . NV_MOD_TABLE . '_categories SET numsubcat=' . $numsubcat;
         if ($numsubcat == 0) {
             $sql .= ",subcatid='', viewcat='viewcat_list_new'";
         } else {

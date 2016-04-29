@@ -49,7 +49,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $array_config['upload_filetype'] = (! empty($array_config['upload_filetype'])) ? implode(',', $array_config['upload_filetype']) : '';
 
-    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
+    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
         if ($config_name != 'readme') {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
@@ -89,7 +89,7 @@ if (file_exists($readme_file)) {
     $array_config['readme'] = nv_htmlspecialchars($array_config['readme']);
 }
 
-$sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
+$sql = 'SELECT config_name, config_value FROM ' . NV_MOD_TABLE . '_config';
 $result = $db->query($sql);
 while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;

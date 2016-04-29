@@ -47,7 +47,7 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data)
+        ->from(NV_MOD_TABLE)
         ->where('catid=' . $cat_data['id'] . ' AND status=1');
 
     $num_items = $db->query($db->sql())->fetchColumn();
@@ -102,7 +102,7 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
 
             $db->sqlreset()
                 ->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
-                ->from(NV_PREFIXLANG . '_' . $module_data)
+                ->from(NV_MOD_TABLE)
                 ->order('uploadtime DESC')
                 ->limit($list_cats[$sub]['numlink']);
 
@@ -130,7 +130,7 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
                 );
             }
 
-            $numfile = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode(',', $array_cat) . ' )')->fetchColumn();
+            $numfile = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE catid IN ( ' . implode(',', $array_cat) . ' )')->fetchColumn();
 
             if ($i) {
                 $subs[] = array(
@@ -153,7 +153,7 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data)
+        ->from(NV_MOD_TABLE)
         ->where('catid IN (' . implode(',', $array_cat) . ') AND status=1');
 
     $num_items = $db->query($db->sql())->fetchColumn();

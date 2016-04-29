@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-global $module_name, $lang_module, $module_data, $list_cats, $module_file;
+global $module_name, $lang_module, $list_cats, $module_file;
 
 $mainmenu = 20; // Do dai tieu de menu chinh
 $submenu = 30; // Do dai tieu de menu con

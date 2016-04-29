@@ -13,7 +13,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'get,post', 0);
-$row = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' where id=' . $id)->fetch();
+$row = $db->query('SELECT * FROM ' . NV_MOD_TABLE . ' where id=' . $id)->fetch();
 if (! empty($row['id'])) {
     $_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true);
     Header('Location: ' . $_url_rewrite);

@@ -24,7 +24,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile)) != false and filemti
 
     $db->sqlreset()
         ->select('catid, alias, uploadtime')
-        ->from(NV_PREFIXLANG . '_' . $module_data)
+        ->from(NV_MOD_TABLE)
         ->where('catid IN (' . $in . ') AND status=1')
         ->order('uploadtime DESC')
         ->limit(1000);

@@ -19,11 +19,11 @@ if (! nv_function_exists('nv_sdown_cats')) {
      * @param mixed $module_data
      * @return
      */
-    function nv_sdown_cats($module_data)
+    function nv_sdown_cats($_mod_table)
     {
         global $db;
 
-        $sql = 'SELECT id, title, alias, groups_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1';
+        $sql = 'SELECT id, title, alias, groups_view FROM ' . $_mod_table . '_categories WHERE status=1';
         $result = $db->query($sql);
 
         $list = array();
@@ -40,7 +40,9 @@ if (! nv_function_exists('nv_sdown_cats')) {
     }
 }
 
-$list_cats = nv_sdown_cats($m_values['module_data']);
+$_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $m_values['module_data'];
+
+$list_cats = nv_sdown_cats($_mod_table);
 if (! empty($list_cats)) {
     $_where = 'catid IN (' . implode(',', array_keys($list_cats)) . ')
 	AND (' . nv_like_logic('title', $dbkeyword, $logic) . '
@@ -50,7 +52,7 @@ if (! empty($list_cats)) {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $m_values['module_data'])
+        ->from($_mod_table)
         ->where($_where);
 
     $num_items = $db->query($db->sql())->fetchColumn();

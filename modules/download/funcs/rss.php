@@ -34,7 +34,7 @@ if (! empty($list_cats)) {
 
     $db->sqlreset()
         ->select('id, catid, uploadtime, title, alias, introtext, fileimage')
-        ->from(NV_PREFIXLANG . '_' . $module_data)
+        ->from(NV_MOD_TABLE)
         ->order('uploadtime DESC')
         ->limit(30);
 

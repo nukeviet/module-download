@@ -17,7 +17,10 @@ if (defined('NV_SYSTEM')) {
         function nv_mod_down_config($module)
         {
             global $site_mods, $module_info, $nv_Cache;
-            $sql = 'SELECT config_name,config_value FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_file'] . '_config';
+            
+            $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
+            
+            $sql = 'SELECT config_name,config_value FROM ' . $_mod_table . '_config';
             $list = $nv_Cache->db($sql, '', $module);
             $download_config = array();
             foreach ($list as $values) {

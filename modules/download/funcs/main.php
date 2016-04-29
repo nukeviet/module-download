@@ -38,7 +38,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
         $point = ( int )$m[2];
 
         if ($id and ($point > 0 and $point < 6)) {
-            $sql = 'SELECT id, rating_detail FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
+            $sql = 'SELECT id, rating_detail FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
             list($id, $rating_detail) = $db->query($sql)->fetch(3);
             if ($id) {
                 $total = $click = 0;
@@ -60,7 +60,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
                     ++$click;
                     $rating_detail = $total . '|' . $click ;
 
-                    $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail= :rating_detail WHERE id=' . $id);
+                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET rating_detail= :rating_detail WHERE id=' . $id);
                     $stmt->bindParam(':rating_detail', $rating_detail, PDO::PARAM_STR);
                     $stmt->execute();
                 }
@@ -93,7 +93,7 @@ if ($viewcat == 'viewcat_main_bottom') {
 
             $db->sqlreset()
                 ->select('COUNT(*)')
-                ->from(NV_PREFIXLANG . '_' . $module_data)
+                ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
 
             $num_items = $db->query($db->sql())->fetchColumn();
@@ -133,7 +133,7 @@ if ($viewcat == 'viewcat_main_bottom') {
                     );
                 }
 
-                $numfile = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid IN ( ' . implode(',', $array_cat) . ' )')->fetchColumn();
+                $numfile = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE catid IN ( ' . implode(',', $array_cat) . ' )')->fetchColumn();
 
                 $array_cats[$value['id']] = array();
                 $array_cats[$value['id']]['catid'] = $value['id'];
@@ -156,7 +156,7 @@ if ($viewcat == 'viewcat_main_bottom') {
     // Fetch Limit
     $db->sqlreset()
       ->select('COUNT(*)')
-      ->from(NV_PREFIXLANG . '_' . $module_data)
+      ->from(NV_MOD_TABLE)
       ->where('status=1');
 
     $all_page = $db->query($db->sql())->fetchColumn();

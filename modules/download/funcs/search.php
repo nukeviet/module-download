@@ -31,7 +31,7 @@ $page_title = $lang_module['search'] . ' ' . $key;
 
 $db->sqlreset()
     ->select('COUNT(*)')
-    ->from(NV_PREFIXLANG . '_' . $module_data);
+    ->from(NV_MOD_TABLE);
 
 $base_url .= '&q=' . $key;
 if (! empty($key)) {

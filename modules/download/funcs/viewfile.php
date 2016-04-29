@@ -24,7 +24,7 @@ if (! preg_match('/^([a-z0-9\-\_\.]+)$/i', $filealias)) {
     exit();
 }
 
-$stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :filealias AND catid=' . $catid . ' AND status=1');
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE alias= :filealias AND catid=' . $catid . ' AND status=1');
 $stmt->bindParam(':filealias', $filealias, PDO::PARAM_STR);
 $stmt->execute();
 $row = $stmt->fetch();
@@ -207,14 +207,14 @@ if (! in_array($row['id'], $dfile)) {
     $dfile = serialize($dfile);
     $nv_Request->set_Session('dfile', $dfile);
 
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET view_hits=view_hits+1 WHERE id=' . $row['id'];
+    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET view_hits=view_hits+1 WHERE id=' . $row['id'];
     $db->query($sql);
     ++$row['view_hits'];
 }
 
 $array_keyword = array();
-$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 
-			INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 
+$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1 
+			INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
 			ON a1.did=a2.did WHERE a1.id=' . $row['id']);
 while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;

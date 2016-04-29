@@ -12,14 +12,14 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-global $module_name, $lang_module, $module_data, $list_cats, $module_file, $db, $global_config;
+global $module_name, $lang_module, $list_cats, $module_file, $db, $global_config;
 
 $xtpl = new XTemplate('block_lastestdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 
 $db->sqlreset()
     ->select('catid, title, alias, uploadtime')
-    ->from(NV_PREFIXLANG . '_' . $module_data)
+    ->from(NV_MOD_TABLE)
     ->where('status=1')
     ->order('uploadtime DESC')
     ->limit(5);

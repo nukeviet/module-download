@@ -14,14 +14,16 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
 
 $lang_siteinfo = nv_get_lang_module($mod);
 
+$_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $mod_data;
+
 // Tong so file
-$number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 1')->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' where status= 1')->fetchColumn();
 if ($number > 0) {
     $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_publtime'], 'value' => $number );
 }
 
 // Tong so file het han
-$number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 0')->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' where status= 0')->fetchColumn();
 if ($number > 0) {
     $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_expired'], 'value' => $number );
 }
@@ -43,7 +45,7 @@ if ($number > 0) {
 }
 
 // So file dang cho duyet
-$sql = 'SELECT COUNT(*) as numbers FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tmp';
+$sql = 'SELECT COUNT(*) as numbers FROM ' . $_mod_table . '_tmp';
 $array_data = $nv_Cache->db($sql, '', $mod);
 $number = isset($array_data[0]['numbers']) ? intval($array_data[0]['numbers']) : 0;
 if ($number > 0) {
@@ -55,7 +57,7 @@ if ($number > 0) {
 }
 
 // So bao cao loi duoc gui toi
-$number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_report')->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_report')->fetchColumn();
 if ($number > 0) {
     $pendinginfo[] = array(
         'key' => $lang_siteinfo['siteinfo_eror'],

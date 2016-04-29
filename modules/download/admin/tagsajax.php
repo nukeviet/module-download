@@ -19,7 +19,7 @@ if (empty($q)) {
 
 $db->sqlreset()
     ->select('keywords')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->from(NV_MOD_TABLE . '_tags')
     ->where('alias LIKE :alias OR keywords LIKE :keywords')
     ->order('alias ASC')
     ->limit(50);

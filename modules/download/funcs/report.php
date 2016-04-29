@@ -27,10 +27,10 @@ if ($id and ! in_array($id, $dlrp)) {
     $dlrp = serialize($dlrp);
     $nv_Request->set_Session('dlrp', $dlrp);
 
-    $query = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
+    $query = 'SELECT id, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
     list($id, $title) = $db->query($query)->fetch(3);
     if ($id) {
-        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
         $stmt->bindParam(':ip', $client_info['ip'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             // Them vao thong bao

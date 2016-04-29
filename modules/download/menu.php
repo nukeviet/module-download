@@ -12,7 +12,9 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_categories ORDER BY parentid, weight ASC';
+$_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $mod_data;
+
+$sql = 'SELECT * FROM ' . $_mod_table . '_categories ORDER BY parentid, weight ASC';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $array_item[$row['id']] = array(
