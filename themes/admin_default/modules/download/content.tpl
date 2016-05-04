@@ -140,11 +140,11 @@
 					<div id="fileupload_items">
 						<!-- BEGIN: fileupload -->
 						<div id="fileupload_item_{FILEUPLOAD.key}">
-							<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />
-							&nbsp; <input class="btn btn-info" type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />
-							&nbsp;<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />
-							&nbsp; <input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" />
-							&nbsp;<input class="btn btn-info" type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
+							<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp;
+							<input class="btn btn-info" type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={UPLOADS_DIR}&currentpath={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />
+							<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />
+							<input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" />
+							<input class="btn btn-info" type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
 						</div>
 						<!-- END: fileupload -->
 					</div>
@@ -153,6 +153,7 @@
 						var file_selectfile = '{LANG.file_selectfile}';
 						var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 						var file_dir = '{FILES_DIR}';
+						var uploads_dir = '{UPLOADS_DIR}';
 						var file_checkUrl = '{LANG.file_checkUrl}';
 						var file_gourl = '{LANG.file_gourl}';
 						var file_delurl = '{LANG.file_delurl}';
@@ -166,7 +167,8 @@
 					(<em>{LANG.file_linkdirect_note}</em>) </td>
 					<td>
 					<div id="linkdirect_items">
-						<!-- BEGIN: linkdirect -->						<textarea name="linkdirect[]" id="linkdirect{LINKDIRECT.key}" style="width:500px;height:100px" class="form-control pull-left">{LINKDIRECT.value}</textarea>
+						<!-- BEGIN: linkdirect -->
+                        <textarea name="linkdirect[]" id="linkdirect{LINKDIRECT.key}" style="width:500px;height:100px" class="form-control pull-left">{LINKDIRECT.value}</textarea>
 						&nbsp; &nbsp;<input type="button" class="btn btn-info pull-left" value="{LANG.file_checkUrl}" id="check_linkdirect{LINKDIRECT.key}" onclick="nv_checkfile('linkdirect{LINKDIRECT.key}',0, 'check_linkdirect{LINKDIRECT.key}');" />
 						<!-- END: linkdirect -->
 					</div>
@@ -201,7 +203,7 @@
 </form>
 <script type="text/javascript">
 	$("input[name=selectimg]").click(function() {
-		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={UPLOADS_DIR}&currentpath={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
     function get_alias() {

@@ -30,6 +30,101 @@ if ($nv_Request->isset_request('gettitle', 'post')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+/**
+ * nv_update_upload_dir()
+ * 
+ * @param mixed $dir
+ * @return void
+ */
+function nv_update_upload_dir($dir)
+{
+    global $db;
+    try {
+        $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $dir . "', 0)");
+    } catch (PDOException $e) {
+        trigger_error($e->getMessage());
+    }
+}
+
+// Thiết lập thư mục tải lên
+$username_alias = change_alias($admin_info['username']);
+$array_structure_image = array();
+$array_structure_image[''] = $module_upload;
+$array_structure_image['Y'] = $module_upload . '/' . date('Y');
+$array_structure_image['Ym'] = $module_upload . '/' . date('Y_m');
+$array_structure_image['Y_m'] = $module_upload . '/' . date('Y/m');
+$array_structure_image['Ym_d'] = $module_upload . '/' . date('Y_m/d');
+$array_structure_image['Y_m_d'] = $module_upload . '/' . date('Y/m/d');
+$array_structure_image['username'] = $module_upload . '/' . $username_alias;
+
+$array_structure_image['username_Y'] = $module_upload . '/' . $username_alias . '/' . date('Y');
+$array_structure_image['username_Ym'] = $module_upload . '/' . $username_alias . '/' . date('Y_m');
+$array_structure_image['username_Y_m'] = $module_upload . '/' . $username_alias . '/' . date('Y/m');
+$array_structure_image['username_Ym_d'] = $module_upload . '/' . $username_alias . '/' . date('Y_m/d');
+$array_structure_image['username_Y_m_d'] = $module_upload . '/' . $username_alias . '/' . date('Y/m/d');
+
+$structure_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : 'Ym';
+$currentpath = isset($array_structure_image[$structure_upload]) ? $array_structure_image[$structure_upload] : '';
+$currentpath_files = $currentpath_images = '';
+
+if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
+    $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $currentpath;
+} else {
+    $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_upload;    
+    $e = explode('/', $currentpath);
+    if (! empty($e)) {
+        $cp = '';
+        foreach ($e as $p) {
+            if (! empty($p) and ! is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
+                $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $cp, $p);
+                if ($mk[0] > 0) {
+                    $upload_real_dir_page = $mk[2];
+                    nv_update_upload_dir($cp . $p);
+                }
+            } elseif (! empty($p)) {
+                $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
+            }
+            $cp .= $p . '/';
+        }
+    }    
+
+    $upload_real_dir_page = str_replace('\\', '/', $upload_real_dir_page);
+}
+
+$currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
+$currentpath_tmp = str_replace(NV_UPLOADS_REAL_DIR . '/', '', $upload_real_dir_page);
+$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
+
+if (!is_dir($upload_real_dir_page . '/images')) {
+    $mk = nv_mkdir($upload_real_dir_page, 'images');
+    if ($mk[0] > 0) {
+        $currentpath_images = '/images';
+        nv_update_upload_dir($currentpath_tmp . '/images');
+    }
+} else {
+    $currentpath_images = '/images';
+}
+if (!is_dir($upload_real_dir_page . '/files')) {
+    $mk = nv_mkdir($upload_real_dir_page, 'files');
+    if ($mk[0] > 0) {
+        $currentpath_files = '/files';
+        nv_update_upload_dir($currentpath_tmp . '/files');
+    }
+} else {
+    $currentpath_files = '/files';
+}
+unset($currentpath_tmp);
+
+if (! defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
+    $array_currentpath = explode('/', $currentpath);
+    if ($array_currentpath[2] == $username_alias) {
+        $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
+    }
+}
+
+$currentpath_images = $currentpath . $currentpath_images;
+$currentpath_files = $currentpath . $currentpath_files;
+
 $id = $nv_Request->get_int('id', 'get', 0);
 $groups_list = nv_groups_list();
 $array = array();
@@ -536,8 +631,9 @@ $xtpl->assign('DATA', $array);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-$xtpl->assign('IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images');
-$xtpl->assign('FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files');
+$xtpl->assign('IMG_DIR', $currentpath_images);
+$xtpl->assign('FILES_DIR', $currentpath_files);
+$xtpl->assign('UPLOADS_DIR', $uploads_dir_user);
 $xtpl->assign('ONCHANGE', 'onchange="get_alias();"');
 
 if (! empty($error)) {

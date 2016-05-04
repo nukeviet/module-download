@@ -52,50 +52,80 @@
 	</form>
 </div>
 
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<colgroup>
-			<col span="2" />
-			<col class="w150" />
-			<col span="4" class="w100" />
-			<col class="w150" />
-		</colgroup>
-		<thead>
-			<tr class="text-center">
-				<th>{LANG.file_title}</th>
-				<th>{LANG.category_cat_parent}</th>
-				<th>{LANG.file_update}</th>
-				<th class="text-center">{LANG.file_view_hits}</th>
-				<th class="text-center">{LANG.file_download_hits}</th>
-				<th class="text-center">{LANG.file_comment_hits}</th>
-				<th class="text-center">{LANG.file_active}</th>
-				<th class="text-center">{LANG.file_feature}</th>
-			</tr>
-		</thead>
-		<!-- BEGIN: generate_page -->
-		<tfoot>
-			<tr>
-				<td colspan="8" class="text-center">{GENERATE_PAGE}</td>
-			</tr>
-		</tfoot>
-		<!-- END: generate_page -->
-		<tbody>
-			<!-- BEGIN: row -->
-			<tr>
-				<td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-				<td><a href="{ROW.catlink}">{ROW.cattitle}</a></td>
-				<td>{ROW.uploadtime}</td>
-				<td class="text-center">{ROW.view_hits}</td>
-				<td class="text-center">{ROW.download_hits}</td>
-				<td class="text-center">{ROW.comment_hits}</td>
-				<td class="text-center"><input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status} onclick="nv_chang_file_status({ROW.id})" /></td>
-				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id});">{GLANG.delete}</a></td>
-			</tr>
-			<!-- END: row -->
-		</tbody>
-	</table>
-</div>
+<form class="form-inline">
+    <div class="table-responsive">
+    	<table class="table table-striped table-bordered table-hover">
+    		<colgroup>
+    			<col />
+    			<col span="2" />
+    			<col class="w150" />
+    			<col span="4" class="w100" />
+    			<col class="w150" />
+    		</colgroup>
+    		<thead>
+    			<tr class="text-center">
+                    <th class="text-center w50"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+    				<th>{LANG.file_title}</th>
+    				<th>{LANG.category_cat_parent}</th>
+    				<th>{LANG.file_update}</th>
+    				<th class="text-center">{LANG.file_view_hits}</th>
+    				<th class="text-center">{LANG.file_download_hits}</th>
+    				<th class="text-center">{LANG.file_comment_hits}</th>
+    				<th class="text-center">{LANG.file_active}</th>
+    				<th class="text-center">{LANG.file_feature}</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<!-- BEGIN: row -->
+    			<tr>
+    				<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+    				<td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+    				<td><a href="{ROW.catlink}">{ROW.cattitle}</a></td>
+    				<td>{ROW.uploadtime}</td>
+    				<td class="text-center">{ROW.view_hits}</td>
+    				<td class="text-center">{ROW.download_hits}</td>
+    				<td class="text-center">{ROW.comment_hits}</td>
+    				<td class="text-center"><input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status} onclick="nv_chang_file_status({ROW.id})" /></td>
+    				<td class="text-center">
+                        <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;
+                        <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id}, {DELETEFILE_MODE});">{GLANG.delete}</a></td>
+    			</tr>
+    			<!-- END: row -->
+    		</tbody>
+    		<!-- BEGIN: generate_page -->
+    		<tbody>
+    			<tr>
+    				<td colspan="9" class="text-center">{GENERATE_PAGE}</td>
+    			</tr>
+    		</tbody>
+    		<!-- END: generate_page -->
+			<tfoot>
+				<tr class="text-left">
+					<td colspan="9">
+						<select class="form-control" name="action" id="action">
+							<!-- BEGIN: action -->
+							<option value="{ACTION.value}">{ACTION.title}</option>
+							<!-- END: action -->
+						</select>
+						<input type="button" class="btn btn-primary" onclick="nv_file_action(this, this.form, '{LANG.msgnocheck}')" value="{LANG.confirm}" />
+					</td>
+				</tr>
+			</tfoot>
+    	</table>
+    </div>
+</form>
 <script>
 	$('#catid').select2();
 </script>
+<div class="hidden" id="delete-filemode" title="{LANG.config_delfile_mode}">
+    <div class="input-group">
+        <select class="form-control">
+            <option value="0">{LANG.config_delfile_mode0}</option>
+            <option value="1">{LANG.config_delfile_mode1}</option>
+        </select>
+        <span class="input-group-btn">
+            <input type="button" name="delete-filemode-submit" value="{GLANG.delete}" class="btn btn-danger" data-id="0"/>
+        </span>
+    </div>
+</div>
 <!-- END: main -->

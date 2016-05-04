@@ -34,6 +34,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['is_resume'] = $nv_Request->get_int('is_resume', 'post', 0);
     $array_config['max_speed'] = $nv_Request->get_int('max_speed', 'post', 0);
     $array_config['tags_alias'] = $nv_Request->get_int('tags_alias', 'post', 0);
+    $array_config['delfile_mode'] = $nv_Request->get_int('delfile_mode', 'post', 0);
+    $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
+    $array_config['scorm_handle_mode'] = $nv_Request->get_int('scorm_handle_mode', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -83,6 +86,9 @@ $array_config['readme'] = '';
 $array_config['is_resume'] = 0;
 $array_config['max_speed'] = 0;
 $array_config['tags_alias'] = 0;
+$array_config['delfile_mode'] = 0;
+$array_config['structure_upload'] = 'Ym';
+$array_config['scorm_handle_mode'] = 0;
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -123,7 +129,24 @@ if (! empty($groups_list)) {
         );
     }
 }
+
 $array_config['maxfilesize'] = number_format($array_config['maxfilesize']/1048576, 2);
+
+$array_structure_image = array();
+$array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;
+$array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y');
+$array_structure_image['Ym'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m');
+$array_structure_image['Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y/m');
+$array_structure_image['Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m/d');
+$array_structure_image['Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y/m/d');
+
+$array_structure_image['username'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin';
+$array_structure_image['username_Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y');
+$array_structure_image['username_Ym'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y_m');
+$array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y/m');
+$array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y_m/d');
+$array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y/m/d');
+
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('LANG', $lang_module);
@@ -176,6 +199,36 @@ if (! empty($global_config['file_allowed_ext'])) {
 }
 
 $xtpl->assign('IS_ADDFILE', !$array_config['is_addfile'] ? 'style="display: none"' : '');
+
+// Kieu xoa file
+for ($i = 0; $i <= 2; $i ++) {
+    $xtpl->assign('DELFILE_MODE', array(
+        'key' => $i,
+        'title' => $lang_module['config_delfile_mode' . $i],
+        'selected' => $i == $array_config['delfile_mode'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.delfile_mode');
+}
+
+// Thu muc uploads
+foreach ($array_structure_image as $type => $dir) {
+    $xtpl->assign('STRUCTURE_UPLOAD', array(
+        'key' => $type,
+        'title' => $dir,
+        'selected' => $type == $array_config['structure_upload'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.structure_upload');
+}
+
+// Xu ly file SCORM
+for ($i = 0; $i <= 1; $i ++) {
+    $xtpl->assign('SCORM_HANDLE_MODE', array(
+        'key' => $i,
+        'title' => $lang_module['config_scorm_handle_mode' . $i],
+        'selected' => $i == $array_config['scorm_handle_mode'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.scorm_handle_mode');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

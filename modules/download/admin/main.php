@@ -13,22 +13,38 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 // Avtive - Deactive
-if ($nv_Request->isset_request('changestatus', 'post')) {
+if ($nv_Request->isset_request('changestatus', 'post') or $nv_Request->isset_request('active', 'post') or $nv_Request->isset_request('deactive', 'post')) {
     if (! defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
-
-    $id = $nv_Request->get_int('id', 'post', 0);
-
-    $query = 'SELECT status FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
-    $row = $db->query($query)->fetch();
-    if (empty($row)) {
-        die('NO');
+    
+    $control_status = -1;
+    if ($nv_Request->isset_request('active', 'post')) {
+        $control_status = 1;
+    } elseif ($nv_Request->isset_request('deactive', 'post')) {
+        $control_status = 0;
     }
-
-    $status = $row['status'] ? 0 : 1;
-
-    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET status=' . $status . ' WHERE id=' . $id);
+    
+    $id = $nv_Request->get_int('id', 'post', 0);
+    $listid = $nv_Request->get_string('listid', 'post', '');
+    
+    if ($listid != '') {
+        $array_id = array_filter(array_map('intval', explode(',', $listid)));
+    } else {
+        $array_id = array($id);
+    }
+    
+    foreach ($array_id as $id) {
+        $sql = 'SELECT status FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
+        $row = $db->query($sql)->fetch();
+        if (empty($row)) {
+            die('NO');
+        }
+    
+        $status = $control_status != -1 ? $control_status : ($row['status'] ? 0 : 1);
+    
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET status=' . $status . ' WHERE id=' . $id);
+    }
 
     $nv_Cache->delMod($module_name);
     die('OK');
@@ -41,20 +57,52 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $id = $nv_Request->get_int('id', 'post', 0);
-
-    $query = 'SELECT fileupload, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
-    $row = $db->query($query)->fetch();
-    if (empty($row)) {
-        die('NO');
+    $delfile = $nv_Request->get_int('delfile', 'post', -1);
+    $listid = $nv_Request->get_string('listid', 'post', '');
+    
+    if ($delfile < 0) {
+        if ($module_config[$module_name]['delfile_mode'] == 2) {
+            die('NO');
+        }
+        
+        $delfile = $module_config[$module_name]['delfile_mode'];
     }
-
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id=' . $id);
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id);
-
-    // Xoa thong bao loi
-    nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
-
+    
+    if ($listid != '') {
+        $array_id = array_filter(array_map('intval', explode(',', $listid)));
+    } else {
+        $array_id = array($id);
+    }
+    
+    foreach ($array_id as $id) {
+        $sql = 'SELECT fileupload, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
+        $row = $db->query($sql)->fetch();
+        if (empty($row)) {
+            die('NO');
+        }
+        
+        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id=' . $id);
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
+        
+        if ($db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id) and $delfile) {
+            $row['fileupload'] = explode('[NV]', $row['fileupload']);
+            foreach ($row['fileupload'] as $fileupload) {
+                if (!empty($fileupload)) {
+                    nv_deletefile(NV_UPLOADS_REAL_DIR . $fileupload);
+                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=(SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname=" . $db->quote(NV_UPLOADS_DIR . '/' . ltrim(dirname($fileupload), '/')) . ") AND title=" . $db->quote(basename($fileupload)));
+                }
+            }
+        }
+    
+        // Xoa thong bao loi
+        nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
+    }
+    
+    // Resets the contents of the opcode cache
+    if ($delfile and nv_function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+        
     $nv_Cache->delMod($module_name);
 
     nv_insert_logs(NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid']);
@@ -127,6 +175,13 @@ while ($row = $result2->fetch()) {
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
+$array_list_action = array(
+    'del0' => $lang_module['file_delmode0'],
+    'del1' => $lang_module['file_delmode1'],
+    'active' => $lang_module['action_active'],
+    'deactive' => $lang_module['action_deactive'],
+);
+
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -141,6 +196,7 @@ $xtpl->assign('SEARCH', $array_search);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
 $xtpl->assign('ADD_NEW_FILE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content');
+$xtpl->assign('DELETEFILE_MODE', $module_config[$module_name]['delfile_mode']);
 
 if (! empty($array)) {
     foreach ($array as $row) {
@@ -182,6 +238,15 @@ for ($i = 5; $i <= 300; $i+=5) {
 if (! empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
     $xtpl->parse('main.generate_page');
+}
+
+while (list($action_i, $title_i) = each($array_list_action)) {
+    $action_assign = array(
+        'value' => $action_i,
+        'title' => $title_i
+    );
+    $xtpl->assign('ACTION', $action_assign);
+    $xtpl->parse('main.action');
 }
 
 $xtpl->parse('main');

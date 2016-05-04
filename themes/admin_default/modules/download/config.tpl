@@ -99,6 +99,36 @@
 						<td class="top">{LANG.zip_readme}</td>
 						<td><textarea name="readme" cols="20" rows="5" class="form-control">{DATA.readme}</textarea></td>
 					</tr>
+					<tr>
+						<td>{LANG.config_delfile_mode}</td>
+						<td>
+							<select class="form-control" name="delfile_mode">
+								<!-- BEGIN: delfile_mode -->
+								<option value="{DELFILE_MODE.key}" {DELFILE_MODE.selected}>{DELFILE_MODE.title}</option>
+								<!-- END: delfile_mode -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>{LANG.config_structure_upload}</td>
+						<td>
+							<select class="form-control" name="structure_upload">
+								<!-- BEGIN: structure_upload -->
+								<option value="{STRUCTURE_UPLOAD.key}" {STRUCTURE_UPLOAD.selected}>{STRUCTURE_UPLOAD.title}</option>
+								<!-- END: structure_upload -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>{LANG.config_scorm_handle_mode}</td>
+						<td>
+							<select class="form-control" name="scorm_handle_mode">
+								<!-- BEGIN: scorm_handle_mode -->
+								<option value="{SCORM_HANDLE_MODE.key}" {SCORM_HANDLE_MODE.selected}>{SCORM_HANDLE_MODE.title}</option>
+								<!-- END: scorm_handle_mode -->
+							</select>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

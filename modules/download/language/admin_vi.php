@@ -19,6 +19,8 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['msgnocheck'] = 'Vui lòng chọn ít nhất một dòng để thực hiện';
+
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_keywods'] = 'Từ khóa tìm kiếm';
 $lang_module['search_per_page'] = 'Số file hiển thị';
@@ -50,6 +52,7 @@ $lang_module['config_delfile_mode2'] = 'Hỏi người xóa hình thức thực 
 $lang_module['config_scorm_handle_mode'] = 'Sau khi giải nén SCORM thì';
 $lang_module['config_scorm_handle_mode0'] = 'Xóa luôn file gốc';
 $lang_module['config_scorm_handle_mode1'] = 'Giữ lại file gốc';
+$lang_module['config_structure_upload'] = 'Thư mục tải file lên';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
@@ -76,6 +79,7 @@ $lang_module['category_cat_feature'] = 'Chức năng';
 $lang_module['table_caption1'] = 'Danh sách các chủ đề là chủ đề chính';
 $lang_module['table_caption2'] = 'Danh sách các chủ đề con của chủ đề &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['category_cat_sort'] = 'Vị trí';
+
 $lang_module['file_error_fileupload'] = 'Hãy chọn file để upload hoặc điền vào link trực tiếp!';
 $lang_module['file_error_author_url'] = 'Lỗi: URL trang cá nhân của tác giả không hợp lệ!';
 $lang_module['file_error1'] = 'Vì một lý do nào đó, các thay đổi mà bạn vừa khai báo đã không được lưu !';
@@ -106,25 +110,31 @@ $lang_module['file_comment_hits'] = 'Bình';
 $lang_module['file_feature'] = 'Chức năng';
 $lang_module['file_active'] = 'Hoạt động';
 $lang_module['file_addfile'] = 'Thêm file mới';
-$lang_module['download_filequeue'] = 'File chờ kiểm duyệt';
 $lang_module['file_title_exists'] = 'Lỗi: Tên này đã được sử dụng. Hãy chọn một tên khác';
-$lang_module['download_filequeue_del'] = 'Xóa file';
-$lang_module['download_alldel'] = 'Xóa tất cả';
-$lang_module['filequeue_empty'] = 'Rất tiếc là chưa có file nào được gửi đến!';
 $lang_module['file_checkUrl'] = 'Kiểm tra';
 $lang_module['file_checkUrl_error'] = 'Lỗi: URL không tồn tại!';
 $lang_module['file_checkUrl_ok'] = 'URL được chấp nhận!';
+$lang_module['file_gourl'] = 'Truy cập';
+$lang_module['file_delurl'] = 'Xóa file';
+$lang_module['file_delmode0'] = 'Xóa file và giữ lại đính kèm';
+$lang_module['file_delmode1'] = 'Xóa file và xóa đính kèm';
+
+$lang_module['filequeue_empty'] = 'Rất tiếc là chưa có file nào được gửi đến!';
+$lang_module['download_filequeue'] = 'File chờ kiểm duyệt';
+$lang_module['download_filequeue_del'] = 'Xóa file';
+$lang_module['download_alldel'] = 'Xóa tất cả';
+
 $lang_module['report_empty'] = 'Chưa có báo cáo lỗi!';
 $lang_module['report_post_time'] = 'Thời gian báo cáo';
 $lang_module['report_check_ok'] = 'Hệ thống đã kiểm tra file và không phát hiện ra lỗi. Xóa báo cáo lỗi này?';
 $lang_module['report_check_error'] = 'Hệ thống phát hiện link hỏng đối với file này. Hãy click OK để sửa hoặc CANCEL để thôi';
 $lang_module['report_check_error2'] = 'Lỗi: File không tồn tại. Hãy click OK để xóa báo cáo này hoặc CANCEL để thôi';
 $lang_module['report_delete'] = 'Xóa báo cáo lỗi';
-$lang_module['file_gourl'] = 'Truy cập';
-$lang_module['file_delurl'] = 'Xóa file';
+
 $lang_module['download_report'] = 'Báo cáo lỗi';
 $lang_module['download_filemanager'] = 'Quản lý file';
 $lang_module['download_editfile'] = 'Sửa file';
+
 $lang_module['editcat_cat'] = 'Sửa chủ đề';
 $lang_module['add_file_items'] = 'Thêm file tải lên';
 $lang_module['add_file_items_note'] = 'Nếu file có nhiều phần nhỏ';
@@ -164,3 +174,6 @@ $lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng 
 $lang_module['tags_all_link'] = 'Chế độ xem các tags chưa có mô tả đang được kích hoạt, nhấp vào đây để xem tất cả các tags';
 $lang_module['content_tag'] = 'Các tag cho file';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
+
+$lang_module['action_active'] = 'Cho hoạt động';
+$lang_module['action_deactive'] = 'Đình chỉ hoạt động';

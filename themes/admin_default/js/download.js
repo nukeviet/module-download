@@ -48,18 +48,65 @@ function nv_row_del(catid) {
 }
 
 //  ---------------------------------------
+function nv_file_del_submit (fid, delfile) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'del=1&delfile=' + delfile + '&id=' + fid, function(res) {
+		if (res == 'OK') {
+			window.location.href = window.location.href;
+		} else {
+			alert(nv_is_del_confirm[2]);
+		}
+	});
+}
 
-function nv_file_del(fid) {
-	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'del=1&id=' + fid, function(res) {
-			if (res == 'OK') {
-				window.location.href = window.location.href;
+function nv_file_del(fid, mode) {
+    if (mode == 2) {
+        $('#delete-filemode').find('[type="button"]').attr('data-id', fid);
+        modalShowByObj('#delete-filemode')
+    } else if (confirm(nv_is_del_confirm[0])) {
+        nv_file_del_submit(fid, -1);
+    }
+	return false;
+}
+
+function nv_file_action(oBtn, oForm, msgnocheck) {
+	var fa = oForm['idcheck[]'];
+	var listid = '';
+	if (fa.length) {
+		for (var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
+		}
+	}
+
+	if (listid != '') {
+		var action = document.getElementById('action').value,
+            delmode = '';
+		if (action == 'del0' || action == 'del1') {
+			if (!confirm(nv_is_del_confirm[0])) {
+                return
+			}
+            delmode = ('&delfile=' + (action == 'del0' ? '0' : '1'));
+            action = 'del';
+		}
+        $(oBtn).prop('disabled', true)
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), action + '=1&listid=' + listid + delmode, function(res) {
+			$(oBtn).prop('disabled', false)
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+			} else if (action == 'del') {
+			     alert(nv_is_del_confirm[2]);
 			} else {
-				alert(nv_is_del_confirm[2]);
+			     alert(nv_is_change_act_confirm[2]);
 			}
 		});
+	} else {
+		alert(msgnocheck);
 	}
-	return false;
 }
 
 //  ---------------------------------------
@@ -236,7 +283,7 @@ function nv_report_alldel() {
 function nv_file_additem(id) {
 	file_items++;
 	var newitem = "<div id=\"fileupload_item_" + file_items + "\" style=\"margin-top: 5px\">&nbsp;<input readonly=\"readonly\" class=\"w300 form-control pull-left\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
+	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + uploads_dir + "&currentpath=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
 	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
 	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
 	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + " ); \" /></div>";
@@ -247,7 +294,7 @@ function nv_file_additem(id) {
 
 function nv_file_additem2() {
 	var newitem = "<div style=\"display: inline-block; margin-top: 10px\"><input readonly=\"readonly\" class=\"form-control w300 pull-left\" style=\"margin-right: 5px\" value=\"\" name=\"fileupload2[]\" id=\"fileupload2_" + file_items + "\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload2_" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
+	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload2_" + file_items + "&path=" + uploads_dir + "&currentpath=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
 	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_checkUrl + "\" id= \"check_fileupload2_" + file_items + "\" onclick=\"nv_checkfile( 'fileupload2_" + file_items + "', 1, 'check_fileupload2_" + file_items + "' ); \" />";
 	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_gourl + "\" id= \"go_fileupload2_" + file_items + "\" onclick=\"nv_gourl( 'fileupload2_" + file_items + "', 1, 'go_fileupload2_" + file_items + "' ); \" /><br /></div>";
 	$("#fileupload2_items").append(newitem);
@@ -285,6 +332,12 @@ function extractLast(term) {
 	return split(term).pop();
 }
 
+function modalShowByObj(a) {
+	var b = $(a).attr("title"),
+		c = $(a).html();
+	modalShow(b, c)
+}
+
 $(document).ready(function() {
 	$("input[name='catids[]']").click(function() {
 		var catid = $("input:radio[name=catid]:checked").val();
@@ -312,6 +365,14 @@ $(document).ready(function() {
 			}
 		}
 	});
+    // Delete file
+    $(document).delegate('[name="delete-filemode-submit"]', 'click', function(e){
+        e.preventDefault();
+        var $this = $(this),
+            wrap = $(this).parent().parent();
+        $('#sitemodal').modal('toggle');
+        nv_file_del_submit($this.data('id'), $('select', wrap).val());
+    })
 });
 
 function nv_search_tag(did) {
