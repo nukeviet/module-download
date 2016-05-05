@@ -20,6 +20,8 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['msgnocheck'] = 'Vui lòng chọn ít nhất một dòng để thực hiện';
+$lang_module['error'] = 'Lỗi';
+$lang_module['waiting'] = 'Đang xử lý';
 
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_keywods'] = 'Từ khóa tìm kiếm';
@@ -118,6 +120,7 @@ $lang_module['file_gourl'] = 'Truy cập';
 $lang_module['file_delurl'] = 'Xóa file';
 $lang_module['file_delmode0'] = 'Xóa file và giữ lại đính kèm';
 $lang_module['file_delmode1'] = 'Xóa file và xóa đính kèm';
+$lang_module['file_direct_upload'] = 'Hoặc upload trực tiếp';
 
 $lang_module['filequeue_empty'] = 'Rất tiếc là chưa có file nào được gửi đến!';
 $lang_module['download_filequeue'] = 'File chờ kiểm duyệt';

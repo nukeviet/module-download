@@ -198,7 +198,10 @@ function nv_gourl(mylink, is_myUrl, butt) {
 
 //  ---------------------------------------
 
-function nv_delurl(id, item) {
+function nv_delurl(id, item, file) {
+    if (typeof file != 'undefined') {
+        uploader.removeFile(file);
+    }
 	$("#fileupload_item_" + item).remove();
 }
 
@@ -280,13 +283,15 @@ function nv_report_alldel() {
 
 //  ---------------------------------------
 
-function nv_file_additem(id) {
-	file_items++;
-	var newitem = "<div id=\"fileupload_item_" + file_items + "\" style=\"margin-top: 5px\">&nbsp;<input readonly=\"readonly\" class=\"w300 form-control pull-left\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + uploads_dir + "&currentpath=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
-	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + " ); \" /></div>";
+function nv_file_additem(id, queue, file) {
+	file_items ++;
+    var isQueue = (typeof queue != 'undefined' && queue)
+	
+    var newitem = "<div" + (isQueue ? " data-fileid=\"" + file.id + "\"" : "") + " id=\"fileupload_item_" + file_items + "\" style=\"margin-top: 5px\">&nbsp;<input readonly=\"readonly\" class=\"w300 form-control pull-left\" value=\"" + (isQueue ? file.name : "") + "\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
+	newitem += "&nbsp;<input" + (isQueue ? " disabled=\"disabled\"" : "") + " class=\"btn btn-default\" type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + uploads_dir + "&currentpath=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
+	newitem += "&nbsp;<input" + (isQueue ? " disabled=\"disabled\"" : "") + " class=\"btn btn-info\" type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input" + (isQueue ? " disabled=\"disabled\"" : "") + " class=\"btn btn-info\" type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input class=\"btn btn-danger\" type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + (isQueue ? ", '" + file.id + "'" : "") + " ); \" />&nbsp;<span class=\"upload-status\"></span></div>";
 	$("#fileupload_items").append(newitem);
 }
 
@@ -372,6 +377,24 @@ $(document).ready(function() {
             wrap = $(this).parent().parent();
         $('#sitemodal').modal('toggle');
         nv_file_del_submit($this.data('id'), $('select', wrap).val());
+    });
+    // Upload handler
+    $('#file-upload-form').submit(function(e){
+        var $this = $(this);
+        if($this.data('busy')) {
+            e.preventDefault()
+            console.log('Busy')
+            return
+        }
+        if (is_direct_upload) {
+            e.preventDefault()
+            $this.data('busy', true)
+            $("html, body").animate({
+                scrollTop: $('#fileupload_items').offset().top
+            }, 200, function(){
+                uploader.start();
+            });
+        }
     })
 });
 

@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
-<form action="{FORM_ACTION}" method="post" class="confirm-reload">
+<form action="{FORM_ACTION}" method="post" class="confirm-reload" id="file-upload-form" data-busy="false">
 	<div class="row">
 		<div class="col-sm-24 col-md-18">
 			<div class="table-responsive">
@@ -137,29 +137,117 @@
 				<tr>
 					<td class="w250" style="vertical-align:top"> {LANG.file_myfile} <sup class="required">(*)</sup></td>
 					<td>
-					<div id="fileupload_items">
-						<!-- BEGIN: fileupload -->
-						<div id="fileupload_item_{FILEUPLOAD.key}">
-							<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp;
-							<input class="btn btn-info" type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={UPLOADS_DIR}&currentpath={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />
-							<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />
-							<input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" />
-							<input class="btn btn-info" type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
-						</div>
-						<!-- END: fileupload -->
-					</div>
-					<script type="text/javascript">
-						var file_items = '{DATA.fileupload_num}';
-						var file_selectfile = '{LANG.file_selectfile}';
-						var nv_base_adminurl = '{NV_BASE_ADMINURL}';
-						var file_dir = '{FILES_DIR}';
-						var uploads_dir = '{UPLOADS_DIR}';
-						var file_checkUrl = '{LANG.file_checkUrl}';
-						var file_gourl = '{LANG.file_gourl}';
-						var file_delurl = '{LANG.file_delurl}';
-					</script>
-					<p style="margin-top: 10px"><input class="btn btn-default" type="button" value="{LANG.add_file_items}" onclick="nv_file_additem({DATA.id});" /> ({LANG.add_file_items_note})
-					</p></td>
+    					<div id="fileupload_items">
+    						<!-- BEGIN: fileupload -->
+    						<div id="fileupload_item_{FILEUPLOAD.key}" style="margin-top: 5px">
+    							<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp;
+    							<input class="btn btn-default" type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={UPLOADS_DIR}&currentpath={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />
+    							<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />
+    							<input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" />
+    							<input class="btn btn-danger" type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
+    						</div>
+    						<!-- END: fileupload -->
+    					</div>
+    					<script type="text/javascript">
+    						var file_items = '{DATA.fileupload_num}';
+    						var file_selectfile = '{LANG.file_selectfile}';
+    						var nv_base_adminurl = '{NV_BASE_ADMINURL}';
+    						var file_dir = '{FILES_DIR}';
+    						var uploads_dir = '{UPLOADS_DIR}';
+    						var file_checkUrl = '{LANG.file_checkUrl}';
+    						var file_gourl = '{LANG.file_gourl}';
+    						var file_delurl = '{LANG.file_delurl}';
+                            var is_direct_upload = false;
+    					</script>
+    					<p style="margin-top: 10px">
+                            <input class="btn btn-default" type="button" value="{LANG.add_file_items}" onclick="nv_file_additem({DATA.id});" />
+                            <input class="btn btn-success" type="button" value="{LANG.file_direct_upload}" id="direct-upload"/>
+    					</p>
+                        <script type="text/javascript">
+                        var uploader;
+                        $(function(){
+                        	uploader = new plupload.Uploader({
+                        		runtimes: 'html5,flash,silverlight,html4',
+                        		browse_button: 'direct-upload',
+                        		url: "{DIRECT_UPLOAD_URL}",
+                                file_data_name : 'upload',
+                        		filters: {
+                                    max_file_size: '{UPLOAD_MAX_FILESIZE}b',
+                                	mime_types : [
+                                		<!-- BEGIN: mime -->
+                                		{ title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
+                                		<!-- END: mime -->
+                                	]
+                                },
+                        		flash_swf_url: '{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/Moxie.swf',
+                        		silverlight_xap_url: '{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/Moxie.xap',
+                                multipart : true,
+                        		init: {
+                  		            // Event on init uploader
+                        			PostInit: function() {
+                        			},
+                                    // Event on add file (Add to queue or first add)
+                        			FilesAdded: function(up, files) {
+                 			            is_direct_upload = true;
+                        				plupload.each(files, function(file) {
+                        				    nv_file_additem(0, 1, file)
+                        				});
+                        			},
+                                    // Event on trigger a file upload status
+                        			UploadProgress: function(up, file) {
+ 			                            $('[data-fileid="' + file.id + '"]').find('.upload-status').html(file.percent + "%");
+                        			},
+                                    // Event on error
+                        			Error: function(up, err) {
+     			                        modalShow("{LANG.error}", err.code + ": " + err.message);
+                        			},
+                                    // Event on remove a file
+                                    FilesRemoved: function(up, file){
+                                        if (uploader.total.queued <= 0) {
+                                            is_direct_upload = false;
+                                        } else {
+                                            is_direct_upload = true;
+                                        }
+                                    },
+                					// Event on one file finish uploaded (Maybe success or error)
+                					FileUploaded: function(up, file, response){
+                						response = response.response;
+                                        var check = response.split('_');
+                            			if(check[0] == 'ERROR') {
+                            				file.status = plupload.FAILED;
+                            				file.hint = check[1];
+                            				uploader.total.uploaded --;
+                            				uploader.total.failed ++;
+                            			}else{
+                            				file.name = response;
+                            			}
+                            			
+                                        $.each(uploader.files, function(i, f){
+                            				if( f.id == file.id ){
+                            					uploader.files[i].status = file.status;
+                            					uploader.files[i].hint = file.hint;
+                            					uploader.files[i].name = file.name;
+                            				}
+                            			});
+                                        
+                                        if (file.status == plupload.DONE) {
+                                            $('[name="fileupload[]"]', $('[data-fileid="' + file.id + '"]')).val(nv_base_siteurl + file_dir + '/' + file.name);
+                                        } else {
+                                            $('[name="fileupload[]"]', $('[data-fileid="' + file.id + '"]')).val(file.hint);
+                                        }
+                					},
+                                    // Event on all files are uploaded
+                                    UploadComplete: function(up, files) {
+                                        is_direct_upload = false;
+                                        $('#file-upload-form').data('busy', false);
+                                        $('#file-upload-form').find('[name="submit"]').click();
+                                    }
+                        		}
+                        	});
+                        	uploader.init();                        
+                        })
+                        </script>
+                    </td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top"> {LANG.file_linkdirect}
@@ -198,7 +286,9 @@
 		<!-- BEGIN: is_del_report -->
 		<input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
 		<!-- END: is_del_report -->
-		<input type="submit" name="submit" value="{LANG.confirm}" class="btn btn-primary" />
+        <button type="submit" name="submit" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
+            {LANG.confirm}
+        </button>
 	</div>
 </form>
 <script type="text/javascript">
@@ -232,6 +322,7 @@
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/download.js"></script>
 
 <script type="text/javascript">

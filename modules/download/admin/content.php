@@ -635,6 +635,23 @@ $xtpl->assign('IMG_DIR', $currentpath_images);
 $xtpl->assign('FILES_DIR', $currentpath_files);
 $xtpl->assign('UPLOADS_DIR', $uploads_dir_user);
 $xtpl->assign('ONCHANGE', 'onchange="get_alias();"');
+$xtpl->assign('UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE);
+$xtpl->assign('DIRECT_UPLOAD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&path=' . urlencode($currentpath_files) . '&random=' . nv_genpass(10));
+
+$mimes = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
+
+foreach ($mimes as $mime_type => $file_ext) {
+    if (! in_array($mime_type, $global_config['forbid_mimes']) and in_array($mime_type, $admin_info['allow_files_type'])) {
+        $file_ext = array_diff(array_keys($file_ext), $global_config['forbid_extensions']);
+
+        if (! empty($file_ext)) {
+            $xtpl->assign('MIMI_TYPE', ucfirst($mime_type));
+            $xtpl->assign('MIME_EXTS', implode(',', $file_ext));
+
+            $xtpl->parse('main.mime');
+        }
+    }
+}
 
 if (! empty($error)) {
     $xtpl->assign('ERROR', $error);
