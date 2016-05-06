@@ -121,6 +121,7 @@ $lang_module['file_delurl'] = 'Xóa file';
 $lang_module['file_delmode0'] = 'Xóa file và giữ lại đính kèm';
 $lang_module['file_delmode1'] = 'Xóa file và xóa đính kèm';
 $lang_module['file_direct_upload'] = 'Hoặc upload trực tiếp';
+$lang_module['file_error_extract_scorm'] = 'Lỗi: Không thể giải nén file SCORM';
 
 $lang_module['filequeue_empty'] = 'Rất tiếc là chưa có file nào được gửi đến!';
 $lang_module['download_filequeue'] = 'File chờ kiểm duyệt';

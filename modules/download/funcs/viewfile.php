@@ -121,6 +121,18 @@ $session_files = array();
 $session_files['fileupload'] = array();
 $session_files['linkdirect'] = array();
 $row['filepdf'] = '';
+$row['scorm'] = array();
+$row['scorm_num'] = 0;
+
+if ($row['is_onlineview_allow']) {
+    $row['scormpath'] = explode('[NV]', $row['scormpath']);
+    foreach ($row['scormpath'] as $scormpath) {
+        if (!empty($scormpath) and is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
+            $row['scorm'][] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $scormpath;
+            $row['scorm_num'] ++;
+        }
+    }
+}
 
 if ($row['is_download_allow']) {
     $session_files['tokend'] = md5($global_config['sitekey'] . session_id() . $row['id'] . $row['alias']);

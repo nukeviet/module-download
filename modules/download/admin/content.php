@@ -176,6 +176,7 @@ if ($id) {
     } else {
         $array['linkdirect'] = array();
     }
+    $array['scormpath'] = ! empty($array['scormpath']) ? explode('[NV]', $array['scormpath']) : array();
     $array['is_del_report'] = 1;
     
     $array_keywords_old = array();
@@ -193,7 +194,7 @@ if ($id) {
     $array['id'] = 0;
     $array['catid'] = $nv_Request->get_int('catid', 'get', 0);
     $array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['version'] = $array['fileimage'] = '';
-    $array['fileupload'] = $array['linkdirect'] = array();
+    $array['fileupload'] = $array['linkdirect'] = $array['scormpath'] = array();
     $array['groups_comment'] = $module_config[$module_name]['setcomm'];
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
     $array['filesize'] = 0;
@@ -238,7 +239,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $array['author_url'] = 'http://' . $array['author_url'];
         }
     }
-
+    
+    // Kiểm tra lại thư mục scorm
+    foreach ($array['scormpath'] as $key => $scormpath) {
+        if (empty($scormpath) or !is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
+            unset($array['scormpath'][$key]);
+        }
+    }
+    
     $array['filesize'] = 0;
     if (! empty($array['fileupload'])) {
         $fileupload = $array['fileupload'];
@@ -327,201 +335,323 @@ if ($nv_Request->isset_request('submit', 'post')) {
     } elseif (empty($array['fileupload']) and empty($array['linkdirect'])) {
         $error = $lang_module['file_error_fileupload'];
     } else {
-        $array['introtext'] = ! empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
-        $array['fileupload'] = (! empty($array['fileupload'])) ? implode('[NV]', $array['fileupload']) : '';
-        if ((! empty($array['linkdirect']))) {
-            $array['linkdirect'] = array_map('nv_nl2br', $array['linkdirect']);
-            $array['linkdirect'] = implode('[NV]', $array['linkdirect']);
-        } else {
-            $array['linkdirect'] = '';
-        }
-        
-        $action_db = false;
-        
-        if (empty($id)) {
-            $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-                catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, 
-                version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_onlineview, groups_download, comment_hits, rating_detail
-            ) VALUES (
-    			 " . $array['catid'] . ",
-    			 :title,
-    			 :alias ,
-    			 :description ,
-    			 :introtext ,
-    			 " . NV_CURRENTTIME . ",
-    			 " . NV_CURRENTTIME . ",
-    			 " . $admin_info['admin_id'] . ",
-    			 :username,
-    			 :author_name ,
-    			 :author_email ,
-    			 :author_url ,
-    			 :fileupload ,
-    			 :linkdirect ,
-    			 :version ,
-    			 " . $array['filesize'] . ",
-    			 :fileimage ,
-    			 1,
-    			 :copyright ,
-    			 0, 0,
-    			 :groups_comment ,
-    			 :groups_view ,
-    			 :groups_onlineview ,
-    			 :groups_download ,
-    			 0, ''
-            )";
-    
-            $data_insert = array();
-            $data_insert['title'] = $array['title'];
-            $data_insert['alias'] = $array['alias'];
-            $data_insert['description'] = $array['description'];
-            $data_insert['introtext'] = $array['introtext'];
-            $data_insert['username'] = $admin_info['username'];
-            $data_insert['author_name'] = $array['author_name'];
-            $data_insert['author_email'] = $array['author_email'];
-            $data_insert['author_url'] = $array['author_url'];
-            $data_insert['fileupload'] = $array['fileupload'];
-            $data_insert['linkdirect'] = $array['linkdirect'];
-            $data_insert['version'] = $array['version'];
-            $data_insert['fileimage'] = $array['fileimage'];
-            $data_insert['copyright'] = $array['copyright'];
-            $data_insert['groups_comment'] = $array['groups_comment'];
-            $data_insert['groups_view'] = $array['groups_view'];
-            $data_insert['groups_onlineview'] = $array['groups_onlineview'];
-            $data_insert['groups_download'] = $array['groups_download'];
-    
-            $array['id'] = $db->insert_id($sql, 'id', $data_insert);
-    
-            if ($array['id'] != 0) {
-                $action_db = true;
-            } else {
-                $error = $lang_module['file_error2'];
-            }
-        } else {
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
-				 catid=" . $array['catid'] . ",
-				 title= :title,
-				 alias= :alias,
-				 description= :description,
-				 introtext= :introtext,
-				 updatetime=" . NV_CURRENTTIME . ",
-				 author_name= :author_name,
-				 author_email= :author_email,
-				 author_url= :author_url,
-				 fileupload= :fileupload,
-				 linkdirect= :linkdirect,
-				 version= :version,
-				 filesize=" . $array['filesize'] . ",
-				 fileimage= :fileimage,
-				 copyright= :copyright,
-				 groups_comment= :groups_comment,
-				 groups_view= :groups_view,
-				 groups_onlineview= :groups_onlineview,
-				 groups_download= :groups_download
-				 WHERE id=" . $id
-            );
-
-            $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
-            $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR, strlen($array['description']));
-            $stmt->bindParam(':introtext', $array['introtext'], PDO::PARAM_STR, strlen($array['introtext']));
-            $stmt->bindParam(':author_name', $array['author_name'], PDO::PARAM_STR);
-            $stmt->bindParam(':author_email', $array['author_email'], PDO::PARAM_STR);
-            $stmt->bindParam(':author_url', $array['author_url'], PDO::PARAM_STR);
-            $stmt->bindParam(':fileupload', $array['fileupload'], PDO::PARAM_STR, strlen($array['fileupload']));
-            $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
-            $stmt->bindParam(':version', $array['version'], PDO::PARAM_STR);
-            $stmt->bindParam(':fileimage', $array['fileimage'], PDO::PARAM_STR);
-            $stmt->bindParam(':copyright', $array['copyright'], PDO::PARAM_STR);
-            $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
-            $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
-            $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
-            $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
-
-            if (! $stmt->execute()) {
-                $error = $lang_module['file_error1'];
-            } else {
-                $action_db = true;
-
-                if ($report and $array['is_del_report']) {
-                    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
-                }
-            }
-        }
-        
-        if ($action_db) {
-            if ($array['keywords'] != $array['keywords_old']) {
-                $keywords = explode(',', $array['keywords']);
-                $keywords = array_map('strip_punctuation', $keywords);
-                $keywords = array_map('trim', $keywords);
-                $keywords = array_diff($keywords, array( '' ));
-                $keywords = array_unique($keywords);
+        if (!empty($array['fileupload'])) {
+            foreach ($array['fileupload'] as $fileuploadkey => $file) {
+                // Xác định file scorm
+                $file_ext = nv_getextension($file);
+                $file_name = basename($file);
+                $file_path = dirname($file);
                 
-                foreach ($keywords as $keyword) {
-                    $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
-                    $alias_i = nv_strtolower($alias_i);
+                if ($file_ext == 'zip') {
+                    $zip = new PclZip(NV_UPLOADS_REAL_DIR . $file);
+                    $ziplistContent = $zip->listContent();
                     
-                    $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_MOD_TABLE . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
-                    $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
-                    $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-                    $sth->execute();
-
-                    list($did, $alias, $keywords_i) = $sth->fetch(3);
-                    
-                    if (empty($did)) {
-                        $array_insert = array( );
-                        $array_insert['alias'] = $alias_i;
-                        $array_insert['keyword'] = $keyword;
-
-                        $did = $db->insert_id("INSERT INTO " . NV_MOD_TABLE . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
-                    } else {
-                        $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
-                    }
-
-                    $_sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $array['id'] . ' AND did = ' . $did;
-                    $_query = $db->query($_sql);
-                    $row = $_query->fetch();
-
-                    if (empty($row)) {
-                        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_tags_id (id, did, keyword) VALUES (' . $array['id'] . ', ' . intval($did) . ', :keyword)');
-                        $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-                        $sth->execute();
-                    } else {
-                        $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags_id SET keyword = :keyword WHERE id = ' . $array['id'] . ' AND did=' . intval($did));
-                        $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-                        $sth->execute();
-                    }
-                    
-                    unset($array_keywords_old[$did]);
-                }
-                
-                foreach ($array_keywords_old as $did => $keyword) {
-                    if (! in_array($keyword, $keywords)) {
-                        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id = ' . $array['id'] . ' AND did=' . $did);
-
-                        $count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $did);
+                    if (!empty($ziplistContent)) {
+                        $num_check = 0;
+                        foreach ($ziplistContent as $zipCt) {
+                            if ($zipCt['filename'] == 'SCORM.htm' or $zipCt['filename'] == 'index.htm' or $zipCt['filename'] == 'viewer.swf') {
+                                $num_check ++;
+                            }
+                            if ($num_check >= 3) {
+                                break;
+                            }
+                        }
+                        if ($num_check >= 3) {
+                            $scorm_dir = substr($file_name, 0, 0 - (strlen($file_ext) + 1));
+                            $scorm_path = $file_path . '/' . $scorm_dir;
+                            
+                            if (is_dir(NV_UPLOADS_REAL_DIR . $scorm_path) and file_exists(NV_UPLOADS_REAL_DIR . $scorm_path . '/SCORM.htm')) {
+                                if (!in_array($scorm_path, $array['scormpath'])) {
+                                    $array['scormpath'][] = $scorm_path;
+                                }
+                            } else {
+                                nv_deletefile(NV_UPLOADS_REAL_DIR . $scorm_path, true);
+                                $mkdir = nv_mkdir(NV_UPLOADS_REAL_DIR . $file_path, $scorm_dir);
+                                if ($mkdir[0] == 1) {
+                                    nv_deletefile(NV_UPLOADS_REAL_DIR . $scorm_path . '/index.html');
+                                    
+                                    // Kiem tra FTP
+                                    $ftp_check_login = 0;
                         
-                        if ($count_tag->fetchColumn()) {
-                            $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did);
-                        } else {
-                            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE did=' . $did);
+                                    if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+                                        $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
+                                        $ftp_port = intval($global_config['ftp_port']);
+                                        $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
+                                        $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
+                                        $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
+                                        // set up basic connection
+                                        $conn_id = ftp_connect($ftp_server, $ftp_port, 10);
+                                        // login with username and password
+                                        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+                                        if ((! $conn_id) || (! $login_result)) {
+                                            $ftp_check_login = 3;
+                                        } elseif (ftp_chdir($conn_id, $ftp_path)) {
+                                            $ftp_check_login = 1;
+                                        } else {
+                                            $ftp_check_login = 2;
+                                        }
+                                    }
+                        
+                                    // Tao thu muc bang FTP neu co
+                                    $scorm_path1 = NV_UPLOADS_DIR . $scorm_path;
+                                    if ($ftp_check_login == 1) {
+                                        ftp_mkdir($conn_id, $scorm_path1);
+                        
+                                        if (substr($sys_info['os'], 0, 3) != 'WIN') {
+                                            ftp_chmod($conn_id, 0777, $scorm_path1);
+                                        }
+                        
+                                        foreach ($ziplistContent as $array_file) {
+                                            if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $array_file['filename'])) {
+                                                $cp = '';
+                                                $e = explode('/', $array_file['filename']);
+                                                foreach ($e as $p) {
+                                                    if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $cp . $p)) {
+                                                        ftp_mkdir($conn_id, $scorm_path1 . '/' . $cp . $p);
+                                                        if (substr($sys_info['os'], 0, 3) != 'WIN') {
+                                                            ftp_chmod($conn_id, 0777, $scorm_path1 . '/' . $cp . $p);
+                                                        }
+                                                    }
+                                                    $cp .= $p . '/';
+                                                }
+                                            }
+                                        }
+                                    }
+                    
+                                    if ($ftp_check_login > 0) {
+                                        ftp_close($conn_id);
+                                    }
+                                    
+                                    $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $scorm_path1);
+                                    
+                                    foreach ($extract as $extract_i) {
+                                        if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
+                                            $error = $lang_module['file_error_extract_scorm'] . ': ' . $file_name;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (!empty($error)) {
+                                        nv_deletefile(NV_UPLOADS_REAL_DIR . $scorm_path, true);
+                                    } elseif (empty($module_config[$module_name]['scorm_handle_mode'])) {
+                                        nv_deletefile(NV_UPLOADS_REAL_DIR . $array['fileupload'][$fileuploadkey]);
+                                        unset($array['fileupload'][$fileuploadkey]);
+                                    }
+                                    $array['scormpath'][] = $scorm_path;
+                                } else {
+                                    $error = $mkdir[1];
+                                }
+                            }
                         }
                     }
                 }
             }
-            
-            $nv_Cache->delMod($module_name);
-            
-            if ($id) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid']);
-            } else {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
-            }
-            
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-            exit();
         }
         
-        $array['fileupload'] = (! empty($array['fileupload'])) ? explode('[NV]', $array['fileupload']) : array();
+        if (empty($error)) {
+            $array['scormpath'] = array_unique($array['scormpath']);
+            $array['introtext'] = ! empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
+            $array['fileupload'] = (! empty($array['fileupload'])) ? implode('[NV]', $array['fileupload']) : '';
+            $array['scormpath'] = (! empty($array['scormpath'])) ? implode('[NV]', $array['scormpath']) : '';
+            
+            if ((! empty($array['linkdirect']))) {
+                $array['linkdirect'] = array_map('nv_nl2br', $array['linkdirect']);
+                $array['linkdirect'] = implode('[NV]', $array['linkdirect']);
+            } else {
+                $array['linkdirect'] = '';
+            }
+            
+            $action_db = false;
+            
+            if (empty($id)) {
+                $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+                    catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, scormpath, 
+                    version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_onlineview, groups_download, comment_hits, rating_detail
+                ) VALUES (
+        			 " . $array['catid'] . ",
+        			 :title,
+        			 :alias ,
+        			 :description ,
+        			 :introtext ,
+        			 " . NV_CURRENTTIME . ",
+        			 " . NV_CURRENTTIME . ",
+        			 " . $admin_info['admin_id'] . ",
+        			 :username,
+        			 :author_name ,
+        			 :author_email ,
+        			 :author_url ,
+        			 :fileupload ,
+        			 :linkdirect ,
+        			 :scormpath ,
+        			 :version ,
+        			 " . $array['filesize'] . ",
+        			 :fileimage ,
+        			 1,
+        			 :copyright ,
+        			 0, 0,
+        			 :groups_comment ,
+        			 :groups_view ,
+        			 :groups_onlineview ,
+        			 :groups_download ,
+        			 0, ''
+                )";
+        
+                $data_insert = array();
+                $data_insert['title'] = $array['title'];
+                $data_insert['alias'] = $array['alias'];
+                $data_insert['description'] = $array['description'];
+                $data_insert['introtext'] = $array['introtext'];
+                $data_insert['username'] = $admin_info['username'];
+                $data_insert['author_name'] = $array['author_name'];
+                $data_insert['author_email'] = $array['author_email'];
+                $data_insert['author_url'] = $array['author_url'];
+                $data_insert['fileupload'] = $array['fileupload'];
+                $data_insert['linkdirect'] = $array['linkdirect'];
+                $data_insert['scormpath'] = $array['scormpath'];
+                $data_insert['version'] = $array['version'];
+                $data_insert['fileimage'] = $array['fileimage'];
+                $data_insert['copyright'] = $array['copyright'];
+                $data_insert['groups_comment'] = $array['groups_comment'];
+                $data_insert['groups_view'] = $array['groups_view'];
+                $data_insert['groups_onlineview'] = $array['groups_onlineview'];
+                $data_insert['groups_download'] = $array['groups_download'];
+        
+                $array['id'] = $db->insert_id($sql, 'id', $data_insert);
+        
+                if ($array['id'] != 0) {
+                    $action_db = true;
+                } else {
+                    $error = $lang_module['file_error2'];
+                }
+            } else {
+                $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
+    				 catid=" . $array['catid'] . ",
+    				 title= :title,
+    				 alias= :alias,
+    				 description= :description,
+    				 introtext= :introtext,
+    				 updatetime=" . NV_CURRENTTIME . ",
+    				 author_name= :author_name,
+    				 author_email= :author_email,
+    				 author_url= :author_url,
+    				 fileupload= :fileupload,
+    				 linkdirect= :linkdirect,
+    				 scormpath= :scormpath,
+    				 version= :version,
+    				 filesize=" . $array['filesize'] . ",
+    				 fileimage= :fileimage,
+    				 copyright= :copyright,
+    				 groups_comment= :groups_comment,
+    				 groups_view= :groups_view,
+    				 groups_onlineview= :groups_onlineview,
+    				 groups_download= :groups_download
+    				 WHERE id=" . $id
+                );
+    
+                $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
+                $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
+                $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR, strlen($array['description']));
+                $stmt->bindParam(':introtext', $array['introtext'], PDO::PARAM_STR, strlen($array['introtext']));
+                $stmt->bindParam(':author_name', $array['author_name'], PDO::PARAM_STR);
+                $stmt->bindParam(':author_email', $array['author_email'], PDO::PARAM_STR);
+                $stmt->bindParam(':author_url', $array['author_url'], PDO::PARAM_STR);
+                $stmt->bindParam(':fileupload', $array['fileupload'], PDO::PARAM_STR, strlen($array['fileupload']));
+                $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
+                $stmt->bindParam(':scormpath', $array['scormpath'], PDO::PARAM_STR, strlen($array['scormpath']));
+                $stmt->bindParam(':version', $array['version'], PDO::PARAM_STR);
+                $stmt->bindParam(':fileimage', $array['fileimage'], PDO::PARAM_STR);
+                $stmt->bindParam(':copyright', $array['copyright'], PDO::PARAM_STR);
+                $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
+                $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
+                $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
+                $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
+    
+                if (! $stmt->execute()) {
+                    $error = $lang_module['file_error1'];
+                } else {
+                    $action_db = true;
+    
+                    if ($report and $array['is_del_report']) {
+                        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
+                    }
+                }
+            }
+            
+            if ($action_db) {
+                if ($array['keywords'] != $array['keywords_old']) {
+                    $keywords = explode(',', $array['keywords']);
+                    $keywords = array_map('strip_punctuation', $keywords);
+                    $keywords = array_map('trim', $keywords);
+                    $keywords = array_diff($keywords, array( '' ));
+                    $keywords = array_unique($keywords);
+                    
+                    foreach ($keywords as $keyword) {
+                        $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
+                        $alias_i = nv_strtolower($alias_i);
+                        
+                        $sth = $db->prepare('SELECT did, alias, description, keywords FROM ' . NV_MOD_TABLE . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
+                        $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
+                        $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                        $sth->execute();
+    
+                        list($did, $alias, $keywords_i) = $sth->fetch(3);
+                        
+                        if (empty($did)) {
+                            $array_insert = array( );
+                            $array_insert['alias'] = $alias_i;
+                            $array_insert['keyword'] = $keyword;
+    
+                            $did = $db->insert_id("INSERT INTO " . NV_MOD_TABLE . "_tags (numdownload, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "did", $array_insert);
+                        } else {
+                            $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload+1 WHERE did = ' . $did);
+                        }
+    
+                        $_sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $array['id'] . ' AND did = ' . $did;
+                        $_query = $db->query($_sql);
+                        $row = $_query->fetch();
+    
+                        if (empty($row)) {
+                            $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_tags_id (id, did, keyword) VALUES (' . $array['id'] . ', ' . intval($did) . ', :keyword)');
+                            $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                            $sth->execute();
+                        } else {
+                            $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags_id SET keyword = :keyword WHERE id = ' . $array['id'] . ' AND did=' . intval($did));
+                            $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                            $sth->execute();
+                        }
+                        
+                        unset($array_keywords_old[$did]);
+                    }
+                    
+                    foreach ($array_keywords_old as $did => $keyword) {
+                        if (! in_array($keyword, $keywords)) {
+                            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id = ' . $array['id'] . ' AND did=' . $did);
+    
+                            $count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $did);
+                            
+                            if ($count_tag->fetchColumn()) {
+                                $db->query('UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload = numdownload-1 WHERE did = ' . $did);
+                            } else {
+                                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE did=' . $did);
+                            }
+                        }
+                    }
+                }
+                
+                $nv_Cache->delMod($module_name);
+                
+                if ($id) {
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid']);
+                } else {
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
+                }
+                
+                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+                exit();
+            }
+            
+            $array['fileupload'] = (! empty($array['fileupload'])) ? explode('[NV]', $array['fileupload']) : array();
+        }
     }
 }
 

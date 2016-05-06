@@ -47,6 +47,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          author_url varchar(255) NOT NULL,
          fileupload text NOT NULL,
          linkdirect text NOT NULL,
+         scormpath text NOT NULL,
          version varchar(20) NOT NULL,
          filesize int(11) NOT NULL DEFAULT '0',
          fileimage varchar(255) NOT NULL,

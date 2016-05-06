@@ -27,7 +27,7 @@ $per_page = $download_config['per_page_home'];
 $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 $yesterday = $today - 86400;
 
-//rating
+// Rating
 if ($nv_Request->isset_request('rating', 'post')) {
     $in = implode(',', array_keys($list_cats));
 

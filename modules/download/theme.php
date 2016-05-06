@@ -199,7 +199,21 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
     if (! empty($row['download_info'])) {
         $xtpl->parse('main.download_info');
     }
-
+    
+    if ($row['scorm_num'] == 1) {
+        $xtpl->assign('SCORM_LINK', $row['scorm'][0]);
+        $xtpl->parse('main.scorm');
+    } elseif ($row['scorm_num'] > 1) {
+        $i = 1;
+        foreach ($row['scorm'] as $scorm) {
+            $xtpl->assign('SCORM_LINK', $scorm);
+            $xtpl->assign('SCORM_NUM', $i ++);
+            $xtpl->parse('main.scorms.loop');
+        }
+        
+        $xtpl->parse('main.scorms');
+    }
+    
     if ($row['is_download_allow']) {
         $xtpl->parse('main.report');
         
