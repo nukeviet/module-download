@@ -75,7 +75,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
     
     foreach ($array_id as $id) {
-        $sql = 'SELECT fileupload, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
+        $sql = 'SELECT fileupload, scormpath, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
         $row = $db->query($sql)->fetch();
         if (empty($row)) {
             die('NO');
@@ -86,10 +86,18 @@ if ($nv_Request->isset_request('del', 'post')) {
         
         if ($db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id) and $delfile) {
             $row['fileupload'] = explode('[NV]', $row['fileupload']);
+            $row['scormpath'] = explode('[NV]', $row['scormpath']);
+            
             foreach ($row['fileupload'] as $fileupload) {
                 if (!empty($fileupload)) {
                     nv_deletefile(NV_UPLOADS_REAL_DIR . $fileupload);
                     $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=(SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname=" . $db->quote(NV_UPLOADS_DIR . '/' . ltrim(dirname($fileupload), '/')) . ") AND title=" . $db->quote(basename($fileupload)));
+                }
+            }
+            
+            foreach ($row['scormpath'] as $scormpath) {
+                if (!empty($scormpath) and is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
+                    nv_deletefile(NV_UPLOADS_REAL_DIR . $scormpath, true);
                 }
             }
         }

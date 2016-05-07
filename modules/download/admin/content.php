@@ -422,13 +422,40 @@ if ($nv_Request->isset_request('submit', 'post')) {
                                         ftp_close($conn_id);
                                     }
                                     
+                                    // Đọc cấu hình .htaccess ở thư mục upload
+                                    $forbid_ext = array();
+                                    if (file_exists(NV_UPLOADS_REAL_DIR . '/.htaccess')) {
+                                        $file_handle = fopen(NV_UPLOADS_REAL_DIR . '/.htaccess', 'r');
+                                        if ($file_handle !== false) {
+                                            $line = trim(fgets($file_handle));
+                                            fclose($file_handle);
+                                            
+                                            if (!empty($line) and preg_match("/\((.*?)\)/i", $line, $m)) {
+                                                $forbid_ext = array_map("trim", array_filter(array_unique(explode('|', $m[1]))));
+                                            }
+                                        }
+                                        $forbid_ext = array_unique(array_merge_recursive($global_config['forbid_extensions'], $forbid_ext, array('htaccess')));
+                                    }
+                                    $forbid_ext = implode('|', $forbid_ext);
+                                    
                                     $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $scorm_path1);
                                     
                                     foreach ($extract as $extract_i) {
+                                        // Delete forbid file
+                                        $array_name_i = explode('/', $extract_i['stored_filename']);
+                                        
+                                        if (preg_match("/\.(" . $forbid_ext . ")$/i", $array_name_i[sizeof($array_name_i) - 1])) {
+                                            nv_deletefile($extract_i['filename']);
+                                        }
+                                        
                                         if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
                                             $error = $lang_module['file_error_extract_scorm'] . ': ' . $file_name;
                                             break;
                                         }
+                                    }
+                                    
+                                    if (file_exists(NV_UPLOADS_REAL_DIR . '/.htaccess')) {
+                                        file_put_contents(NV_ROOTDIR . '/' . $scorm_path1 . '/.htaccess', file_get_contents(NV_UPLOADS_REAL_DIR . '/.htaccess'), LOCK_EX);
                                     }
                                     
                                     if (!empty($error)) {
@@ -441,6 +468,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
                                 } else {
                                     $error = $mkdir[1];
                                 }
+                            }
+                            
+                            // Resets the contents of the opcode cache
+                            if (nv_function_exists('opcache_reset')) {
+                                opcache_reset();
                             }
                         }
                     }
