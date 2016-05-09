@@ -297,17 +297,6 @@ function nv_file_additem(id, queue, file) {
 
 //  ---------------------------------------
 
-function nv_file_additem2() {
-	var newitem = "<div style=\"display: inline-block; margin-top: 10px\"><input readonly=\"readonly\" class=\"form-control w300 pull-left\" style=\"margin-right: 5px\" value=\"\" name=\"fileupload2[]\" id=\"fileupload2_" + file_items + "\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload2_" + file_items + "&path=" + uploads_dir + "&currentpath=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
-	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_checkUrl + "\" id= \"check_fileupload2_" + file_items + "\" onclick=\"nv_checkfile( 'fileupload2_" + file_items + "', 1, 'check_fileupload2_" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_gourl + "\" id= \"go_fileupload2_" + file_items + "\" onclick=\"nv_gourl( 'fileupload2_" + file_items + "', 1, 'go_fileupload2_" + file_items + "' ); \" /><br /></div>";
-	$("#fileupload2_items").append(newitem);
-	file_items++;
-}
-
-//  ---------------------------------------
-
 function nv_linkdirect_additem() {
 	var newitem = "<div class=\"clearfix\">&nbsp;</div><textarea name=\"linkdirect[]\" id=\"linkdirect" + linkdirect_items + "\" style=\"width : 500px; height : 100px; margin-top: 10px\" class=\"form-control pull-left\"></textarea>";
 	newitem += "&nbsp;&nbsp;<input type=\"button\" style=\"margin-top: 10px\" class=\"btn btn-info pull-left\" value=\"" + file_checkUrl + "\" id=\"check_linkdirect" + linkdirect_items + "\" onclick=\"nv_checkfile( 'linkdirect" + linkdirect_items + "', 0, 'check_linkdirect" + linkdirect_items + "' ); \" /><br />";

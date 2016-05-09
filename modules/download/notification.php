@@ -19,5 +19,5 @@ if ($data['type'] == 'report_new') {
     $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;edit=1&amp;id=' . $data['obid'] . '&amp;report=1';
 } elseif ($data['type'] == 'upload_new') {
     $data['title'] = sprintf($lang_siteinfo['notification_upload'], $data['send_from'], $data['content']['title']);
-    $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=filequeue&amp;edit=1&amp;id=' . $data['obid'];
+    $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=content&amp;filequeueid=' . $data['obid'];
 }

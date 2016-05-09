@@ -48,11 +48,24 @@
 						</tr>
 						<tr>
 							<td> {LANG.file_image} </td>
-							<td>
-								<input class="w300 form-control pull-left" type="text" style="margin-right: 5px" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" />
-								<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_selectfile}" name="selectimg" />
-								<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_checkUrl}" id="check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" />
-								<input type="button" class="btn btn-info pull-left" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
+                            <td>
+                                <!-- BEGIN: fileimage_tmp -->
+                                <div class="clearfix" style="margin-bottom: 5px"> 
+                                    <strong>{LANG.file_fileimage_tmp}:</strong>
+                                    <div class="clearfix" style="margin-bottom: 5px">
+        								<input readonly="readonly" class="w300 form-control pull-left" type="text" style="margin-right: 5px" value="{DATA.fileimage_tmp}" name="fileimage_tmp" id="fileimage_tmp" maxlength="255" />
+        								<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_checkUrl}" id="check_fileimage_tmp" onclick="nv_checkfile('fileimage_tmp',1, 'check_fileimage_tmp');" />
+        								<input type="button" class="btn btn-info pull-left" value="{LANG.file_gourl}" id= "go_fileimage_tmp" onclick="nv_gourl('fileimage_tmp',1, 'go_fileimage_tmp');" />
+                                    </div>
+                                    <strong>{LANG.file_fileimage_change}:</strong>
+                                </div>
+                                <!-- END: fileimage_tmp -->
+                                <div class="clearfix">
+    								<input class="w300 form-control pull-left" type="text" style="margin-right: 5px" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" />
+    								<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_selectfile}" name="selectimg" />
+    								<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_checkUrl}" id="check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" />
+    								<input type="button" class="btn btn-info pull-left" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
+                                </div>
 							</td>
 						</tr>
 						<tr>
@@ -137,6 +150,20 @@
 				<tr>
 					<td class="w250" style="vertical-align:top"> {LANG.file_myfile} <sup class="required">(*)</sup></td>
 					<td>
+                        <!-- BEGIN: fileupload_tmp -->
+                        <div class="clearfix" style="margin-bottom: 5px"> 
+                            <strong>{LANG.file_fileupload_tmp}:</strong>
+                            <!-- BEGIN: loop -->
+                            <div class="clearfix" style="margin-bottom: 5px">
+    							<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD_TMP.value}" id="fileuploadtmp{FILEUPLOAD_TMP.key}" maxlength="255" />&nbsp;
+    							<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileuploadtmp{FILEUPLOAD_TMP.key}" onclick="nv_checkfile('fileuploadtmp{FILEUPLOAD_TMP.key}',1, 'check_fileuploadtmp{FILEUPLOAD_TMP.key}');" />
+    							<input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileuploadtmp{FILEUPLOAD_TMP.key}" onclick="nv_gourl('fileuploadtmp{FILEUPLOAD_TMP.key}', 1, 'go_fileuploadtmp{FILEUPLOAD_TMP.key}');" />
+                            </div>
+                            <!-- END: loop -->
+                            <strong>{LANG.file_fileupload_change}:</strong>
+                        </div>
+                        <!-- END: fileupload_tmp -->
+
     					<div id="fileupload_items">
     						<!-- BEGIN: fileupload -->
     						<div id="fileupload_item_{FILEUPLOAD.key}" style="margin-top: 5px">
@@ -286,9 +313,17 @@
 		<!-- BEGIN: is_del_report -->
 		<input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
 		<!-- END: is_del_report -->
+        <!-- BEGIN: approval -->
+        <button type="submit" name="submit" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
+            {LANG.download_filequeue_submit}
+        </button>
+        <input type="button" value="{LANG.download_filequeue_del}" class="btn btn-danger" onclick="nv_filequeue_del('{FILEQUEUEIDs}')"/>
+        <!-- END: approval -->
+        <!-- BEGIN: submit -->
         <button type="submit" name="submit" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
             {LANG.confirm}
         </button>
+        <!-- END: submit -->
 	</div>
 </form>
 <script type="text/javascript">

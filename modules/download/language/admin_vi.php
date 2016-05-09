@@ -122,10 +122,16 @@ $lang_module['file_delmode0'] = 'Xóa file và giữ lại đính kèm';
 $lang_module['file_delmode1'] = 'Xóa file và xóa đính kèm';
 $lang_module['file_direct_upload'] = 'Hoặc upload trực tiếp';
 $lang_module['file_error_extract_scorm'] = 'Lỗi: Không thể giải nén file SCORM';
+$lang_module['file_fileimage_tmp'] = 'Ảnh thành viên đưa lên';
+$lang_module['file_fileimage_change'] = 'Thay mới <small>(Nếu chọn ảnh cũ sẽ bị xóa)</small>';
+$lang_module['file_fileupload_tmp'] = 'File thành viên tải lên';
+$lang_module['file_fileupload_change'] = 'Thay mới <small>(Nếu chọn các file cũ sẽ bị xóa)</small>';
 
 $lang_module['filequeue_empty'] = 'Rất tiếc là chưa có file nào được gửi đến!';
 $lang_module['download_filequeue'] = 'File chờ kiểm duyệt';
 $lang_module['download_filequeue_del'] = 'Xóa file';
+$lang_module['download_filequeue_edit'] = 'Kiểm duyệt file';
+$lang_module['download_filequeue_submit'] = 'Duyệt file';
 $lang_module['download_alldel'] = 'Xóa tất cả';
 
 $lang_module['report_empty'] = 'Chưa có báo cáo lỗi!';
