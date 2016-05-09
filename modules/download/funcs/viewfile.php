@@ -122,13 +122,15 @@ $session_files['fileupload'] = array();
 $session_files['linkdirect'] = array();
 $row['filepdf'] = '';
 $row['scorm'] = array();
+$row['fileupload'] = array();
 $row['scorm_num'] = 0;
 
+$fileuploads = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $row['id'] . ' ORDER BY weight ASC')->fetchAll();
+
 if ($row['is_onlineview_allow']) {
-    $row['scormpath'] = explode('[NV]', $row['scormpath']);
-    foreach ($row['scormpath'] as $scormpath) {
-        if (!empty($scormpath) and is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
-            $row['scorm'][] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $scormpath;
+    foreach ($fileuploads as $file) {
+        if (!empty($file['scorm_path']) and is_dir(NV_UPLOADS_REAL_DIR . $file['scorm_path'])) {
+            $row['scorm'][] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $file['scorm_path'];
             $row['scorm_num'] ++;
         }
     }
@@ -138,29 +140,32 @@ if ($row['is_download_allow']) {
     $session_files['tokend'] = md5($global_config['sitekey'] . session_id() . $row['id'] . $row['alias']);
     $session_files['id'] = $row['id'];
     
-    if (! empty($row['fileupload'])) {
-        $fileupload = explode('[NV]', $row['fileupload']);
-        $row['fileupload'] = array();
-
-        $a = 1;
-        $count_file = sizeof($fileupload);
-        foreach ($fileupload as $file) {
-            if (! empty($file)) {
-                $file2 = NV_UPLOADS_DIR . $file;
-                if (file_exists(NV_ROOTDIR . '/' . $file2) and ($filesize = filesize(NV_ROOTDIR . '/' . $file2)) != 0) {
-                    $new_name = str_replace('-', '_', $filealias) . ($count_file > 1 ? '_part' . str_pad($a, 2, '0', STR_PAD_LEFT) : '') . '.' . nv_getextension($file);
-                    $row['fileupload'][] = array( 'link' => '#', 'title' => $new_name );
-                    $session_files['fileupload'][$new_name] = array( 'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] );
-
-                    ++$a;
-                    if (empty($row['filepdf']) and preg_match('/\.pdf$/i', $file2)) {
-                        $row['filepdf'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=down&amp;filepdf=1&amp;filename=' . $new_name;
+    if (! empty($fileuploads)) {
+        $count_file = 0;
+        foreach ($fileuploads as $file) {
+            if (! empty($file['file_path'])) {
+                $count_file ++;
+            }
+        }
+            
+        if ($count_file > 0) {
+            $a = 1;
+            foreach ($fileuploads as $file) {
+                if (! empty($file['file_path'])) {
+                    $file2 = NV_UPLOADS_DIR . $file['file_path'];
+                    if (file_exists(NV_ROOTDIR . '/' . $file2) and ($filesize = filesize(NV_ROOTDIR . '/' . $file2)) != 0) {
+                        $new_name = str_replace('-', '_', $filealias) . ($count_file > 1 ? '_part' . str_pad($a, 2, '0', STR_PAD_LEFT) : '') . '.' . nv_getextension($file2);
+                        $row['fileupload'][] = array( 'link' => '#', 'title' => $new_name );
+                        $session_files['fileupload'][$new_name] = array( 'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] );
+    
+                        ++$a;
+                        if (empty($row['filepdf']) and preg_match('/\.pdf$/i', $file2)) {
+                            $row['filepdf'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=down&amp;filepdf=1&amp;filename=' . $new_name;
+                        }
                     }
                 }
             }
         }
-    } else {
-        $row['fileupload'] = array();
     }
 
     if (! empty($row['linkdirect'])) {
@@ -208,6 +213,8 @@ if ($row['is_download_allow']) {
 
     $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
 }
+
+unset($fileuploads, $file);
 
 $session_files = serialize($session_files);
 $nv_Request->set_Session('session_files', $session_files);

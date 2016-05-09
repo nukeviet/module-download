@@ -158,7 +158,6 @@ if ($id) {
     $array['author_name'] = $row['author_name'];
     $array['author_email'] = $row['author_email'];
     $array['author_url'] = $row['author_url'];
-    $array['fileupload'] = $row['fileupload'];
     $array['linkdirect'] = $row['linkdirect'];
     $array['version'] = $row['version'];
     $array['filesize'] = ( int )$row['filesize'];
@@ -168,15 +167,14 @@ if ($id) {
     $array['groups_view'] = $row['groups_view'];
     $array['groups_onlineview'] = $row['groups_onlineview'];
     $array['groups_download'] = $row['groups_download'];
-
-    $array['fileupload'] = ! empty($array['fileupload']) ? explode('[NV]', $array['fileupload']) : array();
+    
     if (! empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
         $array['linkdirect'] = array_map('nv_br2nl', $array['linkdirect']);
     } else {
         $array['linkdirect'] = array();
     }
-    $array['scormpath'] = ! empty($array['scormpath']) ? explode('[NV]', $array['scormpath']) : array();
+    
     $array['is_del_report'] = 1;
     
     $array_keywords_old = array();
@@ -187,6 +185,30 @@ if ($id) {
     $array['keywords'] = implode(', ', $array_keywords_old);
     $array['keywords_old'] = $array['keywords'];
 
+    $fileupload = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id)->fetchAll();
+    
+    $array['fileupload'] = array();
+    $array['fileupload_key'] = array();
+    $array['fileupload_old'] = array();
+    $array['fileupload_del'] = array();
+    $array['scorm_path_old'] = array();
+
+    foreach ($fileupload as $file) {
+        $array['fileupload_old'][$file['file_id']] = array(
+            'file_id' => $file['file_id'],
+            'server_id' => $file['server_id'],
+            'file_path' => $file['file_path'],
+            'scorm_path' => $file['scorm_path']
+        );
+        if (!empty($file['file_path'])) {
+            $array['fileupload_key'][md5($file['server_id'] . '_' . $file['file_path'])] = $file['file_id'];
+            $array['fileupload'][] = $file['file_path'];
+        }
+        if (!empty($file['scorm_path'])) {
+            $array['scorm_path_old'][] = $file['scorm_path'];
+        }
+    }
+    unset($fileupload, $file);
 } else {
     $page_title = $lang_module['file_addfile'];
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
@@ -194,7 +216,10 @@ if ($id) {
     $array['id'] = 0;
     $array['catid'] = $nv_Request->get_int('catid', 'get', 0);
     $array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['version'] = $array['fileimage'] = '';
-    $array['fileupload'] = $array['linkdirect'] = $array['scormpath'] = array();
+    $array['fileupload'] = $array['fileupload_key'] = $array['linkdirect'] = array();
+    $array['fileupload_old'] = array();
+    $array['fileupload_del'] = array();
+    $array['scorm_path_old'] = array();
     $array['groups_comment'] = $module_config[$module_name]['setcomm'];
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
     $array['filesize'] = 0;
@@ -212,7 +237,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['author_name'] = $nv_Request->get_title('author_name', 'post', '', 1);
     $array['author_email'] = $nv_Request->get_title('author_email', 'post', '');
     $array['author_url'] = $nv_Request->get_title('author_url', 'post', '');
-    $array['fileupload'] = $nv_Request->get_typed_array('fileupload', 'post', 'string');
     $array['linkdirect'] = $nv_Request->get_typed_array('linkdirect', 'post', 'string');
     $array['version'] = $nv_Request->get_title('version', 'post', '', 1);
     $array['fileimage'] = $nv_Request->get_title('fileimage', 'post', '');
@@ -241,30 +265,61 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     
     // Kiểm tra lại thư mục scorm
-    foreach ($array['scormpath'] as $key => $scormpath) {
-        if (empty($scormpath) or !is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
-            unset($array['scormpath'][$key]);
+    foreach ($array['fileupload_old'] as $key => $fileupload) {
+        if (!empty($fileupload['scorm_path'])) {
+            if ($fileupload['server_id'] == 0) {
+                if (!is_dir(NV_UPLOADS_REAL_DIR . $fileupload['scorm_path'])) {
+                    $array['fileupload_old'][$key]['scorm_path'] = '';
+                }
+            } else {
+                // Kiểm tra trên server khác
+            }
+        }
+        
+        if (empty($array['fileupload_old'][$key]['scorm_path']) and empty($array['fileupload_old'][$key]['file_path'])) {
+            $array['fileupload_del'][$fileupload['file_id']] = $fileupload['file_id'];
         }
     }
     
+    $fileupload_submit = $nv_Request->get_typed_array('fileupload', 'post', 'string');
+    $fileserver = 0;  
     $array['filesize'] = 0;
-    if (! empty($array['fileupload'])) {
-        $fileupload = $array['fileupload'];
-        $array['fileupload'] = array();
-        $array['filesize'] = 0;
-        foreach ($fileupload as $file) {
+    $array['fileupload_new'] = array();
+    $array['fileupload_all_key'] = array();
+
+    if (! empty($fileupload_submit)) {
+        foreach ($fileupload_submit as $file) {
             if (! empty($file)) {
                 $file2 = substr($file, strlen(NV_BASE_SITEURL));
+                $file3 = substr($file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR));
+                $file_key = md5($fileserver . '_' . $file3);
+
                 if (file_exists(NV_ROOTDIR . '/' . $file2) and ($filesize = filesize(NV_ROOTDIR . '/' . $file2)) != 0) {
-                    $array['fileupload'][] = substr($file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR));
                     $array['filesize'] += $filesize;
+                    if (!isset($array['fileupload_key'][$file_key])) {
+                        $array['fileupload_new'][] = array(
+                            'file_path' => $file3,
+                            'scorm_path' => '',
+                            'filesize' => $filesize
+                        );
+                        $array['fileupload'][] = $file3;
+                    }
+                    
+                    $array['fileupload_all_key'][$file_key] = 2;
                 }
+            }
+        }
+        
+        foreach ($array['fileupload_key'] as $key => $file_id) {
+            if (!isset($array['fileupload_all_key'][$key])) {
+                $array['fileupload_del'][$file_id] = $file_id;
             }
         }
     } else {
         $array['fileupload'] = array();
+        $array['fileupload_del'] = array_values($array['fileupload_key']);
     }
-
+        
     // Sort image
     if (! empty($array['fileimage'])) {
         if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'])) {
@@ -332,11 +387,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error = $check_valid_email;
     } elseif (! empty($array['author_url']) and ! nv_is_url($array['author_url'])) {
         $error = $lang_module['file_error_author_url'];
-    } elseif (empty($array['fileupload']) and empty($array['linkdirect'])) {
+    } elseif (empty($array['fileupload']) and empty($array['linkdirect']) and empty($array['scorm_path_old'])) {
         $error = $lang_module['file_error_fileupload'];
     } else {
-        if (!empty($array['fileupload'])) {
-            foreach ($array['fileupload'] as $fileuploadkey => $file) {
+        if (!empty($array['fileupload_new'])) {
+            foreach ($array['fileupload_new'] as $fileuploadkey => $file_new) {
+                $file = $file_new['file_path'];
+                
                 // Xác định file scorm
                 $file_ext = nv_getextension($file);
                 $file_name = basename($file);
@@ -361,9 +418,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                             $scorm_path = $file_path . '/' . $scorm_dir;
                             
                             if (is_dir(NV_UPLOADS_REAL_DIR . $scorm_path) and file_exists(NV_UPLOADS_REAL_DIR . $scorm_path . '/SCORM.htm')) {
-                                if (!in_array($scorm_path, $array['scormpath'])) {
-                                    $array['scormpath'][] = $scorm_path;
-                                }
+                                $array['fileupload_new'][$fileuploadkey]['scorm_path'] = $scorm_path;
                             } else {
                                 nv_deletefile(NV_UPLOADS_REAL_DIR . $scorm_path, true);
                                 $mkdir = nv_mkdir(NV_UPLOADS_REAL_DIR . $file_path, $scorm_dir);
@@ -462,9 +517,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
                                         nv_deletefile(NV_UPLOADS_REAL_DIR . $scorm_path, true);
                                     } elseif (empty($module_config[$module_name]['scorm_handle_mode'])) {
                                         nv_deletefile(NV_UPLOADS_REAL_DIR . $array['fileupload'][$fileuploadkey]);
-                                        unset($array['fileupload'][$fileuploadkey]);
+                                        $array['fileupload_new'][$fileuploadkey]['file_path'] = '';
                                     }
-                                    $array['scormpath'][] = $scorm_path;
+                                    $array['fileupload_new'][$fileuploadkey]['scorm_path'] = $scorm_path;
                                 } else {
                                     $error = $mkdir[1];
                                 }
@@ -481,10 +536,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
         
         if (empty($error)) {
-            $array['scormpath'] = array_unique($array['scormpath']);
             $array['introtext'] = ! empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
-            $array['fileupload'] = (! empty($array['fileupload'])) ? implode('[NV]', $array['fileupload']) : '';
-            $array['scormpath'] = (! empty($array['scormpath'])) ? implode('[NV]', $array['scormpath']) : '';
             
             if ((! empty($array['linkdirect']))) {
                 $array['linkdirect'] = array_map('nv_nl2br', $array['linkdirect']);
@@ -497,7 +549,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             
             if (empty($id)) {
                 $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-                    catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, scormpath, 
+                    catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, linkdirect, 
                     version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_onlineview, groups_download, comment_hits, rating_detail
                 ) VALUES (
         			 " . $array['catid'] . ",
@@ -512,9 +564,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         			 :author_name ,
         			 :author_email ,
         			 :author_url ,
-        			 :fileupload ,
         			 :linkdirect ,
-        			 :scormpath ,
         			 :version ,
         			 " . $array['filesize'] . ",
         			 :fileimage ,
@@ -537,9 +587,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $data_insert['author_name'] = $array['author_name'];
                 $data_insert['author_email'] = $array['author_email'];
                 $data_insert['author_url'] = $array['author_url'];
-                $data_insert['fileupload'] = $array['fileupload'];
                 $data_insert['linkdirect'] = $array['linkdirect'];
-                $data_insert['scormpath'] = $array['scormpath'];
                 $data_insert['version'] = $array['version'];
                 $data_insert['fileimage'] = $array['fileimage'];
                 $data_insert['copyright'] = $array['copyright'];
@@ -566,9 +614,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     				 author_name= :author_name,
     				 author_email= :author_email,
     				 author_url= :author_url,
-    				 fileupload= :fileupload,
     				 linkdirect= :linkdirect,
-    				 scormpath= :scormpath,
     				 version= :version,
     				 filesize=" . $array['filesize'] . ",
     				 fileimage= :fileimage,
@@ -587,9 +633,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $stmt->bindParam(':author_name', $array['author_name'], PDO::PARAM_STR);
                 $stmt->bindParam(':author_email', $array['author_email'], PDO::PARAM_STR);
                 $stmt->bindParam(':author_url', $array['author_url'], PDO::PARAM_STR);
-                $stmt->bindParam(':fileupload', $array['fileupload'], PDO::PARAM_STR, strlen($array['fileupload']));
                 $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
-                $stmt->bindParam(':scormpath', $array['scormpath'], PDO::PARAM_STR, strlen($array['scormpath']));
                 $stmt->bindParam(':version', $array['version'], PDO::PARAM_STR);
                 $stmt->bindParam(':fileimage', $array['fileimage'], PDO::PARAM_STR);
                 $stmt->bindParam(':copyright', $array['copyright'], PDO::PARAM_STR);
@@ -610,6 +654,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
             
             if ($action_db) {
+                // Xử lý từ khóa
                 if ($array['keywords'] != $array['keywords_old']) {
                     $keywords = explode(',', $array['keywords']);
                     $keywords = array_map('strip_punctuation', $keywords);
@@ -670,19 +715,61 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     }
                 }
                 
-                $nv_Cache->delMod($module_name);
-                
                 if ($id) {
+                    // Xóa file cũ
+                    if (!empty($array['fileupload_del'])) {
+                        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id . ' AND file_id IN(' . implode(',', $array['fileupload_del']) . ')');
+                    }
+                    
+                    // Thêm file mới
+                    $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id)->fetchColumn();
+                    $weight ++;
+                    foreach ($array['fileupload_new'] as $fileupload) {
+                        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_files (
+                            download_id, server_id, file_path, scorm_path, filesize, weight, status
+                        ) VALUES (
+                            ' . $array['id'] . ', 0, :file_path, :scorm_path, :filesize, ' . ($weight++) . ', 1
+                        )';
+                        $data_insert = array();
+                        $data_insert['file_path'] = $fileupload['file_path'];
+                        $data_insert['scorm_path'] = $fileupload['scorm_path'];
+                        $data_insert['filesize'] = $fileupload['filesize'];
+                        $db->insert_id($sql, 'file_id', $data_insert);
+                    }
+                    
+                    // Sắp xếp lại file
+                    $weight = 1;
+                    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id . ' ORDER BY weight ASC';
+                    $result = $db->query($sql);
+                    
+                    while ($file = $result->fetch()) {
+                        $db->query('UPDATE ' . NV_MOD_TABLE . '_files SET weight=' . ($weight++) . ' WHERE file_id=' . $file['file_id']);
+                    }
+                    
                     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid']);
                 } else {
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
+                    $weight = 1;
+                    foreach ($array['fileupload_new'] as $fileupload) {
+                        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_files (
+                            download_id, server_id, file_path, scorm_path, filesize, weight, status
+                        ) VALUES (
+                            ' . $array['id'] . ', 0, :file_path, :scorm_path, :filesize, ' . ($weight++) . ', 1
+                        )';
+                        $data_insert = array();
+                        $data_insert['file_path'] = $fileupload['file_path'];
+                        $data_insert['scorm_path'] = $fileupload['scorm_path'];
+                        $data_insert['filesize'] = $fileupload['filesize'];
+                        $db->insert_id($sql, 'file_id', $data_insert);
+                    }
+                    
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);                    
                 }
+                
+                $nv_Cache->delMod($module_name);
                 
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 exit();
             }
-            
-            $array['fileupload'] = (! empty($array['fileupload'])) ? explode('[NV]', $array['fileupload']) : array();
         }
     }
 }

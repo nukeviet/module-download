@@ -75,7 +75,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
     
     foreach ($array_id as $id) {
-        $sql = 'SELECT fileupload, scormpath, fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
+        $sql = 'SELECT fileimage, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
         $row = $db->query($sql)->fetch();
         if (empty($row)) {
             die('NO');
@@ -85,23 +85,25 @@ if ($nv_Request->isset_request('del', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid=' . $id);
         
         if ($db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id) and $delfile) {
-            $row['fileupload'] = explode('[NV]', $row['fileupload']);
-            $row['scormpath'] = explode('[NV]', $row['scormpath']);
+            $fileupload = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id)->fetchAll();
             
-            foreach ($row['fileupload'] as $fileupload) {
-                if (!empty($fileupload)) {
-                    nv_deletefile(NV_UPLOADS_REAL_DIR . $fileupload);
-                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=(SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname=" . $db->quote(NV_UPLOADS_DIR . '/' . ltrim(dirname($fileupload), '/')) . ") AND title=" . $db->quote(basename($fileupload)));
-                }
-            }
-            
-            foreach ($row['scormpath'] as $scormpath) {
-                if (!empty($scormpath) and is_dir(NV_UPLOADS_REAL_DIR . $scormpath)) {
-                    nv_deletefile(NV_UPLOADS_REAL_DIR . $scormpath, true);
+            foreach ($fileupload as $file) {
+                if ($file['server_id'] == 0) {
+                    // Delete local file
+                    nv_deletefile(NV_UPLOADS_REAL_DIR . $file['file_path']);
+                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=(SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname=" . $db->quote(NV_UPLOADS_DIR . '/' . ltrim(dirname($file['file_path']), '/')) . ") AND title=" . $db->quote(basename($file['file_path'])));
+                    
+                    if (!empty($file['scorm_path']) and is_dir(NV_UPLOADS_REAL_DIR . $file['scorm_path'])) {
+                        nv_deletefile(NV_UPLOADS_REAL_DIR . $file['scorm_path'], true);
+                    }
+                } else {
+                    // Delete file on fileserver
                 }
             }
         }
-    
+        
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id);    
+        
         // Xoa thong bao loi
         nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
     }

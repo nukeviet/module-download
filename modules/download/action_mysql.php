@@ -16,6 +16,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_drop_module = array();
     
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data;
+    $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report";
@@ -45,14 +46,15 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          author_name varchar(100) NOT NULL,
          author_email varchar(60) NOT NULL,
          author_url varchar(255) NOT NULL,
-         fileupload text NOT NULL,
          linkdirect text NOT NULL,
-         scormpath text NOT NULL,
          version varchar(20) NOT NULL,
          filesize int(11) NOT NULL DEFAULT '0',
          fileimage varchar(255) NOT NULL,
          status tinyint(1) unsigned NOT NULL DEFAULT '0',
          copyright varchar(255) NOT NULL,
+         num_fileupload smallint(4) unsigned NOT NULL DEFAULT '0',
+         num_linkdirect smallint(4) unsigned NOT NULL DEFAULT '0',
+         weight smallint(4) unsigned NOT NULL DEFAULT '0',
          view_hits int(11) NOT NULL DEFAULT '0',
          download_hits int(11) NOT NULL DEFAULT '0',
          groups_comment varchar(255) NOT NULL,
@@ -65,6 +67,20 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          UNIQUE KEY alias (alias),
          KEY catid (catid),
          KEY user_id (user_id)
+        )ENGINE=MyISAM";
+    
+    $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files (
+         file_id int(11) unsigned NOT NULL AUTO_INCREMENT,
+         download_id mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'ID file download',
+         server_id smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'ID fileserver hoặc 0 nếu là local',
+         file_path varchar(255) NOT NULL DEFAULT '',
+         scorm_path varchar(255) NOT NULL DEFAULT '',
+         filesize int(11) NOT NULL DEFAULT '0',
+         weight smallint(4) unsigned NOT NULL DEFAULT '0',
+         status tinyint(1) unsigned NOT NULL DEFAULT '0',
+         PRIMARY KEY (file_id),
+         KEY download_id (download_id),
+         KEY server_id (server_id)
         )ENGINE=MyISAM";
     
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
