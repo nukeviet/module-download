@@ -26,7 +26,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name. '&' . NV_OP_VARIABLE . '='.$op;
     
     $db->sqlreset()
-        ->select('*')
+        ->select('count(*)')
         ->from(NV_MOD_TABLE . '_tags')
         ->order('alias ASC');
         
@@ -55,7 +55,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    $number = 0;
+    $number = ($page - 1) * $per_page;
     while ($row = $result2->fetch()) {
         $row['number'] = ++$number;
         $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $row['alias'];
