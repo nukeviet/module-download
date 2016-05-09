@@ -537,6 +537,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         
         if (empty($error)) {
             $array['introtext'] = ! empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
+            $array['num_fileupload'] = sizeof($array['fileupload']);
+            $array['num_linkdirect'] = sizeof($array['linkdirect']);
             
             if ((! empty($array['linkdirect']))) {
                 $array['linkdirect'] = array_map('nv_nl2br', $array['linkdirect']);
@@ -550,7 +552,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
             if (empty($id)) {
                 $sql = "INSERT INTO " . NV_MOD_TABLE . " (
                     catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, linkdirect, 
-                    version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_onlineview, groups_download, comment_hits, rating_detail
+                    version, filesize, fileimage, status, copyright, num_fileupload, num_linkdirect, view_hits, download_hits, groups_comment, groups_view, 
+                    groups_onlineview, groups_download, comment_hits, rating_detail
                 ) VALUES (
         			 " . $array['catid'] . ",
         			 :title,
@@ -570,6 +573,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         			 :fileimage ,
         			 1,
         			 :copyright ,
+        			 :num_fileupload ,
+        			 :num_linkdirect ,
         			 0, 0,
         			 :groups_comment ,
         			 :groups_view ,
@@ -591,6 +596,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $data_insert['version'] = $array['version'];
                 $data_insert['fileimage'] = $array['fileimage'];
                 $data_insert['copyright'] = $array['copyright'];
+                $data_insert['num_fileupload'] = $array['num_fileupload'];
+                $data_insert['num_linkdirect'] = $array['num_linkdirect'];
                 $data_insert['groups_comment'] = $array['groups_comment'];
                 $data_insert['groups_view'] = $array['groups_view'];
                 $data_insert['groups_onlineview'] = $array['groups_onlineview'];
@@ -619,6 +626,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     				 filesize=" . $array['filesize'] . ",
     				 fileimage= :fileimage,
     				 copyright= :copyright,
+    				 num_fileupload= :num_fileupload,
+    				 num_linkdirect= :num_linkdirect,
     				 groups_comment= :groups_comment,
     				 groups_view= :groups_view,
     				 groups_onlineview= :groups_onlineview,
@@ -637,6 +646,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $stmt->bindParam(':version', $array['version'], PDO::PARAM_STR);
                 $stmt->bindParam(':fileimage', $array['fileimage'], PDO::PARAM_STR);
                 $stmt->bindParam(':copyright', $array['copyright'], PDO::PARAM_STR);
+                $stmt->bindParam(':num_fileupload', $array['num_fileupload'], PDO::PARAM_INT);
+                $stmt->bindParam(':num_linkdirect', $array['num_linkdirect'], PDO::PARAM_INT);
                 $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
                 $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
                 $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);

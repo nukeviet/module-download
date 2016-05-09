@@ -214,7 +214,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
         $xtpl->parse('main.scorms');
     }
     
-    if ($row['is_download_allow'] and !empty($row['fileupload']) and !empty($row['linkdirect'])) {
+    if ($row['is_download_allow'] and (!empty($row['fileupload']) or !empty($row['linkdirect']))) {
         $xtpl->parse('main.report');
         
         if (! empty($row['filepdf']) and $row['is_onlineview_allow']) {
