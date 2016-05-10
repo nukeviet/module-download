@@ -22,6 +22,9 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['msgnocheck'] = 'Vui lòng chọn ít nhất một dòng để thực hiện';
 $lang_module['error'] = 'Lỗi';
 $lang_module['waiting'] = 'Đang xử lý';
+$lang_module['errorsave'] = 'Lỗi lưu dữ liệu không xác định';
+$lang_module['function'] = 'Chức năng';
+$lang_module['status'] = 'Hoạt động';
 
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_keywods'] = 'Từ khóa tìm kiếm';
@@ -55,6 +58,9 @@ $lang_module['config_scorm_handle_mode'] = 'Sau khi giải nén SCORM thì';
 $lang_module['config_scorm_handle_mode0'] = 'Xóa luôn file gốc';
 $lang_module['config_scorm_handle_mode1'] = 'Giữ lại file gốc';
 $lang_module['config_structure_upload'] = 'Thư mục tải file lên';
+$lang_module['config_fileserver'] = 'Server upload file';
+$lang_module['config_fileserver0'] = 'Local server';
+$lang_module['config_fileserver1'] = 'File server';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
@@ -187,3 +193,15 @@ $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 
 $lang_module['action_active'] = 'Cho hoạt động';
 $lang_module['action_deactive'] = 'Đình chỉ hoạt động';
+
+$lang_module['fileserver_manager'] = 'Quản lý FileServer';
+$lang_module['fileserver'] = 'FileServer';
+$lang_module['fileserver_server_name'] = 'Tên FileServer';
+$lang_module['fileserver_upload_url'] = 'Upload url';
+$lang_module['fileserver_access_key'] = 'Access key';
+$lang_module['fileserver_secret_key'] = 'Secret key';
+$lang_module['fileserver_add'] = 'Thêm FileServer';
+$lang_module['fileserver_edit'] = 'Sửa FileServer';
+$lang_module['fileserver_error_server_name'] = 'Lỗi: Tên FileServer không được để trống';
+$lang_module['fileserver_error_upload_url'] = 'Lỗi: Tham số upload_url không được để trống';
+$lang_module['fileserver_error_exists'] = 'Lỗi: Tên FileServer bị trùng';

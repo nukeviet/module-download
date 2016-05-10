@@ -129,6 +129,17 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td>{LANG.config_fileserver}</td>
+						<td>
+							<select class="form-control pull-left w200" name="fileserver">
+								<!-- BEGIN: fileserver -->
+								<option value="{FILESERVER.key}" {FILESERVER.selected}>{FILESERVER.title}</option>
+								<!-- END: fileserver -->
+							</select>
+                            <span id="fileserverLink"{FILESERVER_DISPLAY}>&nbsp; (<a href="{FILESERVER_MANAGER}">{LANG.fileserver_manager}</a>)</span>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

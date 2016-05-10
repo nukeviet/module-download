@@ -23,6 +23,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id";
+    $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_server";
     
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comment'");
     $rows = $result->fetchAll();
@@ -159,6 +160,17 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
           KEY did (did)
         )ENGINE=MyISAM";
     
+    $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_server (
+          server_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+          server_name varchar(250) NOT NULL DEFAULT '',
+          upload_url varchar(255) NOT NULL DEFAULT '',
+          access_key varchar(255) NOT NULL DEFAULT '',
+          secret_key varchar(255) NOT NULL DEFAULT '',
+          status tinyint(1) unsigned NOT NULL DEFAULT '0',
+          UNIQUE KEY server_name (server_name),
+          PRIMARY KEY (server_id)
+        )ENGINE=MyISAM";
+    
     $maxfilesize = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
     
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
@@ -177,7 +189,8 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('max_speed', '0'),
         ('delfile_mode', '0'),
         ('structure_upload', 'Ym'),
-        ('scorm_handle_mode', '0')
+        ('scorm_handle_mode', '0'),
+        ('fileserver', '0')
     ";
     
     // Comments

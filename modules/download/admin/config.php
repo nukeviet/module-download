@@ -37,6 +37,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['delfile_mode'] = $nv_Request->get_int('delfile_mode', 'post', 0);
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['scorm_handle_mode'] = $nv_Request->get_int('scorm_handle_mode', 'post', 0);
+    $array_config['fileserver'] = $nv_Request->get_int('fileserver', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -89,6 +90,7 @@ $array_config['tags_alias'] = 0;
 $array_config['delfile_mode'] = 0;
 $array_config['structure_upload'] = 'Ym';
 $array_config['scorm_handle_mode'] = 0;
+$array_config['fileserver'] = 0;
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -229,6 +231,17 @@ for ($i = 0; $i <= 1; $i ++) {
     ));
     $xtpl->parse('main.scorm_handle_mode');
 }
+
+for ($i = 0; $i <= 1; $i++) {
+    $xtpl->assign('FILESERVER', array(
+        'key' => $i,
+        'title' => $lang_module['config_fileserver' . $i],
+        'selected' => $i == $array_config['fileserver'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.fileserver');
+}
+$xtpl->assign('FILESERVER_MANAGER', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=fileserver');
+$xtpl->assign('FILESERVER_DISPLAY', !empty($array_config['fileserver']) ? '' : ' style="display:none"');
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

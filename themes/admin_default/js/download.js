@@ -6,6 +6,17 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function nv_change_weight_res(res) {
+	var r_split = res.split("_");
+	if (r_split[0] != 'OK') {
+		alert(nv_is_change_act_confirm[2]);
+		clearTimeout(nv_timer);
+	} else {
+		window.location.href = window.location.href;
+	}
+	return;
+}
+
 function nv_chang_weight(catid) {
 	var nv_timer = nv_settimeout_disable('weight' + catid, 5000);
 	var newpos = $("#weight" + catid).val();
@@ -150,6 +161,46 @@ function nv_filequeue_alldel() {
 		});
 	}
 	return false;
+}
+
+//  ---------------------------------------
+
+function nv_change_fileserver_weight(server_id) {
+	var nv_timer = nv_settimeout_disable('change_weight_' + server_id, 5000);
+	var new_weight = $('#change_weight_' + server_id).val();
+	$.post(
+		script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fileserver&nocache=' + new Date().getTime(), 
+		'changeweight=1&server_id=' + server_id + '&new_weight=' + new_weight, function(res) {
+		nv_change_weight_res(res);
+	});
+	return;
+}
+function nv_del_fileserver(server_id) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$.post(
+			script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fileserver&nocache=' + new Date().getTime(),
+			'delete=1&server_id=' + server_id, function(res) {
+			var r_split = res.split("_");
+			if (r_split[0] == 'OK') {
+				window.location.href = window.location.href;
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+		});
+	}
+	return false;
+}
+function nv_change_fileserver_status(server_id) {
+	var nv_timer = nv_settimeout_disable('change_status' + server_id, 4000);
+	$.post(
+		script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fileserver&nocache=' + new Date().getTime(),
+		'changestatus=1&server_id=' + server_id,
+		function(res) {
+			if (res != 'OK') {
+				alert(nv_is_change_act_confirm[2]);
+				window.location.href = window.location.href;
+			}
+		});
 }
 
 //  ---------------------------------------
@@ -383,6 +434,14 @@ $(document).ready(function() {
             }, 200, function(){
                 uploader.start();
             });
+        }
+    })
+    // Show/Hide fileserver link
+    $('[name="fileserver"]').change(function(){
+        if ($(this).val() == '0') {
+            $('#fileserverLink').hide();
+        } else {
+            $('#fileserverLink').show();
         }
     })
 });

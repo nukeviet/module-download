@@ -109,3 +109,6 @@
     max-height: 200px;
     overflow: auto;
 }
+span.fa-required{
+    display: block;
+}
