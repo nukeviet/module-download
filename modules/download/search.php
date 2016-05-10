@@ -45,9 +45,9 @@ $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLA
 $list_cats = nv_sdown_cats($_mod_table);
 if (! empty($list_cats)) {
     $_where = 'catid IN (' . implode(',', array_keys($list_cats)) . ')
-	AND (' . nv_like_logic('title', $dbkeyword, $logic) . '
-	OR ' . nv_like_logic('description', $dbkeyword, $logic) . '
-	OR ' . nv_like_logic('introtext', $dbkeyword, $logic) . ')';
+    AND (' . nv_like_logic('title', $dbkeyword, $logic) . '
+    OR ' . nv_like_logic('description', $dbkeyword, $logic) . '
+    OR ' . nv_like_logic('introtext', $dbkeyword, $logic) . ')';
 
 
     $db->sqlreset()

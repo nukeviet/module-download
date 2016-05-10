@@ -205,22 +205,22 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                 $array['linkdirect'] = nv_nl2br($array['linkdirect'], '<br />');
 
                 $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_tmp (catid, title, description, introtext, uploadtime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, copyright) VALUES (
-					 ' . $array['catid'] . ',
-					 :title,
-					 :description,
-					 :introtext,
-					 ' . NV_CURRENTTIME . ',
-					 ' . $array['user_id'] . ',
-					 :user_name,
-					 :author_name,
-					 :author_email,
-					 :author_url,
-					 :fileupload,
-					 :linkdirect,
-					 :version,
-					 ' . $array['filesize'] . ',
-					 :fileimage,
-					 :copyright)';
+                     ' . $array['catid'] . ',
+                     :title,
+                     :description,
+                     :introtext,
+                     ' . NV_CURRENTTIME . ',
+                     ' . $array['user_id'] . ',
+                     :user_name,
+                     :author_name,
+                     :author_email,
+                     :author_url,
+                     :fileupload,
+                     :linkdirect,
+                     :version,
+                     ' . $array['filesize'] . ',
+                     :fileimage,
+                     :copyright)';
 
                 $data_insert = array();
                 $data_insert['title'] = $array['title'];

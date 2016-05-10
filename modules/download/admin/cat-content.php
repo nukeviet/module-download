@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 groups_onlineview= :groups_onlineview,
                 groups_download= :groups_download,
                 weight=' . $new_weight . '
-			WHERE id=' . $catid);
+            WHERE id=' . $catid);
 
             $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
             $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
@@ -131,15 +131,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_categories (
                 parentid, title, alias, description, groups_view, groups_onlineview, groups_download, weight, status
             ) VALUES (
-    			 ' . $array['parentid'] . ',
-    			 :title,
-    			 :alias,
-    			 :description,
-    			 :groups_view,
-    			 :groups_onlineview,
-    			 :groups_download,
-    			 ' . $new_weight . ',
-    			 1
+                 ' . $array['parentid'] . ',
+                 :title,
+                 :alias,
+                 :description,
+                 :groups_view,
+                 :groups_onlineview,
+                 :groups_download,
+                 ' . $new_weight . ',
+                 1
             )';
             
             $data_insert = array();

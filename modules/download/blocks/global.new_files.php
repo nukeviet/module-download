@@ -18,16 +18,16 @@ if (! nv_function_exists('nv_bdown_news')) {
         global $db, $site_mods;
         $html = '';
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['title_length'] . '</td>';
-        $html .= '	<td><input type="text" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
+        $html .= '    <td>' . $lang_block['title_length'] . '</td>';
+        $html .= '    <td><input type="text" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
+        $html .= '    <td>' . $lang_block['numrow'] . '</td>';
+        $html .= '    <td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['class_name'] . '</td>';
-        $html .= '	<td><input type="text" name="config_class_name" size="5" value="' . $data_block['class_name'] . '"/></td>';
+        $html .= '    <td>' . $lang_block['class_name'] . '</td>';
+        $html .= '    <td><input type="text" name="config_class_name" size="5" value="' . $data_block['class_name'] . '"/></td>';
         $html .= '</tr>';
         return $html;
     }

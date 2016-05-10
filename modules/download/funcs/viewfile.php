@@ -240,8 +240,8 @@ if (! in_array($row['id'], $dfile)) {
 
 $array_keyword = array();
 $_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1 
-			INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
-			ON a1.did=a2.did WHERE a1.id=' . $row['id']);
+            INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
+            ON a1.did=a2.did WHERE a1.id=' . $row['id']);
 while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
     $meta_property['article:tag'][] = $_row['keyword'];
