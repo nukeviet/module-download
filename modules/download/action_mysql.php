@@ -34,7 +34,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_create_module = $sql_drop_module;
     
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
-         id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+         id int(11) unsigned NOT NULL AUTO_INCREMENT,
          catid smallint(5) unsigned NOT NULL,
          title varchar(250) NOT NULL,
          alias varchar(250) NOT NULL,
@@ -72,7 +72,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files (
          file_id int(11) unsigned NOT NULL AUTO_INCREMENT,
-         download_id mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'ID file download',
+         download_id int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'ID file download',
          server_id smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'ID fileserver hoặc 0 nếu là local',
          file_path varchar(255) NOT NULL DEFAULT '',
          scorm_path varchar(255) NOT NULL DEFAULT '',
@@ -129,7 +129,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         )ENGINE=MyISAM";
     
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report (
-         fid mediumint(8) unsigned NOT NULL DEFAULT '0',
+         fid int(11) unsigned NOT NULL DEFAULT '0',
          post_ip varchar(45) NOT NULL,
          post_time int(11) unsigned NOT NULL DEFAULT '0',
          UNIQUE KEY fid (fid),
@@ -143,7 +143,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         )ENGINE=MyISAM";
     
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
-         did mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+         did int(11) unsigned NOT NULL AUTO_INCREMENT,
          numdownload mediumint(8) NOT NULL DEFAULT '0',
          alias varchar(255) NOT NULL,
          image varchar(255),
@@ -154,7 +154,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (
           id int(11) unsigned NOT NULL DEFAULT '0',
-          did mediumint(9) unsigned NOT NULL DEFAULT '0',
+          did int(11) unsigned NOT NULL DEFAULT '0',
           keyword varchar(65) NOT NULL,
           UNIQUE KEY id_tid (id,did),
           KEY did (did)
