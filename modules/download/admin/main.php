@@ -122,7 +122,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 // List file
 $page_title = $lang_module['download_filemanager'];
 
-$where = '';
+$where = array();
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 $array_search = array(
     'q' => $nv_Request->get_title('q', 'get', ''),
@@ -138,21 +138,22 @@ if (empty($list_cats)) {
 
 if (!empty($array_search['q'])) {
     $base_url .= '&q=' . $array_search['q'];
-    $where .= ' AND title LIKE "%' . $array_search['q'] . '%" OR description LIKE "%' . $array_search['q'] . '%" OR introtext LIKE "%' . $array_search['q'] . '%" OR author_name LIKE "%' . $array_search['q'] . '%" OR author_email LIKE "%' . $array_search['q'] . '%"';
+    $where[] = '(title LIKE "%' . $array_search['q'] . '%" OR description LIKE "%' . $array_search['q'] . '%" OR introtext LIKE "%' . $array_search['q'] . '%" OR author_name LIKE "%' . $array_search['q'] . '%" OR author_email LIKE "%' . $array_search['q'] . '%")';
 }
 if (!empty($array_search['catid'])) {
     $base_url .= '&catid=' . $array_search['catid'];
-    $where .= ' AND catid IN (' . implode(',', GetCatidInParent($array_search['catid'])) . ')';
+    $where[] = 'catid IN (' . implode(',', GetCatidInParent($array_search['catid'])) . ')';
 }
 if ($array_search['active'] >= 0) {
     $base_url .= '&active=' . $array_search['active'];
-    $where .= ' AND status=' . $array_search['active'];
+    $where[] = 'status=' . $array_search['active'];
 }
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE)
-    ->where('1=1' . $where);
+$db->sqlreset()->select('COUNT(*)')->from(NV_MOD_TABLE);
+    
+if (!empty($where)) {
+    $db->where(implode(' AND ', $where));
+}
 
 $num_items = $db->query($db->sql())->fetchColumn();
 
