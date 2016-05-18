@@ -103,6 +103,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
         
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id);    
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id);    
         
         // Xoa thong bao loi
         nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);

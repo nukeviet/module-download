@@ -28,6 +28,18 @@ if (empty($row)) {
     die('Wrong URL');
 }
 
+$row['groups_view'] = '';
+$row['groups_download'] = '';
+
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $row['id'];
+$detail = $db->query($sql)->fetch();
+
+if (!empty($detail)) {
+    $row['groups_view'] = $detail['groups_view'];
+    $row['groups_download'] = $detail['groups_download'];
+}
+unset($detail);
+
 if (!nv_user_in_groups($row['groups_view']) 
     or !nv_user_in_groups($row['groups_download'])
     or !isset($list_cats[$row['catid']]) 

@@ -34,6 +34,28 @@ if (empty($row)) {
     exit();
 }
 
+$row['description'] = '';
+$row['linkdirect'] = '';
+$row['groups_comment'] = '';
+$row['groups_view'] = '';
+$row['groups_onlineview'] = '';
+$row['groups_download'] = '';
+$row['rating_detail'] = '';
+
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $row['id'];
+$detail = $db->query($sql)->fetch();
+
+if (!empty($detail)) {
+    $row['description'] = $detail['description'];
+    $row['linkdirect'] = $detail['linkdirect'];
+    $row['groups_comment'] = $detail['groups_comment'];
+    $row['groups_view'] = $detail['groups_view'];
+    $row['groups_onlineview'] = $detail['groups_onlineview'];
+    $row['groups_download'] = $detail['groups_download'];
+    $row['rating_detail'] = $detail['rating_detail'];
+}
+unset($detail);
+
 if (! nv_user_in_groups($row['groups_view'])) {
     $redirect = '<meta http-equiv="Refresh" content="4;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
     nv_info_die($lang_module['error_not_permission_title'], $lang_module['error_not_permission_title'], $lang_module['error_not_permission_content'] . $redirect);

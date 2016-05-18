@@ -17,6 +17,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data;
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files";
+    $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report";
@@ -38,7 +39,6 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          catid smallint(5) unsigned NOT NULL,
          title varchar(250) NOT NULL,
          alias varchar(250) NOT NULL,
-         description mediumtext NOT NULL,
          introtext text NOT NULL,
          uploadtime int(11) unsigned NOT NULL,
          updatetime int(11) unsigned NOT NULL DEFAULT '0',
@@ -47,7 +47,6 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          author_name varchar(100) NOT NULL,
          author_email varchar(60) NOT NULL,
          author_url varchar(255) NOT NULL,
-         linkdirect text NOT NULL,
          version varchar(20) NOT NULL,
          filesize int(11) NOT NULL DEFAULT '0',
          fileimage varchar(255) NOT NULL,
@@ -57,12 +56,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          num_linkdirect smallint(4) unsigned NOT NULL DEFAULT '0',
          view_hits int(11) NOT NULL DEFAULT '0',
          download_hits int(11) NOT NULL DEFAULT '0',
-         groups_comment varchar(255) NOT NULL,
-         groups_view varchar(255) NOT NULL,
-         groups_onlineview varchar(255) NOT NULL,
-         groups_download varchar(255) NOT NULL,
          comment_hits int(11) NOT NULL DEFAULT '0',
-         rating_detail varchar(255) NOT NULL,
          PRIMARY KEY (id),
          UNIQUE KEY alias (alias),
          KEY catid (catid),
@@ -81,6 +75,18 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          PRIMARY KEY (file_id),
          KEY download_id (download_id),
          KEY server_id (server_id)
+        )ENGINE=MyISAM";
+    
+    $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (
+         id int(11) unsigned NOT NULL,
+         description mediumtext NOT NULL,
+         linkdirect text NOT NULL,
+         groups_comment varchar(255) NOT NULL,
+         groups_view varchar(255) NOT NULL,
+         groups_onlineview varchar(255) NOT NULL,
+         groups_download varchar(255) NOT NULL,
+         rating_detail varchar(255) NOT NULL,
+         PRIMARY KEY (id)
         )ENGINE=MyISAM";
     
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (

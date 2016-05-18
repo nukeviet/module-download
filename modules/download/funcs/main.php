@@ -38,9 +38,11 @@ if ($nv_Request->isset_request('rating', 'post')) {
         $point = ( int )$m[2];
 
         if ($id and ($point > 0 and $point < 6)) {
-            $sql = 'SELECT id, rating_detail FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
-            list($id, $rating_detail) = $db->query($sql)->fetch(3);
+            $sql = 'SELECT id FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
+            list($id) = $db->query($sql)->fetch(3);
             if ($id) {
+                $rating_detail = $db->query('SELECT rating_detail FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id)->fetchColumn();
+                
                 $total = $click = 0;
                 if (! empty($rating_detail)) {
                     $rating_detail = explode('|', $rating_detail);
@@ -60,7 +62,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
                     ++$click;
                     $rating_detail = $total . '|' . $click ;
 
-                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET rating_detail= :rating_detail WHERE id=' . $id);
+                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_detail SET rating_detail= :rating_detail WHERE id=' . $id);
                     $stmt->bindParam(':rating_detail', $rating_detail, PDO::PARAM_STR);
                     $stmt->execute();
                 }

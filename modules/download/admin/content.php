@@ -140,6 +140,25 @@ if ($id) {
         exit();
     }
     
+    $row['description'] = '';
+    $row['linkdirect'] = '';
+    $row['groups_comment'] = '';
+    $row['groups_view'] = '';
+    $row['groups_onlineview'] = '';
+    $row['groups_download'] = '';
+    
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id;
+    $detail = $db->query($sql)->fetch();
+    
+    if (!empty($detail)) {
+        $row['description'] = $detail['description'];
+        $row['linkdirect'] = $detail['linkdirect'];
+        $row['groups_comment'] = $detail['groups_comment'];
+        $row['groups_view'] = $detail['groups_view'];
+        $row['groups_onlineview'] = $detail['groups_onlineview'];
+        $row['groups_download'] = $detail['groups_download'];
+    }
+    
     $report = $nv_Request->isset_request('report', 'get');
     // Cap nhat trang thai thong bao
     if ($report) {
@@ -654,14 +673,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
             
             if (empty($id)) {
                 $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-                    catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, linkdirect, 
-                    version, filesize, fileimage, status, copyright, num_fileupload, num_linkdirect, view_hits, download_hits, groups_comment, groups_view, 
-                    groups_onlineview, groups_download, comment_hits, rating_detail
+                    catid, title, alias, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, 
+                    version, filesize, fileimage, status, copyright, num_fileupload, num_linkdirect, view_hits, download_hits, comment_hits 
                 ) VALUES (
                      " . $array['catid'] . ",
                      :title,
                      :alias ,
-                     :description ,
                      :introtext ,
                      " . NV_CURRENTTIME . ",
                      " . NV_CURRENTTIME . ",
@@ -670,7 +687,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
                      :author_name ,
                      :author_email ,
                      :author_url ,
-                     :linkdirect ,
                      :version ,
                      " . $array['filesize'] . ",
                      :fileimage ,
@@ -679,32 +695,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
                      :num_fileupload ,
                      :num_linkdirect ,
                      0, 0,
-                     :groups_comment ,
-                     :groups_view ,
-                     :groups_onlineview ,
-                     :groups_download ,
-                     0, ''
+                     0
                 )";
         
                 $data_insert = array();
                 $data_insert['title'] = $array['title'];
                 $data_insert['alias'] = $array['alias'];
-                $data_insert['description'] = $array['description'];
                 $data_insert['introtext'] = $array['introtext'];
                 $data_insert['username'] = $admin_info['username'];
                 $data_insert['author_name'] = $array['author_name'];
                 $data_insert['author_email'] = $array['author_email'];
                 $data_insert['author_url'] = $array['author_url'];
-                $data_insert['linkdirect'] = $array['linkdirect'];
                 $data_insert['version'] = $array['version'];
                 $data_insert['fileimage'] = $array['fileimage'];
                 $data_insert['copyright'] = $array['copyright'];
                 $data_insert['num_fileupload'] = $array['num_fileupload'];
                 $data_insert['num_linkdirect'] = $array['num_linkdirect'];
-                $data_insert['groups_comment'] = $array['groups_comment'];
-                $data_insert['groups_view'] = $array['groups_view'];
-                $data_insert['groups_onlineview'] = $array['groups_onlineview'];
-                $data_insert['groups_download'] = $array['groups_download'];
         
                 $array['id'] = $db->insert_id($sql, 'id', $data_insert);
         
@@ -718,43 +724,30 @@ if ($nv_Request->isset_request('submit', 'post')) {
                      catid=" . $array['catid'] . ",
                      title= :title,
                      alias= :alias,
-                     description= :description,
                      introtext= :introtext,
                      updatetime=" . NV_CURRENTTIME . ",
                      author_name= :author_name,
                      author_email= :author_email,
                      author_url= :author_url,
-                     linkdirect= :linkdirect,
                      version= :version,
                      filesize=" . $array['filesize'] . ",
                      fileimage= :fileimage,
                      copyright= :copyright,
                      num_fileupload= :num_fileupload,
-                     num_linkdirect= :num_linkdirect,
-                     groups_comment= :groups_comment,
-                     groups_view= :groups_view,
-                     groups_onlineview= :groups_onlineview,
-                     groups_download= :groups_download
-                     WHERE id=" . $id
-                );
+                     num_linkdirect= :num_linkdirect 
+                WHERE id=" . $id);
     
                 $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
                 $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
-                $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR, strlen($array['description']));
                 $stmt->bindParam(':introtext', $array['introtext'], PDO::PARAM_STR, strlen($array['introtext']));
                 $stmt->bindParam(':author_name', $array['author_name'], PDO::PARAM_STR);
                 $stmt->bindParam(':author_email', $array['author_email'], PDO::PARAM_STR);
                 $stmt->bindParam(':author_url', $array['author_url'], PDO::PARAM_STR);
-                $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
                 $stmt->bindParam(':version', $array['version'], PDO::PARAM_STR);
                 $stmt->bindParam(':fileimage', $array['fileimage'], PDO::PARAM_STR);
                 $stmt->bindParam(':copyright', $array['copyright'], PDO::PARAM_STR);
                 $stmt->bindParam(':num_fileupload', $array['num_fileupload'], PDO::PARAM_INT);
                 $stmt->bindParam(':num_linkdirect', $array['num_linkdirect'], PDO::PARAM_INT);
-                $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
-                $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
-                $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
-                $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
     
                 if (! $stmt->execute()) {
                     $error = $lang_module['file_error1'];
@@ -830,6 +823,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
                 
                 if ($id) {
+                    // Cập nhật bảng detail
+                    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_detail SET 
+                        description=:description, 
+                        linkdirect=:linkdirect, 
+                        groups_comment=:groups_comment, 
+                        groups_view=:groups_view, 
+                        groups_onlineview=:groups_onlineview, 
+                        groups_download=:groups_download  
+                    WHERE id=" . $id);
+                    
+                    $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR, strlen($array['description']));
+                    $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
+                    $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
+                    $stmt->execute();
+                    
                     // Xóa file cũ
                     if (!empty($array['fileupload_del'])) {
                         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id . ' AND file_id IN(' . implode(',', $array['fileupload_del']) . ')');
@@ -862,6 +873,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     
                     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid']);
                 } else {
+                    // Thêm bảng detail
+                    $stmt = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_detail (
+                        id, description, linkdirect, groups_comment, groups_view, groups_onlineview, groups_download, rating_detail
+                    ) VALUES( 
+                        " . $array['id'] . ", :description, :linkdirect, :groups_comment, :groups_view, :groups_onlineview, :groups_download, ''
+                    )");
+                    
+                    $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR, strlen($array['description']));
+                    $stmt->bindParam(':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen($array['linkdirect']));
+                    $stmt->bindParam(':groups_comment', $array['groups_comment'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
+                    $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
+                    $stmt->execute();
+                    
+                    // Thêm bảng file
                     $weight = 1;
                     foreach ($array['fileupload_new'] as $fileupload) {
                         $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_files (
