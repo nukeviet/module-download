@@ -122,7 +122,7 @@ function theme_viewcat_list($array_files, $page = '', $cat_data = array(), $subc
 
     if ((defined('NV_IS_ADMIN') or $download_config['is_addfile_allow']) and $upload) {
         if (defined('NV_IS_ADMIN')) {
-            $cat_data['uploadurl'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add&amp;catid=' . $cat_data['id'];
+            $cat_data['uploadurl'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $cat_data['id'];
         } elseif (!empty($cat_data)) {
             $cat_data['uploadurl'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module_name]['alias']['upload'] . '/' . $cat_data['id'];
         } else {
