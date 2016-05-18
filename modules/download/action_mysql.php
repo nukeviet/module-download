@@ -55,7 +55,6 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          copyright varchar(255) NOT NULL,
          num_fileupload smallint(4) unsigned NOT NULL DEFAULT '0',
          num_linkdirect smallint(4) unsigned NOT NULL DEFAULT '0',
-         weight smallint(4) unsigned NOT NULL DEFAULT '0',
          view_hits int(11) NOT NULL DEFAULT '0',
          download_hits int(11) NOT NULL DEFAULT '0',
          groups_comment varchar(255) NOT NULL,
