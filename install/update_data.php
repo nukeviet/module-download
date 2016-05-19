@@ -455,6 +455,9 @@ function nv_up_finish()
         'message' => ''
     );
 
+    @nv_deletefile(NV_ROOTDIR . '/modules/download/admin/add.php');
+    @nv_deletefile(NV_ROOTDIR . '/themes/admin_default/modules/download/filequeue_edit.tpl');
+
     try {
         $num = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'")->fetchColumn();
         $version = "4.0.29 1463590800";
