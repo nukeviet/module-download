@@ -242,7 +242,7 @@ function nv_up_copydata()
     $return['next'] = 0;
     
     $table_prefix = $array_modtable_update[$request['umodkey']];
-    $limit_rows = 1;
+    $limit_rows = 5000;
     
     $db->sqlreset()->select("id, description, fileupload, linkdirect, groups_comment, groups_view, groups_onlineview, groups_download, rating_detail")->from($table_prefix)->order("id ASC")->limit($limit_rows)->offset($request['uoffset']);
     $sql = $db->sql();
