@@ -46,7 +46,6 @@ $list_cats = nv_sdown_cats($_mod_table);
 if (! empty($list_cats)) {
     $_where = 'catid IN (' . implode(',', array_keys($list_cats)) . ')
     AND (' . nv_like_logic('title', $dbkeyword, $logic) . '
-    OR ' . nv_like_logic('description', $dbkeyword, $logic) . '
     OR ' . nv_like_logic('introtext', $dbkeyword, $logic) . ')';
 
 
@@ -60,17 +59,15 @@ if (! empty($list_cats)) {
     if ($num_items) {
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-        $db->select('alias,title,description, introtext, catid')
+        $db->select('alias, title, introtext, catid')
             ->limit($limit)->offset($page);
 
         $tmp_re = $db->query($db->sql());
-        while (list($alias, $tilterow, $content, $introtext, $catid) = $tmp_re->fetch(3)) {
-            $content = $content . ' ' . $introtext;
-
+        while (list($alias, $tilterow, $introtext, $catid) = $tmp_re->fetch(3)) {
             $result_array[] = array(
                 'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                 'title' => BoldKeywordInStr($tilterow, $key, $logic),
-                'content' => BoldKeywordInStr($content, $key, $logic)
+                'content' => BoldKeywordInStr($introtext, $key, $logic)
             );
         }
     }
