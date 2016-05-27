@@ -358,7 +358,6 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/download.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
