@@ -20,24 +20,14 @@ if ($nv_Request->isset_request('linkcheck', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT id, fileupload, linkdirect FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
-    list($_id, $fileupload, $linkdirect) = $db->query($query)->fetch(3);
+    $sql = 'SELECT id, linkdirect FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id;
+    list($_id, $linkdirect) = $db->query($sql)->fetch(3);
 
     if (empty($_id)) {
         die('BAD_' . $id);
     }
 
     $links = array();
-
-    if (! empty($fileupload)) {
-        $fileupload = explode('[NV]', $fileupload);
-        $fileupload = array_map('trim', $fileupload);
-        foreach ($fileupload as $file) {
-            if (! empty($file)) {
-                $links[] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
-            }
-        }
-    }
 
     if (! empty($linkdirect)) {
         $linkdirect = explode('[NV]', $linkdirect);
@@ -52,6 +42,17 @@ if ($nv_Request->isset_request('linkcheck', 'post')) {
                         $links[] = $l;
                     }
                 }
+            }
+        }
+    }
+
+    $sql = 'SELECT file_path FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id;
+    $fileupload = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    
+    if (! empty($fileupload)) {
+        foreach ($fileupload as $file) {
+            if (! empty($file)) {
+                $links[] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
             }
         }
     }
