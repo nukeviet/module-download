@@ -1096,6 +1096,12 @@ if (!empty($list_cats)) {
     }
 }
 
+$array['keywords'] = array_filter(array_map('trim', explode(',', $array['keywords'])));
+foreach ($array['keywords'] as $keywords){
+    $xtpl->assign('KEYWORDS', $keywords);
+    $xtpl->parse('main.keywords');
+}
+
 $a = 0;
 foreach ($array['fileupload'] as $file) {
     $xtpl->assign('FILEUPLOAD', array( 'value' => $file, 'key' => $a ));
