@@ -21,6 +21,14 @@
     <!-- END: scorms -->
     
     <h2 class="m-bottom">{ROW.title}</h2>
+    
+    <!-- BEGIN: addthis -->
+    <div class="m-bottom clearfix">
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={ADDTHIS_PUBID}"></script>
+        <div class="addthis_sharing_toolbox"></div>
+    </div>
+    <!-- END: addthis -->
+    
     <!-- BEGIN: introtext -->
     <div class="panel panel-default">
         <div class="panel-body">

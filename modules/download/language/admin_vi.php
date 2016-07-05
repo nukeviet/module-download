@@ -61,6 +61,10 @@ $lang_module['config_structure_upload'] = 'Thư mục tải file lên';
 $lang_module['config_fileserver'] = 'Server upload file';
 $lang_module['config_fileserver0'] = 'Local server';
 $lang_module['config_fileserver1'] = 'File server';
+$lang_module['config_share_shareport'] = 'Công cụ chia sẻ mạng xã hội';
+$lang_module['config_share_shareport_none'] = 'Không sử dụng';
+$lang_module['config_share_shareport_addthis'] = 'AddThis';
+$lang_module['addthis_pubid'] = 'AddThis PubID';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';

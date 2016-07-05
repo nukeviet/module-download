@@ -17,6 +17,8 @@ define('NV_MOD_TABLE', (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_categories ORDER BY sort ASC';
 $list_cats = $nv_Cache->db($sql, 'id', $module_name);
 
+$global_array_shareport = array('none', 'addthis');
+
 /**
  * GetCatidInParent()
  *

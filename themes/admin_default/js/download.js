@@ -444,6 +444,13 @@ $(document).ready(function() {
             $('#fileserverLink').show();
         }
     })
+    
+    // Control share port
+    $('[name="shareport"]').change(function() {
+        var shareport = $(this).val()
+        $('[data-toggle="shareport"]').hide()
+        $('#shareport-' + shareport).show()
+    })
 });
 
 function nv_search_tag(did) {

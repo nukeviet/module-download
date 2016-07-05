@@ -40,6 +40,22 @@
                         <td><input type="number" name="per_page_child" value="{DATA.per_page_child}" class="form-control" /></td>
                     </tr>
                     <tr>
+                        <td>{LANG.config_share_shareport}</td>
+                        <td>
+                            <select class="form-control" name="shareport">
+                                <!-- BEGIN: shareport -->
+                                <option value="{SHAREPORT.key}"{SHAREPORT.selected}>{SHAREPORT.title}</option>
+                                <!-- END: shareport -->
+                            </select>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr id="shareport-addthis" data-toggle="shareport"{ADDTHIS_CSS}>
+                        <td>{LANG.addthis_pubid}</td>
+                        <td><input class="form-control" type="text" name="addthis_pubid" value="{DATA.addthis_pubid}" /></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
                         <td>{LANG.config_is_addfile}</td>
                         <td>
                             <label><input name="is_addfile" value="1" id="is_addfile" type="checkbox"{DATA.is_addfile} />{LANG.config_is_addfile_note}</label>

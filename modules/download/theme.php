@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 0:51
  */
 
-if (! defined('NV_IS_MOD_DOWNLOAD')) {
+if (!defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
@@ -42,7 +42,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
             }
             $xtpl->assign('catbox', $cat);
 
-            if (! empty($cat['subcats'])) {
+            if (!empty($cat['subcats'])) {
                 $i = 0;
                 foreach ($list_cats as $subcat) {
                     if ($subcat['parentid'] == $cat['catid']) {
@@ -67,7 +67,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
             $thefirstcat = current($items);
 
             $xtpl->assign('itemcat', $thefirstcat);
-            if (! empty($thefirstcat['imagesrc'])) {
+            if (!empty($thefirstcat['imagesrc'])) {
                 $xtpl->parse('main.catbox.itemcat.image');
             }
 
@@ -94,7 +94,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
     }
 
     // Danh sach file trong chu de
-    if (! empty($array_files)) {
+    if (!empty($array_files)) {
         if (!empty($cat_data)) {
             $xtpl->assign('CAT_TITLE', sprintf($lang_module['viewcat_listfile'], $cat_data['title']));
         }
@@ -130,7 +130,7 @@ function theme_viewcat_list($array_files, $page = '', $cat_data = array(), $subc
         }
     }
 
-    $xtpl = new XTemplate($viewcat. '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/');
+    $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CAT', $cat_data);
@@ -187,19 +187,24 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
         $xtpl->assign('UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload');
         $xtpl->parse('main.is_addfile_allow');
     }
+    
+    if ($download_config['shareport'] == 'addthis') {
+        $xtpl->assign('ADDTHIS_PUBID', $download_config['addthis_pubid']);
+        $xtpl->parse('main.addthis');
+    }
 
-    if (! empty($row['description'])) {
-        if (isset($row['fileimage']['src']) and ! empty($row['fileimage']['src'])) {
+    if (!empty($row['description'])) {
+        if (isset($row['fileimage']['src']) and !empty($row['fileimage']['src'])) {
             $xtpl->assign('FILEIMAGE', $row['fileimage']);
             $xtpl->parse('main.introtext.is_image');
         }
         $xtpl->parse('main.introtext');
     }
 
-    if (! empty($row['download_info'])) {
+    if (!empty($row['download_info'])) {
         $xtpl->parse('main.download_info');
     }
-    
+
     if ($row['scorm_num'] == 1) {
         $xtpl->assign('SCORM_LINK', $row['scorm'][0]);
         $xtpl->parse('main.scorm');
@@ -207,22 +212,22 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
         $i = 1;
         foreach ($row['scorm'] as $scorm) {
             $xtpl->assign('SCORM_LINK', $scorm);
-            $xtpl->assign('SCORM_NUM', $i ++);
+            $xtpl->assign('SCORM_NUM', $i++);
             $xtpl->parse('main.scorms.loop');
         }
-        
+
         $xtpl->parse('main.scorms');
     }
-    
+
     if ($row['is_download_allow'] and (!empty($row['fileupload']) or !empty($row['linkdirect']))) {
         $xtpl->parse('main.report');
-        
-        if (! empty($row['filepdf']) and $row['is_onlineview_allow']) {
+
+        if (!empty($row['filepdf']) and $row['is_onlineview_allow']) {
             $xtpl->assign('FILEPDF', $row['filepdf']);
             $xtpl->parse('main.filepdf');
         }
 
-        if (! empty($row['fileupload'])) {
+        if (!empty($row['fileupload'])) {
             $xtpl->assign('SITE_NAME', $global_config['site_name']);
 
             $a = 0;
@@ -236,7 +241,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
             $xtpl->parse('main.download_allow.fileupload');
         }
 
-        if (! empty($row['linkdirect'])) {
+        if (!empty($row['linkdirect'])) {
             foreach ($row['linkdirect'] as $host => $linkdirect) {
                 $xtpl->assign('HOST', $host);
 
@@ -258,7 +263,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
         $xtpl->parse('main.disablerating');
     }
 
-    if (! empty($array_keyword)) {
+    if (!empty($array_keyword)) {
         $t = sizeof($array_keyword) - 1;
         foreach ($array_keyword as $i => $value) {
             $xtpl->assign('KEYWORD', $value['keyword']);
@@ -308,7 +313,7 @@ function theme_upload($array, $list_cats, $download_config, $error)
     $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
 
-    if (! empty($error)) {
+    if (!empty($error)) {
         $xtpl->assign('ERROR', $error);
         $xtpl->parse('main.is_error');
     }
@@ -366,10 +371,16 @@ function theme_search($array, $generate_page, $is_search)
     return $xtpl->text('main');
 }
 
+/**
+ * theme_viewpdf()
+ * 
+ * @param mixed $filename
+ * @return
+ */
 function theme_viewpdf($filename)
 {
     global $module_name, $lang_module;
-	$xtpl = new XTemplate ( 'viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js/' );
+    $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
@@ -426,9 +437,9 @@ function nv_download_theme_alert($message_title, $message_content, $type = 'info
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
-    include(NV_ROOTDIR . "/includes/header.php");
+    include (NV_ROOTDIR . "/includes/header.php");
     echo nv_site_theme($contents);
-    include(NV_ROOTDIR . "/includes/footer.php");
+    include (NV_ROOTDIR . "/includes/footer.php");
     exit();
 }
 
@@ -446,7 +457,7 @@ function view_items_tag($array_item, $generate_page)
     $xtpl->assign('LANG', $lang_module);
 
     foreach ($array_item as $array_item_i) {
-        $array_item_i['uploadtime']=date('H:i d/m/Y', $array_item_i['uploadtime']);
+        $array_item_i['uploadtime'] = date('H:i d/m/Y', $array_item_i['uploadtime']);
         $xtpl->assign('ITEM', $array_item_i);
 
         if (!empty($array_item_i['fileimage'])) {
@@ -456,7 +467,7 @@ function view_items_tag($array_item, $generate_page)
         $xtpl->parse('main.loop');
     }
 
-    if (! empty($generate_page)) {
+    if (!empty($generate_page)) {
         $xtpl->assign('GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.generate_page');
     }

@@ -38,6 +38,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['scorm_handle_mode'] = $nv_Request->get_int('scorm_handle_mode', 'post', 0);
     $array_config['fileserver'] = $nv_Request->get_int('fileserver', 'post', 0);
+    $array_config['shareport'] = $nv_Request->get_title('shareport', 'post', '');
+    $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -52,6 +54,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $array_config['upload_filetype'] = (! empty($array_config['upload_filetype'])) ? implode(',', $array_config['upload_filetype']) : '';
+    
+    if (!in_array($array_config['shareport'], $global_array_shareport)) {
+        $array_config['shareport'] = $global_array_shareport[0];
+    } elseif ($array_config['shareport'] == 'addthis' and empty($array_config['addthis_pubid'])) {
+        $array_config['shareport'] = $global_array_shareport[0];
+    }
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
@@ -91,6 +99,8 @@ $array_config['delfile_mode'] = 0;
 $array_config['structure_upload'] = 'Ym';
 $array_config['scorm_handle_mode'] = 0;
 $array_config['fileserver'] = 0;
+$array_config['shareport'] = 0;
+$array_config['addthis_pubid'] = 0;
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -242,6 +252,20 @@ for ($i = 0; $i <= 1; $i++) {
 }
 $xtpl->assign('FILESERVER_MANAGER', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=fileserver');
 $xtpl->assign('FILESERVER_DISPLAY', !empty($array_config['fileserver']) ? '' : ' style="display:none"');
+
+// Cổng chia sẻ
+foreach ($global_array_shareport as $shareport) {
+    $shareport = array(
+        'key' => $shareport,
+        'title' => $lang_module['config_share_shareport_' . $shareport],
+        'selected' => $shareport == $array_config['shareport'] ? ' selected="selected"' : ''
+    );
+    
+    $xtpl->assign('SHAREPORT', $shareport);
+    $xtpl->parse('main.shareport');
+}
+
+$xtpl->assign('ADDTHIS_CSS', $array_config['shareport'] == 'addthis' ? '' : ' style="display:none;"');
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

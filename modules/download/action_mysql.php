@@ -195,7 +195,9 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('delfile_mode', '0'),
         ('structure_upload', 'Ym'),
         ('scorm_handle_mode', '0'),
-        ('fileserver', '0')
+        ('fileserver', '0'),
+        ('shareport', 'none'),
+        ('addthis_pubid', '')
     ";
     
     // Comments
