@@ -14,11 +14,6 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
 
 global $db, $module_name, $module_info, $module_file, $lang_module, $list_cats, $global_config;
 
-$path = NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file;
-if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/block_topdownload.tpl')) {
-    $path = NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file;
-}
-
 $db->sqlreset()
     ->select('catid, title, alias, download_hits')
     ->from(NV_MOD_TABLE)
@@ -27,7 +22,7 @@ $db->sqlreset()
     ->limit(5);
 $result = $db->query($db->sql());
 
-$xtpl = new XTemplate('block_topdownload.tpl', $path);
+$xtpl = new XTemplate('block_topdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 
 $i = 1;
