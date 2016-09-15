@@ -156,6 +156,16 @@
                             <span id="fileserverLink"{FILESERVER_DISPLAY}>&nbsp; (<a href="{FILESERVER_MANAGER}">{LANG.fileserver_manager}</a>)</span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>{LANG.config_pdf_handler}</td>
+                        <td>
+                            <select class="form-control pull-left w500" name="pdf_handler">
+                                <!-- BEGIN: pdf_handler -->
+                                <option value="{PDF_HANDLER.key}" {PDF_HANDLER.selected}>{PDF_HANDLER.title}</option>
+                                <!-- END: pdf_handler -->
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

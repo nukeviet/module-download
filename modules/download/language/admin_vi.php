@@ -65,6 +65,9 @@ $lang_module['config_share_shareport'] = 'Công cụ chia sẻ mạng xã hội'
 $lang_module['config_share_shareport_none'] = 'Không sử dụng';
 $lang_module['config_share_shareport_addthis'] = 'AddThis';
 $lang_module['addthis_pubid'] = 'AddThis PubID';
+$lang_module['config_pdf_handler'] = 'Kiểu xử lý việc xem PDF trực tuyến';
+$lang_module['config_pdf_handler_filetmp'] = 'Copy ra file tạm (Có thể đầy bộ nhớ nếu tiến trình xóa file tạm không chạy)';
+$lang_module['config_pdf_handler_phpattachment'] = 'Php Attachment (Khuyến nghị sử dụng, nếu thất bại hãy thử các cách khác)';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';

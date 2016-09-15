@@ -36,13 +36,15 @@ See https://github.com/adobe-type-tools/cmap-resources
 		<script src="{PDF_JS_DIR}pdf.js"></script>
 		<script src="{PDF_JS_DIR}debugger.js"></script>
 		<script src="{PDF_JS_DIR}viewer.js"></script>
-		<script type="text/javascript">
-			var DEFAULT_URL = '{PDF_URL}';
-			PDFJS.imageResourcesPath = '{PDF_JS_DIR}images/';
-			PDFJS.workerSrc = '{PDF_JS_DIR}pdf.worker.js';
-			PDFJS.cMapUrl = '{PDF_JS_DIR}cmaps/';
-			PDFJS.cMapPacked = true;
-	  </script>
+        <script type="text/javascript">
+        var DEFAULT_URL = '{PDF_URL}';
+        function configure(PDFJS) {
+            PDFJS.imageResourcesPath = '{PDF_JS_DIR}images/';
+            PDFJS.workerSrc = '{PDF_JS_DIR}pdf.worker.js';
+            PDFJS.cMapUrl = '{PDF_JS_DIR}cmaps/';
+            PDFJS.cMapPacked = true;
+        }
+        </script>
 	</head>
   <body tabindex="1" class="loadingInProgress">
     <div id="outerContainer">

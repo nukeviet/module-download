@@ -197,7 +197,8 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('scorm_handle_mode', '0'),
         ('fileserver', '0'),
         ('shareport', 'none'),
-        ('addthis_pubid', '')
+        ('addthis_pubid', ''),
+        ('pdf_handler', 'phpattachment')
     ";
     
     // Comments

@@ -37,6 +37,7 @@ $detail = $db->query($sql)->fetch();
 if (!empty($detail)) {
     $row['groups_view'] = $detail['groups_view'];
     $row['groups_download'] = $detail['groups_download'];
+    $row['groups_onlineview'] = $detail['groups_onlineview'];
 }
 unset($detail);
 
@@ -92,7 +93,26 @@ if ($filepdf == 1) {
         die('Wrong URL');
     }
     
-    $html = theme_viewpdf($filename);
+    $download_config = nv_mod_down_config();
+    $file_url = '';
+    $file_src = $session_files['fileupload'][$filename]['src'];
+    
+    if ($download_config['pdf_handler'] == 'filetmp') {
+        $file_src_new = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . md5($file_src) . '.' . nv_getextension($file_src);
+        if (file_exists($file_src_new) or nv_copyfile($file_src, $file_src_new)) {
+            $file_url = NV_MY_DOMAIN . NV_BASE_SITEURL . substr($file_src_new, strlen(NV_ROOTDIR . '/'));
+        }
+    } elseif ($download_config['pdf_handler'] == 'base64') {
+        $file_url = 'data:application/pdf;base64,' . base64_encode(file_get_contents($file_src));
+    } else {
+        $file_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=down&filepdf=2&filename=' . $filename;
+    }
+
+    if (empty($file_url)) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    }    
+    
+    $html = theme_viewpdf($file_url);
     die($html);
 } elseif (empty($filepdf)) {
     $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['fileupload'][$filename]['id']);

@@ -19,6 +19,7 @@ $groups_list = nv_groups_list();
 $readme_file = NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt';
 
 $array_config = array();
+$array_pdf_handler = array('filetmp', 'phpattachment');
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', 'none');
@@ -40,6 +41,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['fileserver'] = $nv_Request->get_int('fileserver', 'post', 0);
     $array_config['shareport'] = $nv_Request->get_title('shareport', 'post', '');
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
+    $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -60,7 +62,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     } elseif ($array_config['shareport'] == 'addthis' and empty($array_config['addthis_pubid'])) {
         $array_config['shareport'] = $global_array_shareport[0];
     }
-
+    
+    if (!in_array($array_config['pdf_handler'], $array_pdf_handler)) {
+        $array_config['pdf_handler'] = $array_pdf_handler[0];
+    }
+    
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
         if ($config_name != 'readme') {
@@ -101,6 +107,7 @@ $array_config['scorm_handle_mode'] = 0;
 $array_config['fileserver'] = 0;
 $array_config['shareport'] = 0;
 $array_config['addthis_pubid'] = 0;
+$array_config['pdf_handler'] = $array_pdf_handler[0];
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -266,6 +273,17 @@ foreach ($global_array_shareport as $shareport) {
 }
 
 $xtpl->assign('ADDTHIS_CSS', $array_config['shareport'] == 'addthis' ? '' : ' style="display:none;"');
+
+foreach ($array_pdf_handler as $_pdf_handler) {
+    $pdf_handler = array(
+        'key' => $_pdf_handler,
+        'title' => $lang_module['config_pdf_handler_' . $_pdf_handler],
+        'selected' => $_pdf_handler == $array_config['pdf_handler'] ? ' selected="selected"' : ''
+    );
+    
+    $xtpl->assign('PDF_HANDLER', $pdf_handler);
+    $xtpl->parse('main.pdf_handler');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
