@@ -295,7 +295,7 @@ if ($id) {
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
     $array['filesize'] = 0;
     $array['is_del_report'] = 1;
-    $array['keywords_old'] = '';
+    $array['keywords'] = $array['keywords_old'] = '';
     $array_keywords_old = array();
     $report = false;
 }
