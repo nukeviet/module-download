@@ -52,7 +52,7 @@
                 </div>
             </div>
             <!-- END: is_image -->
-            <div class="introtext m-bottom">
+            <div class="introtext m-bottom" id="download-bodyhtml">
                 {ROW.description}
             </div>
         </div>
