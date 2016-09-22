@@ -142,7 +142,7 @@ function fix_download_image(){
 	}
 }
 
-$(window).load(function(){
+$(window).on('load', function() {
 	fix_download_image();
 });
 
