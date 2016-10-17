@@ -40,6 +40,10 @@
                         <td><input type="number" name="per_page_child" value="{DATA.per_page_child}" class="form-control" /></td>
                     </tr>
                     <tr>
+                        <td>{LANG.config_list_title_length}</td>
+                        <td><input type="number" name="list_title_length" value="{DATA.list_title_length}" class="form-control" /></td>
+                    </tr>
+                    <tr>
                         <td>{LANG.config_share_shareport}</td>
                         <td>
                             <select class="form-control" name="shareport">

@@ -42,6 +42,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['shareport'] = $nv_Request->get_title('shareport', 'post', '');
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
+    $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -67,12 +68,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config['pdf_handler'] = $array_pdf_handler[0];
     }
     
-    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
         if ($config_name != 'readme') {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-            $sth->execute();
+            try {
+                $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_config (config_value, config_name) VALUES (:config_value, :config_name)');
+                $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+                $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+                $sth->execute();
+            } catch (Exception $e) {
+                $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET config_value = :config_value WHERE config_name = :config_name');
+                $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+                $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+                $sth->execute();
+            }
         }
     }
 
@@ -108,6 +116,7 @@ $array_config['fileserver'] = 0;
 $array_config['shareport'] = 0;
 $array_config['addthis_pubid'] = 0;
 $array_config['pdf_handler'] = $array_pdf_handler[0];
+$array_config['list_title_length'] = 0;
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
