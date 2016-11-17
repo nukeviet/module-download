@@ -49,12 +49,13 @@ function nv_del_cat($catid)
     $sql = 'SELECT parentid, title FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid;
     list($p, $title) = $db->query($sql)->fetch(3);
 
-    $sql = 'SELECT id, fileupload, fileimage FROM ' . NV_MOD_TABLE . ' WHERE catid=' . $catid;
+    $sql = 'SELECT id, fileimage FROM ' . NV_MOD_TABLE . ' WHERE catid=' . $catid;
     $result = $db->query($sql);
 
     $ids = array();
-    while (list($id, $fileupload, $fileimage) = $result->fetch(3)) {
+    while (list($id, $fileimage) = $result->fetch(3)) {
         $ids[] = $id;
+        nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
     }
 
     if (! empty($ids)) {
@@ -63,6 +64,23 @@ function nv_del_cat($catid)
         $db->query($sql);
 
         $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_report WHERE fid IN (' . $ids . ')';
+        $db->query($sql);
+
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_detail WHERE id IN (' . $ids . ')';
+        $db->query($sql);
+
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id IN (' . $ids . ')';
+        $db->query($sql);
+
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tags_id WHERE id IN (' . $ids . ')';
+        $result = $db->query($sql);
+        
+        while ($row = $result->fetch()) {
+            $sql = 'UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload=numdownload-1 WHERE did=' . $row['did'];
+            $db->query($sql);
+        }
+        
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id IN (' . $ids . ')';
         $db->query($sql);
     }
 
