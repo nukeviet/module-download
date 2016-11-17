@@ -105,6 +105,17 @@ if ($nv_Request->isset_request('del', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id);    
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id);    
         
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $id;
+        $result = $db->query($sql);
+        
+        while ($tag = $result->fetch()) {
+            $sql = 'UPDATE ' . NV_MOD_TABLE . '_tags SET numdownload=numdownload-1 WHERE did=' . $tag['did'];
+            $db->query($sql);
+        }
+        
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id=' . $id;
+        $db->query($sql);
+        
         // Xoa thong bao loi
         nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
     }

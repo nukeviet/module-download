@@ -198,7 +198,8 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('fileserver', '0'),
         ('shareport', 'none'),
         ('addthis_pubid', ''),
-        ('pdf_handler', 'phpattachment')
+        ('pdf_handler', 'phpattachment'),
+        ('list_title_length', '30')
     ";
     
     // Comments

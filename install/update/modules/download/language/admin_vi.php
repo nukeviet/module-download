@@ -68,6 +68,7 @@ $lang_module['addthis_pubid'] = 'AddThis PubID';
 $lang_module['config_pdf_handler'] = 'Kiểu xử lý việc xem PDF trực tuyến';
 $lang_module['config_pdf_handler_filetmp'] = 'Copy ra file tạm (Có thể đầy bộ nhớ nếu tiến trình xóa file tạm không chạy)';
 $lang_module['config_pdf_handler_phpattachment'] = 'Php Attachment (Khuyến nghị sử dụng, nếu thất bại hãy thử các cách khác)';
+$lang_module['config_list_title_length'] = 'Số ký tự tên file tại trang danh sách (Nhập 0 nếu không giới hạn)';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
