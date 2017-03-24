@@ -187,6 +187,8 @@ if ($id) {
     $array['groups_view'] = $row['groups_view'];
     $array['groups_onlineview'] = $row['groups_onlineview'];
     $array['groups_download'] = $row['groups_download'];
+    $array['user_id'] = $row['user_id'];
+    $array['user_name'] = $row['user_name'];
     
     if (! empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
@@ -254,6 +256,8 @@ if ($id) {
     $array['version'] = $row['version'];
     $array['filesize'] = ( int )$row['filesize'];
     $array['copyright'] = $row['copyright'];
+    $array['user_id'] = $row['user_id'];
+    $array['user_name'] = $row['user_name'];
     
     $array['fileimage'] = '';
     $array['fileimage_tmp'] = $row['fileimage'];
@@ -295,6 +299,8 @@ if ($id) {
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
     $array['filesize'] = 0;
     $array['is_del_report'] = 1;
+    $array['user_id'] = $admin_info['userid'];
+    $array['user_name'] = $admin_info['username'];
     $array['keywords'] = $array['keywords_old'] = '';
     $array_keywords_old = array();
     $report = false;
@@ -682,7 +688,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                      :introtext ,
                      " . NV_CURRENTTIME . ",
                      " . NV_CURRENTTIME . ",
-                     " . $admin_info['admin_id'] . ",
+                     " . $array['user_id'] . ",
                      :username,
                      :author_name ,
                      :author_email ,
@@ -702,7 +708,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $data_insert['title'] = $array['title'];
                 $data_insert['alias'] = $array['alias'];
                 $data_insert['introtext'] = $array['introtext'];
-                $data_insert['username'] = $admin_info['username'];
+                $data_insert['username'] = $array['user_name'];
                 $data_insert['author_name'] = $array['author_name'];
                 $data_insert['author_email'] = $array['author_email'];
                 $data_insert['author_url'] = $array['author_url'];
