@@ -17,6 +17,7 @@ $page_title = $lang_module['download_config'];
 $array_exts = get_allow_exts();
 $groups_list = nv_groups_list();
 $readme_file = NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt';
+$array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 
 $array_config = array();
 $array_pdf_handler = array('filetmp', 'phpattachment');
@@ -43,6 +44,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
+
+    foreach ($array_field_key as $field) {
+        $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
+        $array_config['arr_req_ur_' . $field] = $nv_Request->get_int('arr_req_ur_' . $field, 'post', 0);
+        $array_config['arr_dis_ad_' . $field] = $nv_Request->get_int('arr_dis_ad_' . $field, 'post', 0);
+        $array_config['arr_dis_ur_' . $field] = $nv_Request->get_int('arr_dis_ur_' . $field, 'post', 0);
+    }
 
     $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
     $array_config['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -292,6 +300,16 @@ foreach ($array_pdf_handler as $_pdf_handler) {
     
     $xtpl->assign('PDF_HANDLER', $pdf_handler);
     $xtpl->parse('main.pdf_handler');
+}
+
+foreach ($array_field_key as $field) {
+    $xtpl->assign('FIELD_NAME', $field);
+    $xtpl->assign('FIELD_TITLE', isset($lang_module['file_' . $field]) ? $lang_module['file_' . $field] : $field);
+    $xtpl->assign('REQ_AD_CHECKED', !empty($array_config['arr_req_ad_' . $field]) ? ' checked="checked"' : '');
+    $xtpl->assign('REQ_UR_CHECKED', !empty($array_config['arr_req_ur_' . $field]) ? ' checked="checked"' : '');
+    $xtpl->assign('DIS_AD_CHECKED', !empty($array_config['arr_dis_ad_' . $field]) ? ' checked="checked"' : '');
+    $xtpl->assign('DIS_UR_CHECKED', !empty($array_config['arr_dis_ur_' . $field]) ? ' checked="checked"' : '');
+    $xtpl->parse('main.field');
 }
 
 $xtpl->parse('main');

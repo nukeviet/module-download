@@ -21,7 +21,11 @@ $allow_func = array('main', 'content', 'filequeue', 'report', 'config', 'cat', '
 $_sql_config = 'SELECT * FROM ' . NV_MOD_TABLE . '_config ';
 $_query_config = $db->query($_sql_config);
 while ($row_config = $_query_config->fetch()) {
-    $module_config[$module_name][$row_config['config_name']]=$row_config['config_value'];
+    if (preg_match('/^arr\_(dis|req)\_(ad|ur)\_([a-zA-Z0-9\_\-]+)$/', $row_config['config_name'], $m)) {
+        $module_config[$module_name][$m[1]][$m[2]][$m[3]] = $row_config['config_value'];
+    } else {
+        $module_config[$module_name][$row_config['config_name']] = $row_config['config_value'];
+    }
 }
 
 /**

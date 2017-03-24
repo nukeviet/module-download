@@ -40,7 +40,7 @@
                             <td><input class="w300 form-control" type="text" value="{DATA.author_email}" name="author_email" id="author_email" maxlength="60" /></td>
                         </tr>
                         <tr>
-                            <td> {LANG.file_author_homepage} </td>
+                            <td> {LANG.file_author_url} </td>
                             <td>
                                 <input class="w300 form-control pull-left" style="margin-right: 5px" type="text" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" />
                                 <input class="btn btn-info pull-left" style="margin-right: 5px" type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" />

@@ -29,7 +29,11 @@ function nv_mod_down_config()
 
     $download_config = array();
     foreach ($list as $values) {
-        $download_config[$values['config_name']] = $values['config_value'];
+        if (preg_match('/^arr\_(dis|req)\_(ad|ur)\_([a-zA-Z0-9\_\-]+)$/', $values['config_name'], $m)) {
+            $download_config[$m[1]][$m[2]][$m[3]] = $values['config_value'];
+        } else {
+            $download_config[$values['config_name']] = $values['config_value'];
+        }
     }
 
     $download_config['upload_filetype'] = ! empty($download_config['upload_filetype']) ? explode(',', $download_config['upload_filetype']) : array();
