@@ -67,6 +67,18 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="vertical-align:top"> {LANG.config_whoaddfile} </td>
+                    <td>
+                        <i class="help-block">{LANG.category_groups_addfile_note}</i>
+                        <div class="groups-allow-area">
+                            <!-- BEGIN: groups_addfile -->
+                            <input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
+                            <br />
+                            <!-- END: groups_addfile -->
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" class="btn btn-primary" /></td>
                 </tr>
             </tbody>
@@ -75,7 +87,7 @@
 </form>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script>
+<script type="text/javascript">
     $('#parentid').select2();
     function get_alias() {
     var title = strip_tags(document.getElementById('title').value);
@@ -98,7 +110,7 @@ $(document).ready(function() {
     $("#title").change(function() {
         get_alias();
     });
-    });
+});
 </script>
 <!-- END: get_alias -->
 <!-- END: main -->

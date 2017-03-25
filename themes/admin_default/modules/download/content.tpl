@@ -5,12 +5,11 @@
 </div>
 <!-- END: error -->
 
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
 <form action="{FORM_ACTION}" method="post" class="confirm-reload" id="file-upload-form" data-busy="false">
     <div class="row">
-        <div class="col-sm-24 col-md-18">
+        <div class="col-sm-24<!-- BEGIN: show_two_col1 --> col-md-18<!-- END: show_two_col1 -->">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
@@ -23,31 +22,28 @@
                             <td><input class="w300 form-control pull-left" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="250" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
                         </tr>
                         <tr>
-                            <td> {LANG.category_cat_parent} </td>
+                            <td> {LANG.category_cat_parent} <sup class="required">(*)</sup></td>
                             <td>
-                            <select name="catid" id="catid" class="form-control w300">
-                                <!-- BEGIN: catid -->
-                                <option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.space}{LISTCATS.title}</option>
-                                <!-- END: catid -->
-                            </select></td>
+                                <div class="list-group upload-catlist" data-toggle="uploadcat" data-catid="{DATA.catid}" data-parentid="{DATA.parentid}" data-tokend="{NV_CHECK_SESSION}"></div>
+                            </td>
                         </tr>
-                        <tr>
-                            <td> {LANG.file_author_name} </td>
+                        <tr{CSS_AUTHOR_NAME}>
+                            <td> {LANG.file_author_name} {REQ_AUTHOR_NAME}</td>
                             <td><input class="w300 form-control" type="text" value="{DATA.author_name}" name="author_name" id="author_name" maxlength="100" /></td>
                         </tr>
-                        <tr>
-                            <td> {LANG.file_author_email} </td>
+                        <tr{CSS_AUTHOR_EMAIL}>
+                            <td> {LANG.file_author_email} {REQ_AUTHOR_EMAIL}</td>
                             <td><input class="w300 form-control" type="text" value="{DATA.author_email}" name="author_email" id="author_email" maxlength="60" /></td>
                         </tr>
-                        <tr>
-                            <td> {LANG.file_author_url} </td>
+                        <tr{CSS_AUTHOR_URL}>
+                            <td> {LANG.file_author_url} {REQ_AUTHOR_URL}</td>
                             <td>
                                 <input class="w300 form-control pull-left" style="margin-right: 5px" type="text" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" />
                                 <input class="btn btn-info pull-left" style="margin-right: 5px" type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" />
                                 <input class="btn btn-info pull-left" type="button" value="{LANG.file_gourl}" id="go_author_url" onclick="nv_gourl('author_url',0, 'go_author_url');" /></td>
                         </tr>
-                        <tr>
-                            <td> {LANG.file_image} </td>
+                        <tr{CSS_FILEIMAGE}>
+                            <td> {LANG.file_image} {REQ_FILEIMAGE}</td>
                             <td>
                                 <!-- BEGIN: fileimage_tmp -->
                                 <div class="clearfix" style="margin-bottom: 5px"> 
@@ -68,13 +64,13 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="top"> {LANG.intro_title} </td>
+                        <tr{CSS_INTROTEXT}>
+                            <td class="top"> {LANG.intro_title} {REQ_INTROTEXT}</td>
                             <td><textarea name="introtext" style="width:500px;height:100px" class="form-control">{DATA.introtext}</textarea></td>
                         </tr>
-                        <tr>
+                        <tr{CSS_DESCRIPTION}>
                             <td colspan="2">
-                                {LANG.file_description}
+                                {LANG.file_description} {REQ_DESCRIPTION}
                                 <br />
                                 {DATA.description}
                             </td>
@@ -83,9 +79,9 @@
                 </table>
             </div>
         </div>
-        <div class="col-sm-24 col-md-6">
+        <div class="col-sm-24<!-- BEGIN: show_two_col2 --> col-md-6<!-- END: show_two_col2 -->">
             <div class="row">
-                <div class="col-sm-12 col-md-24">
+                <div class="col-sm-12{SHOW_FULL_ASIDE}">
                     <label>{LANG.groups_view}</label>
                     <div class="groups-allow-area">
                         <!-- BEGIN: groups_view -->
@@ -93,8 +89,9 @@
                         <br />
                         <!-- END: groups_view -->
                     </div>
-
                     <br />
+                </div>
+                <div class="col-sm-12{SHOW_FULL_ASIDE}">
                     <label>{LANG.groups_onlineview}</label>
                     <div class="groups-allow-area">
                         <!-- BEGIN: groups_onlineview -->
@@ -102,8 +99,9 @@
                         <br />
                         <!-- END: groups_onlineview -->
                     </div>
-
                     <br />
+                </div>
+                <div class="col-sm-12{SHOW_FULL_ASIDE}">
                     <label>{LANG.groups_download}</label>
                     <div class="groups-allow-area">
                         <!-- BEGIN: groups_download -->
@@ -113,7 +111,7 @@
                     </div>
                     <br />
                 </div>
-                <div class="col-sm-12 col-md-24">
+                <div class="col-sm-12{SHOW_FULL_ASIDE}">
                     <label>{LANG.file_whocomment}</label>
                     <div class="groups-allow-area">
                         <!-- BEGIN: groups_comment -->
@@ -121,9 +119,9 @@
                         <br />
                         <!-- END: groups_comment -->
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-24">
                     <br />
+                </div>
+                <div class="col-sm-24">
                     <label>{LANG.content_tag}:</label>
                     <div class="clearfix uiTokenizer uiInlineTokenizer">
                         <div id="keywords" class="tokenarea">
@@ -140,6 +138,7 @@
                             </div>
                         </div>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -284,7 +283,7 @@
                     <div id="linkdirect_items">
                         <!-- BEGIN: linkdirect -->
                         <textarea name="linkdirect[]" id="linkdirect{LINKDIRECT.key}" style="width:500px;height:100px" class="form-control pull-left">{LINKDIRECT.value}</textarea>
-                        &nbsp; &nbsp;<input type="button" class="btn btn-info pull-left" value="{LANG.file_checkUrl}" id="check_linkdirect{LINKDIRECT.key}" onclick="nv_checkfile('linkdirect{LINKDIRECT.key}',0, 'check_linkdirect{LINKDIRECT.key}');" />
+                        <input type="button" class="btn btn-info pull-left" value="{LANG.file_checkUrl}" id="check_linkdirect{LINKDIRECT.key}" onclick="nv_checkfile('linkdirect{LINKDIRECT.key}',0, 'check_linkdirect{LINKDIRECT.key}');" style="margin-left:5px;"/>
                         <!-- END: linkdirect -->
                     </div>
                     <script type="text/javascript">
@@ -294,16 +293,16 @@
                     <p style="margin-top: 10px"><input type="button" class="btn btn-default" value="{LANG.add_linkdirect_items}" onclick="nv_linkdirect_additem();" /> ({LANG.add_linkdirect_items_note})</p>
                     </td>
                 </tr>
-                <tr>
-                    <td> {LANG.file_size} </td>
+                <tr{CSS_FILESIZE}>
+                    <td> {LANG.file_size} {REQ_FILESIZE}</td>
                     <td><input type="text" class="w100 form-control pull-left" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /><span class="text-middle"> {LANG.config_maxfilemb} </span></td>
                 </tr>
-                <tr>
-                    <td> {LANG.file_version} </td>
+                <tr{CSS_VERSION}>
+                    <td> {LANG.file_version} {REQ_VERSION}</td>
                     <td><input class="w300 form-control" type="text" value="{DATA.version}" name="version" id="version" maxlength="20" /></td>
                 </tr>
-                <tr>
-                    <td> {LANG.file_copyright} </td>
+                <tr{CSS_COPYRIGHT}>
+                    <td> {LANG.file_copyright} {REQ_COPYRIGHT}</td>
                     <td><input class="w300 form-control" type="text" value="{DATA.copyright}" name="copyright" id="copyright" maxlength="20" /></td>
                 </tr>
             </tbody>
@@ -361,8 +360,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#catid').select2();
-
         $("#keywords-search").bind("keydown", function(event) {
             if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
                 event.preventDefault();
@@ -427,3 +424,18 @@
     });
 </script>
 <!-- END: main -->
+
+<!-- BEGIN: cat -->
+<li class="list-group-item upload-catlist-item list-group-item-info">
+    <strong>{PARENT_TEXT}</strong>
+</li>
+<!-- BEGIN: loop -->
+<li class="list-group-item upload-catlist-item">
+    <input type="radio" name="catid" id="upload_catid_{CAT.id}" value="{CAT.id}"{CAT.checked}/>&nbsp;<label for="upload_catid_{CAT.id}">{CAT.title}</label>
+    <div class="pull-right">
+        <!-- BEGIN: loadparentcat --><a href="#" data-toggle="upcatload" data-catid="{CATID}" data-parentid="{PARENTID}" data-tokend="{NV_CHECK_SESSION}" title="{LANG.load_parentcat}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a><!-- END: loadparentcat -->
+        <!-- BEGIN: hassubcat --><a href="#" data-toggle="upcatload" data-catid="{CATID}" data-parentid="{CAT.id}" data-tokend="{NV_CHECK_SESSION}" title="{LANG.load_subcat}"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a><!-- END: hassubcat -->
+    </div>
+</li>
+<!-- END: loop -->
+<!-- END: cat -->

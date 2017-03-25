@@ -118,3 +118,17 @@
     border-width: thin;
     padding: 8px;
 }
+
+.upload-catlist {
+    margin-bottom: 0!important;
+}
+.upload-catlist-item {
+    padding: 5px;
+}
+.upload-catlist-item input[type="radio"] {
+    margin-top: 0;
+}
+.upload-catlist-item label {
+    font-weight: normal;
+    margin-bottom: 0;
+}

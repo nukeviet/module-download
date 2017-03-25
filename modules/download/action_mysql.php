@@ -121,7 +121,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          groups_view varchar(255) DEFAULT '',
          groups_onlineview varchar(255) DEFAULT '',
          groups_download varchar(255) DEFAULT '',
-         groups_upload varchar(255) DEFAULT '',
+         groups_addfile varchar(255) DEFAULT '',
          numsubcat smallint(5) NOT NULL DEFAULT '0',
          subcatid varchar(255) NOT NULL DEFAULT '',
          viewcat varchar(100) DEFAULT 'viewcat_list_new',

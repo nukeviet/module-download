@@ -298,11 +298,17 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
  * @param mixed $list_cats
  * @param mixed $download_config
  * @param mixed $error
+ * @param mixed $array_field_key
  * @return
  */
-function theme_upload($array, $list_cats, $download_config, $error)
+function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
     global $module_info, $module_name, $module_file, $lang_module, $lang_global;
+
+    $array['parentid'] = 0;
+    if ($array['catid'] and isset($list_cats[$array['catid']])) {
+        $array['parentid'] = $list_cats[$array['catid']]['parentid'];
+    }
 
     $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/');
     $xtpl->assign('LANG', $lang_module);
@@ -316,32 +322,66 @@ function theme_upload($array, $list_cats, $download_config, $error)
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
     if (!empty($error)) {
         $xtpl->assign('ERROR', $error);
         $xtpl->parse('main.is_error');
     }
-
-    if (!empty($list_cats)) {
-        foreach ($list_cats as $catid => $value) {
-            $value['space'] = '';
-            if ($value['lev'] > 0) {
-                for ($i = 1; $i <= $value['lev']; $i++) {
-                    $value['space'] .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                }
-            }
-            $value['selected'] = $catid == $array['catid'] ? ' selected="selected"' : '';
-
-            $xtpl->assign('LISTCATS', $value);
-            $xtpl->parse('main.catid');
-        }
+    
+    foreach ($array_field_key as $field) {
+        $xtpl->assign(strtoupper('CSS_' . $field), empty($download_config['dis']['ur'][$field]) ? ' style="display:none;"' : '');
+        $xtpl->assign(strtoupper('REQ_' . $field), !empty($download_config['req']['ur'][$field]) ? ' <sup class="text-danger">(*)</sup>' : '');
+        $xtpl->assign(strtoupper('REQ_' . $field . '1'), !empty($download_config['req']['ur'][$field]) ? ' required' : '');
     }
 
     if ($download_config['is_upload_allow']) {
         $xtpl->parse('main.is_upload_allow');
     }
+    
     $xtpl->parse('main');
     return $xtpl->text('main');
+}
+
+/**
+ * theme_upload_getcat()
+ * 
+ * @param mixed $parentid
+ * @param mixed $catid
+ * @param mixed $list_cats_addfile
+ * @return
+ */
+function theme_upload_getcat($parentid, $catid, $list_cats_addfile)
+{
+    global $module_info, $module_name, $module_file, $lang_module, $lang_global;
+
+    $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    $xtpl->assign('CATID', $catid);
+    
+    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats_addfile[$parentid]['title'] : $lang_module['categories_main']);
+    
+    foreach ($list_cats_addfile as $cat) {
+        if ($cat['parentid'] == $parentid) {
+            $cat['checked'] = $cat['id'] == $catid ? ' checked="checked"' : '';
+            $xtpl->assign('CAT', $cat);
+            
+            if (!empty($cat['parentid'])) {
+                $xtpl->assign('PARENTID', $list_cats_addfile[$cat['parentid']]['parentid']);
+                $xtpl->parse('cat.loop.loadparentcat');
+            }
+            if ($cat['numsubcat'] > 0) {
+                $xtpl->parse('cat.loop.hassubcat');
+            }
+            
+            $xtpl->parse('cat.loop');
+        }
+    }
+    
+    $xtpl->parse('cat');
+    return $xtpl->text('cat');
 }
 
 /**

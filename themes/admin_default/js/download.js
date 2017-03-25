@@ -450,7 +450,33 @@ $(document).ready(function() {
         var shareport = $(this).val()
         $('[data-toggle="shareport"]').hide()
         $('#shareport-' + shareport).show()
-    })
+    });
+    
+    // Content cat control
+    $('[data-toggle="uploadcat"]').each(function() {
+        var catid = $(this).data('catid');
+        var parentid = $(this).data('parentid');
+        var checkss = $(this).data('tokend');
+        var $this = $(this);
+        $.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 
+            'loadcat=1&catid=' + catid + '&parentid=' + parentid + '&checkss=' + checkss, 
+        function(res) {
+            $this.html(res);
+        });
+    });
+    $('#file-upload-form').delegate('[data-toggle="upcatload"]', 'click', function(e) {
+        e.preventDefault();
+        var catid = $(this).data('catid');
+        var parentid = $(this).data('parentid');
+        var checkss = $(this).data('tokend');
+        $.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 
+            'loadcat=1&catid=' + catid + '&parentid=' + parentid + '&checkss=' + checkss, 
+        function(res) {
+            $('[data-toggle="uploadcat"]').html(res);
+        });
+    });
 });
 
 function nv_search_tag(did) {

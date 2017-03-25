@@ -16,8 +16,23 @@ $page_title = $lang_module['upload'];
 $array_mod_title[] = array( 'title' => $page_title );
 
 $download_config = nv_mod_down_config();
+$array_field_key = array_keys($download_config['dis']['ad']);
 
-if (! $download_config['is_addfile_allow']) {
+$list_cats_addfile = array();
+foreach ($list_cats as $_catid => $_catvalue) {
+    if (!empty($_catvalue['is_addfile_allow'])) {
+        $list_cats_addfile[$_catid] = $_catvalue;
+    } elseif (isset($list_cats_addfile[$_catvalue['parentid']])) {
+        $list_cats_addfile[$_catvalue['parentid']]['numsubcat']--;
+    }
+}
+
+if (empty($list_cats)) {
+    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
+    exit();
+}
+
+if (! $download_config['is_addfile_allow'] or empty($list_cats_addfile)) {
     if (!defined('NV_IS_USER')) {
         $alert_content = $lang_module['error_not_permission_upload_content_guest'];
         $urlback = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
@@ -30,9 +45,27 @@ if (! $download_config['is_addfile_allow']) {
     nv_download_theme_alert($lang_module['error_not_permission_title'], $alert_content, 'info', $urlback, 5, $lang_back);
 }
 
-if (empty($list_cats)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+if ($nv_Request->isset_request('loadcat', 'post')) {
+    if (! defined('NV_IS_AJAX')) {
+        die('Wrong URL');
+    }
+    
+    $catid = $nv_Request->get_int('catid', 'post', 0);
+    $parentid = $nv_Request->get_int('parentid', 'post', 0);
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    
+    if ($checkss != NV_CHECK_SESSION) {
+        die('Access denied!!!');
+    }
+    if ($catid and !isset($list_cats_addfile[$catid])) {
+        die('NO');
+    }
+    if ($parentid and !isset($list_cats_addfile[$parentid])) {
+        die('NO');
+    }
+    
+    $contents = theme_upload_getcat($parentid, $catid, $list_cats_addfile);
+    die($contents);
 }
 
 $is_error = false;
@@ -120,15 +153,33 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     } elseif ($is_exists) {
         $is_error = true;
         $error = $lang_module['file_title_exists'];
-    } elseif (! $array['catid'] or ! isset($list_cats[$array['catid']])) {
+    } elseif (! $array['catid'] or ! isset($list_cats_addfile[$array['catid']])) {
         $is_error = true;
         $error = $lang_module['file_catid_exists'];
+    } elseif (empty($array['author_name']) and !empty($download_config['req']['ur']['author_name'])) {
+        $error = $lang_module['file_error_author_name'];
+    } elseif (empty($array['author_email']) and !empty($download_config['req']['ur']['author_email'])) {
+        $error = $lang_module['file_error_author_email'];
     } elseif (! empty($array['author_email']) and ($check_valid_email = nv_check_valid_email($array['author_email'])) != '') {
         $is_error = true;
         $error = $check_valid_email;
+    } elseif (empty($array['author_url']) and !empty($download_config['req']['ur']['author_url'])) {
+        $error = $lang_module['file_error_author_url_empty'];
     } elseif (! empty($array['author_url']) and ! nv_is_url($array['author_url'])) {
         $is_error = true;
         $error = $lang_module['file_error_author_url'];
+    } elseif (empty($array['filesize']) and !empty($download_config['req']['ur']['filesize'])) {
+        $error = $lang_module['file_error_filesize'];
+    } elseif (empty($array['version']) and !empty($download_config['req']['ur']['version'])) {
+        $error = $lang_module['file_error_version'];
+    } elseif ((!isset($_FILES['upload_fileimage']) or !is_uploaded_file($_FILES['upload_fileimage']['tmp_name'])) and !empty($download_config['req']['ur']['fileimage'])) {
+        $error = $lang_module['file_error_fileimage'];
+    } elseif (empty($array['copyright']) and !empty($download_config['req']['ur']['copyright'])) {
+        $error = $lang_module['file_error_copyright'];
+    } elseif (empty($array['introtext']) and !empty($download_config['req']['ur']['introtext'])) {
+        $error = $lang_module['file_error_introtext'];
+    } elseif (empty($array['description']) and !empty($download_config['req']['ur']['description'])) {
+        $error = $lang_module['file_error_description'];
     } else {
         $fileupload = '';
         if ($download_config['is_upload_allow']) {
@@ -287,7 +338,7 @@ if (defined('NV_IS_USER')) {
 $array['addfile'] = md5($client_info['session_id']);
 $array['upload_filetype'] = implode("|", $download_config['upload_filetype']);
 
-$contents = theme_upload($array, $list_cats, $download_config, $error);
+$contents = theme_upload($array, $list_cats_addfile, $download_config, $error, $array_field_key);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

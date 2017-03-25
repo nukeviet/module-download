@@ -34,6 +34,7 @@ if ($catid) {
     $array['groups_view'] = $row['groups_view'];
     $array['groups_onlineview'] = $row['groups_onlineview'];
     $array['groups_download'] = $row['groups_download'];
+    $array['groups_addfile'] = $row['groups_addfile'];
 } else {
     $pid = $nv_Request->get_int('pid', 'get', 0);
     $page_title = $lang_module['addcat_titlebox'];
@@ -44,6 +45,7 @@ if ($catid) {
     $array['alias'] = '';
     $array['description'] = '';
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
+    $array['groups_addfile'] = $module_config[$module_name]['groups_addfile'];
 }
 
 $error = '';
@@ -87,6 +89,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $_groups_post = $nv_Request->get_array('groups_download', 'post', array());
     $array['groups_download'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
+    $_groups_post = $nv_Request->get_array('groups_addfile', 'post', array());
+    $array['groups_addfile'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+
     if (empty($error)) {
         if (empty($catid) or $array['parentid'] != $row['parentid']) {
             $sql = 'SELECT MAX(weight) AS new_weight FROM ' . NV_MOD_TABLE . '_categories WHERE parentid=' . $array['parentid'];
@@ -107,6 +112,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 groups_view= :groups_view,
                 groups_onlineview= :groups_onlineview,
                 groups_download= :groups_download,
+                groups_addfile= :groups_addfile,
                 weight=' . $new_weight . '
             WHERE id=' . $catid);
 
@@ -116,6 +122,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $stmt->bindParam(':groups_view', $array['groups_view'], PDO::PARAM_STR);
             $stmt->bindParam(':groups_onlineview', $array['groups_onlineview'], PDO::PARAM_STR);
             $stmt->bindParam(':groups_download', $array['groups_download'], PDO::PARAM_STR);
+            $stmt->bindParam(':groups_addfile', $array['groups_addfile'], PDO::PARAM_STR);
 
             if ($stmt->execute()) {
                 nv_fix_cat_order();
@@ -129,7 +136,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         } else {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_categories (
-                parentid, title, alias, description, groups_view, groups_onlineview, groups_download, weight, status
+                parentid, title, alias, description, groups_view, groups_onlineview, groups_download, groups_addfile, weight, status
             ) VALUES (
                  ' . $array['parentid'] . ',
                  :title,
@@ -138,6 +145,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                  :groups_view,
                  :groups_onlineview,
                  :groups_download,
+                 :groups_addfile,
                  ' . $new_weight . ',
                  1
             )';
@@ -149,6 +157,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $data_insert['groups_view'] = $array['groups_view'];
             $data_insert['groups_onlineview'] = $array['groups_onlineview'];
             $data_insert['groups_download'] = $array['groups_download'];
+            $data_insert['groups_addfile'] = $array['groups_addfile'];
             
             if ($db->insert_id($sql, 'id', $data_insert)) {
                 nv_fix_cat_order();
@@ -204,6 +213,16 @@ foreach ($groups_list as $key => $title) {
     );
 }
 
+$groups_addfile = explode(',', $array['groups_addfile']);
+$array['groups_addfile'] = array();
+foreach ($groups_list as $key => $title) {
+    $array['groups_addfile'][] = array(
+        'key' => $key,
+        'title' => $title,
+        'checked' => in_array($key, $groups_addfile) ? ' checked="checked"' : ''
+    );
+}
+
 $xtpl = new XTemplate('cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
@@ -244,6 +263,11 @@ foreach ($array['groups_onlineview'] as $group) {
 foreach ($array['groups_download'] as $group) {
     $xtpl->assign('GROUPS_DOWNLOAD', $group);
     $xtpl->parse('main.groups_download');
+}
+
+foreach ($array['groups_addfile'] as $group) {
+    $xtpl->assign('GROUPS_ADDFILE', $group);
+    $xtpl->parse('main.groups_addfile');
 }
 
 $xtpl->parse('main');

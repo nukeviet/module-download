@@ -30,6 +30,72 @@ if ($nv_Request->isset_request('gettitle', 'post')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+// Load cat
+if ($nv_Request->isset_request('loadcat', 'post')) {
+    if (! defined('NV_IS_AJAX')) {
+        die('Wrong URL');
+    }
+    
+    $catid = $nv_Request->get_int('catid', 'post', 0);
+    $parentid = $nv_Request->get_int('parentid', 'post', 0);
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    
+    if ($checkss != NV_CHECK_SESSION) {
+        die('Access denied!!!');
+    }
+    if ($catid and !isset($list_cats[$catid])) {
+        die('NO');
+    }
+    if ($parentid and !isset($list_cats[$parentid])) {
+        die('NO');
+    }
+    
+    $contents = theme_upload_getcat($parentid, $catid, $list_cats);
+    die($contents);
+}
+
+
+/**
+ * theme_upload_getcat()
+ * 
+ * @param mixed $parentid
+ * @param mixed $catid
+ * @param mixed $list_cats_addfile
+ * @return
+ */
+function theme_upload_getcat($parentid, $catid, $list_cats)
+{
+    global $global_config, $module_file, $lang_module, $lang_global;
+
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    $xtpl->assign('CATID', $catid);
+    
+    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats[$parentid]['title'] : $lang_module['category_cat_maincat']);
+    
+    foreach ($list_cats as $cat) {
+        if ($cat['parentid'] == $parentid) {
+            $cat['checked'] = $cat['id'] == $catid ? ' checked="checked"' : '';
+            $xtpl->assign('CAT', $cat);
+            
+            if (!empty($cat['parentid'])) {
+                $xtpl->assign('PARENTID', $list_cats[$cat['parentid']]['parentid']);
+                $xtpl->parse('cat.loop.loadparentcat');
+            }
+            if ($cat['numsubcat'] > 0) {
+                $xtpl->parse('cat.loop.hassubcat');
+            }
+            
+            $xtpl->parse('cat.loop');
+        }
+    }
+    
+    $xtpl->parse('cat');
+    return $xtpl->text('cat');
+}
+
 /**
  * nv_update_upload_dir()
  * 
@@ -128,6 +194,7 @@ $currentpath_files = $currentpath . $currentpath_files;
 $id = $nv_Request->get_int('id', 'get', 0);
 $filequeueid = $nv_Request->get_int('filequeueid', 'get', 0);
 $groups_list = nv_groups_list();
+$array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 $array = array();
 $error = '';
 
@@ -460,12 +527,32 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error = $lang_module['file_error_title'];
     } elseif ($is_exists) {
         $error = $lang_module['file_title_exists'];
+    } elseif (empty($array['catid']) or !isset($list_cats[$array['catid']])) {
+        $error = $lang_module['file_catid_exists'];
+    } elseif (empty($array['author_name']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_name'])) {
+        $error = $lang_module['file_error_author_name'];
+    } elseif (empty($array['author_email']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_email'])) {
+        $error = $lang_module['file_error_author_email'];
     } elseif (! empty($array['author_email']) and ($check_valid_email = nv_check_valid_email($array['author_email'])) != '') {
         $error = $check_valid_email;
+    } elseif (empty($array['author_url']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_url'])) {
+        $error = $lang_module['file_error_author_url_empty'];
     } elseif (! empty($array['author_url']) and ! nv_is_url($array['author_url'])) {
         $error = $lang_module['file_error_author_url'];
+    } elseif (empty($array['fileimage']) and empty($array['fileimage_tmp']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['fileimage'])) {
+        $error = $lang_module['file_error_fileimage'];
+    } elseif (empty($array['introtext']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['introtext'])) {
+        $error = $lang_module['file_error_introtext'];
+    } elseif (empty($array['description']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['description'])) {
+        $error = $lang_module['file_error_description'];
     } elseif (empty($array['fileupload']) and empty($array['linkdirect']) and empty($array['scorm_path_old']) and empty($array['fileupload_tmp'])) {
         $error = $lang_module['file_error_fileupload'];
+    } elseif (empty($array['filesize']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['filesize'])) {
+        $error = $lang_module['file_error_filesize'];
+    } elseif (empty($array['version']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['version'])) {
+        $error = $lang_module['file_error_version'];
+    } elseif (empty($array['copyright']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['copyright'])) {
+        $error = $lang_module['file_error_copyright'];
     } else {
         // Xử lý ảnh minh họa nếu duyệt file
         if (empty($array['fileimage']) and !empty($array['fileimage_tmp'])) {
@@ -487,6 +574,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
                 if (@nv_copyfile(NV_ROOTDIR . '/' . $fileimage, NV_ROOTDIR . '/' . $currentpath_images . '/' . $newfile2)) {
                     $array['fileimage'] = substr($currentpath_images . '/' . $newfile2, strlen(NV_UPLOADS_DIR));
+                    // Tạo ảnh thumb
+                    nv_get_viewImage($currentpath_images . '/' . $newfile2);
                 }
             }
         }
@@ -1053,6 +1142,11 @@ if (! $array['filesize']) {
     $array['filesize'] = '';
 }
 
+$array['parentid'] = 0;
+if ($array['catid'] and isset($list_cats[$array['catid']])) {
+    $array['parentid'] = $list_cats[$array['catid']]['parentid'];
+}
+
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
@@ -1064,8 +1158,23 @@ $xtpl->assign('IMG_DIR', $currentpath_images);
 $xtpl->assign('FILES_DIR', $currentpath_files);
 $xtpl->assign('UPLOADS_DIR', $uploads_dir_user);
 $xtpl->assign('ONCHANGE', 'onchange="get_alias();"');
+$xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 $xtpl->assign('UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE);
 $xtpl->assign('DIRECT_UPLOAD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&path=' . urlencode($currentpath_files) . '&random=' . nv_genpass(10));
+
+$num_display_field = 0;
+foreach ($array_field_key as $field) {
+    $xtpl->assign(strtoupper('CSS_' . $field), empty($module_config[$module_name]['dis'][$filequeueid ? 'ur' : 'ad'][$field]) ? ' style="display:none;"' : '');
+    $xtpl->assign(strtoupper('REQ_' . $field), !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad'][$field]) ? ' <sup class="required">(*)</sup>' : '');
+    if (!empty($module_config[$module_name]['dis']['ad'][$field])) {
+        $num_display_field++;
+    }
+}
+if ($num_display_field >= 5) {
+    $xtpl->assign('SHOW_FULL_ASIDE', ' col-md-24');
+    $xtpl->parse('main.show_two_col1');
+    $xtpl->parse('main.show_two_col2');
+}
 
 $mimes = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
 

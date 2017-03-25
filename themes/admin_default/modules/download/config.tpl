@@ -177,10 +177,10 @@
                     <thead>
                         <tr>
                             <th class="w250">{LANG.config_field_name}</th>
-                            <th class="text-center"><a href="#" data-val="0" data-toggle="ckunck" data-target="ck1">{LANG.config_field_required_admin}</a></th>
-                            <th class="text-center"><a href="#" data-val="0" data-toggle="ckunck" data-target="ck2">{LANG.config_field_required_user}</a></th>
-                            <th class="text-center"><a href="#" data-val="0" data-toggle="ckunck" data-target="ck3">{LANG.config_field_display_admin}</a></th>
-                            <th class="text-center"><a href="#" data-val="0" data-toggle="ckunck" data-target="ck4">{LANG.config_field_display_user}</a></th>
+                            <th class="text-center"><a href="#" data-toggle="ckunck" data-target="ck1">{LANG.config_field_required_admin}</a></th>
+                            <th class="text-center"><a href="#" data-toggle="ckunck" data-target="ck2">{LANG.config_field_required_user}</a></th>
+                            <th class="text-center"><a href="#" data-toggle="ckunck" data-target="ck3">{LANG.config_field_display_admin}</a></th>
+                            <th class="text-center"><a href="#" data-toggle="ckunck" data-target="ck4">{LANG.config_field_display_user}</a></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -189,8 +189,8 @@
                             <td>{FIELD_TITLE}</td>
                             <td class="text-center"><input type="checkbox" value="1" data-type="ck1" name="arr_req_ad_{FIELD_NAME}"{REQ_AD_CHECKED}/></td>
                             <td class="text-center"><input type="checkbox" value="1" data-type="ck2" name="arr_req_ur_{FIELD_NAME}"{REQ_UR_CHECKED}/></td>
-                            <td class="text-center"><input type="checkbox" value="1" data-type="ck3" name="arr_dis_ad_{FIELD_NAME}"{DIS_AD_CHECKED}/></td>
-                            <td class="text-center"><input type="checkbox" value="1" data-type="ck4" name="arr_dis_ur_{FIELD_NAME}"{DIS_UR_CHECKED}/></td>
+                            <td class="text-center"><input type="checkbox" value="1" data-type="ck3" data-toggle="ckuncko" name="arr_dis_ad_{FIELD_NAME}"{DIS_AD_CHECKED}/></td>
+                            <td class="text-center"><input type="checkbox" value="1" data-type="ck4" data-toggle="ckuncko" name="arr_dis_ur_{FIELD_NAME}"{DIS_UR_CHECKED}/></td>
                         </tr>
                         <!-- END: field -->
                     </tbody>
@@ -209,14 +209,37 @@ $(function() {
     });
     $('[data-toggle="ckunck"]').click(function(e) {
         e.preventDefault();
-        var ck = $(this).data('val');
-        if (ck) {
-            $('[data-type="' + $(this).data('target') + '"]').prop('checked', false);
+        var tg = $(this).data('target');
+        var num = 0;
+        $('[data-type="' + tg + '"]').each(function() {
+            if ($(this).is(':checked')) {
+                num++;
+            }
+        });
+        if (num >= 9) {
+            $('[data-type="' + tg + '"]').prop('checked', false);
+            if (tg == "ck4") {
+                $('[data-type="ck2"]').prop('checked', false);
+            }
+            if (tg == "ck3") {
+                $('[data-type="ck1"]').prop('checked', false);
+            }
         } else {
-            $('[data-type="' + $(this).data('target') + '"]').prop('checked', true);
+            $('[data-type="' + tg + '"]').prop('checked', true);
         }
-        $(this).data('val', !ck);
     });
+    $('[data-toggle="ckuncko"]').click(function(e) {
+        var tp = $(this).data('type');
+        var rw = $(this).parent().parent();
+        if (!$(this).is(':checked')) {
+            if (tp == "ck4") {
+                $('[data-type="ck2"]', rw).prop('checked', false);
+            }
+            if (tp == "ck3") {
+                $('[data-type="ck1"]', rw).prop('checked', false);
+            }
+        }
+    })
 });
 </script>
 <!-- END: main -->

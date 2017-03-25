@@ -57,6 +57,30 @@ $(document).ready(function() {
                 }
             }
         });
+        $('[data-toggle="uploadcat"]').each(function() {
+            var catid = $(this).data('catid');
+            var parentid = $(this).data('parentid');
+            var checkss = $(this).data('tokend');
+            var $this = $(this);
+            $.post(
+                nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=upload&nocache=' + new Date().getTime(), 
+                'loadcat=1&catid=' + catid + '&parentid=' + parentid + '&checkss=' + checkss, 
+            function(res) {
+                $this.html(res);
+            });
+        });
+        $('#uploadForm').delegate('[data-toggle="upcatload"]', 'click', function(e) {
+            e.preventDefault();
+            var catid = $(this).data('catid');
+            var parentid = $(this).data('parentid');
+            var checkss = $(this).data('tokend');
+            $.post(
+                nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=upload&nocache=' + new Date().getTime(), 
+                'loadcat=1&catid=' + catid + '&parentid=' + parentid + '&checkss=' + checkss, 
+            function(res) {
+                $('[data-toggle="uploadcat"]').html(res);
+            });
+        });
     }
 });
 

@@ -112,3 +112,17 @@
 span.fa-required{
     display: block;
 }
+
+.upload-catlist {
+    margin: -9px!important;
+}
+.upload-catlist-item {
+    padding: 5px;
+}
+.upload-catlist-item input[type="radio"] {
+    margin-top: 0;
+}
+.upload-catlist-item label {
+    font-weight: normal;
+    margin-bottom: 0;
+}

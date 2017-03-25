@@ -24,7 +24,7 @@ function nv_mod_down_config()
 {
     global $module_name, $module_name, $nv_Cache;
 
-    $sql = 'SELECT config_name,config_value FROM ' . NV_MOD_TABLE . '_config';
+    $sql = 'SELECT config_name, config_value FROM ' . NV_MOD_TABLE . '_config';
     $list = $nv_Cache->db($sql, '', $module_name);
 
     $download_config = array();
@@ -62,8 +62,10 @@ if (!empty($list_cats_tmp)) {
     foreach ($list_cats_tmp as $catid => $catvalue) {
         if (! $catvalue['parentid'] or isset($list_cats_tmp[$catvalue['parentid']])) {
             if (nv_user_in_groups($catvalue['groups_view'])) {
-                $catvalue['is_download_allow'] =  nv_user_in_groups($catvalue['groups_download']);
-                $catvalue['is_onlineview_allow'] =  nv_user_in_groups($catvalue['groups_onlineview']);
+                $catvalue['is_download_allow'] = nv_user_in_groups($catvalue['groups_download']);
+                $catvalue['is_onlineview_allow'] = nv_user_in_groups($catvalue['groups_onlineview']);
+                // Nếu được quyền thêm file ở chủ đề cha thì mới tính vào chủ đề con
+                $catvalue['is_addfile_allow'] = ((empty($catvalue['parentid']) or !empty($list_cats[$catvalue['parentid']]['is_addfile_allow'])) and nv_user_in_groups($catvalue['groups_addfile']));
                 $list_cats[$catid] = $catvalue;
             }
         }
