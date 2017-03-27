@@ -545,8 +545,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error = $lang_module['file_error_introtext'];
     } elseif (empty($array['description']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['description'])) {
         $error = $lang_module['file_error_description'];
+    } elseif (empty($array['linkdirect']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['linkdirect'])) {
+        $error = $lang_module['file_error_linkdirect'];
     } elseif (empty($array['fileupload']) and empty($array['linkdirect']) and empty($array['scorm_path_old']) and empty($array['fileupload_tmp'])) {
-        $error = $lang_module['file_error_fileupload'];
+        if (!empty($module_config[$module_name]['dis'][$filequeueid ? 'ur' : 'ad']['linkdirect'])) {
+            $error = $lang_module['file_error_fileupload'];
+        } else {
+            $error = $lang_module['file_error_fileupload1'];
+        }
     } elseif (empty($array['filesize']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['filesize'])) {
         $error = $lang_module['file_error_filesize'];
     } elseif (empty($array['version']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['version'])) {

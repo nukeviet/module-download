@@ -64,10 +64,10 @@
             </div>
             <!-- END: is_upload_allow -->
 
-            <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{LANG.file_linkdirect}</label>
+            <div class="form-group"{CSS_LINKDIRECT}>
+                <label class="col-sm-6 col-md-6 control-label">{LANG.file_linkdirect}{REQ_LINKDIRECT}</label>
                 <div class="col-sm-18 col-md-18">
-                    <textarea name="upload_linkdirect" id="upload_linkdirect_iavim" class="form-control" rows="3">{UPLOAD.linkdirect}</textarea>
+                    <textarea name="upload_linkdirect" id="upload_linkdirect_iavim" class="form-control{REQ_LINKDIRECT1}" rows="3">{UPLOAD.linkdirect}</textarea>
                     <em class="help-block">{LANG.upload_linkdirect_info}</em>
                 </div>
             </div>
@@ -122,12 +122,14 @@
                 </div>
             </div>
 
+            <!-- BEGIN: show_username -->
             <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{LANG.file_username}</label>
+                <label class="col-sm-6 col-md-6 control-label">{LANG.file_username} <sup class="text-danger">(*)</sup></label>
                 <div class="col-sm-18 col-md-18">
-                    <input type="text" class="form-control" name="upload_user_name" id="upload_user_name" value="{UPLOAD.user_name}" {UPLOAD.disabled} maxlength="100">
+                    <input type="text" class="form-control" name="upload_user_name" id="upload_user_name" value="{UPLOAD.user_name}" maxlength="100">
                 </div>
             </div>
+            <!-- END: show_username -->
 
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{LANG.file_upload_captcha}</label>

@@ -105,6 +105,7 @@ $lang_module['table_caption2'] = 'Danh sách các chủ đề con của chủ đ
 $lang_module['category_cat_sort'] = 'Vị trí';
 
 $lang_module['file_error_fileupload'] = 'Hãy chọn file để upload hoặc điền vào link trực tiếp!';
+$lang_module['file_error_fileupload1'] = 'Lỗi: Bạn chưa chọn file upload';
 $lang_module['file_error_author_name'] = 'Lỗi: Tên tác giả không được để trống';
 $lang_module['file_error_author_email'] = 'Lỗi: Email tác giả không được để trống';
 $lang_module['file_error_author_url_empty'] = 'Lỗi: Trang cá nhân của tác giả không được để trống';
@@ -112,6 +113,7 @@ $lang_module['file_error_author_url'] = 'Lỗi: URL trang cá nhân của tác g
 $lang_module['file_error_fileimage'] = 'Lỗi: Ảnh minh họa không được để trống';
 $lang_module['file_error_introtext'] = 'Lỗi: Tóm tắt không được để trống';
 $lang_module['file_error_description'] = 'Lỗi: Mô tả file không được để trống';
+$lang_module['file_error_linkdirect'] = 'Lỗi: Chưa nhập nguồn bên ngoài';
 $lang_module['file_error_filesize'] = 'Lỗi: Dung lượng file không thể bằng 0';
 $lang_module['file_error_version'] = 'Lỗi: Thông tin phiên bản không được để trống';
 $lang_module['file_error_copyright'] = 'Lỗi: Thông tin bản quyền không được để trống';

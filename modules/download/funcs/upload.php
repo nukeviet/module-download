@@ -12,8 +12,12 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['upload'];
-$array_mod_title[] = array( 'title' => $page_title );
+if (nv_strtolower($module_info['funcs'][$op]['func_custom_name']) == $module_info['funcs'][$op]['func_name']) {
+    $page_title = $lang_module['upload'];
+} else {
+    $page_title = $module_info['funcs'][$op]['func_custom_name'];
+}
+$array_mod_title[] = array('title' => $page_title);
 
 $download_config = nv_mod_down_config();
 $array_field_key = array_keys($download_config['dis']['ad']);
@@ -168,6 +172,8 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     } elseif (! empty($array['author_url']) and ! nv_is_url($array['author_url'])) {
         $is_error = true;
         $error = $lang_module['file_error_author_url'];
+    } elseif (empty($array['linkdirect']) and !empty($download_config['req']['ur']['linkdirect'])) {
+        $error = $lang_module['file_error_linkdirect'];
     } elseif (empty($array['filesize']) and !empty($download_config['req']['ur']['filesize'])) {
         $error = $lang_module['file_error_filesize'];
     } elseif (empty($array['version']) and !empty($download_config['req']['ur']['version'])) {
@@ -221,7 +227,11 @@ if ($nv_Request->isset_request('addfile', 'post')) {
         if (! $is_error) {
             if (empty($fileupload) and empty($array['linkdirect'])) {
                 $is_error = true;
-                $error = $lang_module['file_error_fileupload'];
+                if (!empty($download_config['dis']['ur']['linkdirect'])) {
+                    $error = $lang_module['file_error_fileupload'];
+                } else {
+                    $error = $lang_module['file_error_fileupload1'];
+                }
             } else {
                 $fileimage = '';
                 if (isset($_FILES['upload_fileimage']) and is_uploaded_file($_FILES['upload_fileimage']['tmp_name'])) {
@@ -312,7 +322,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     }
 } else {
     $array['catid'] = sizeof($array_op) == 2 ? (int)$array_op[1] : 0;
-    $array['filesize'] = 0;
+    $array['filesize'] = $array['user_id'] = 0;
     $array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['linkdirect'] = $array['version'] = $array['copyright'] = $array['user_name'] = '';
     if (defined('NV_IS_USER')) {
         $array['user_name'] = $user_info['username'];
@@ -331,10 +341,6 @@ if (! empty($array['introtext'])) {
     $array['introtext'] = nv_htmlspecialchars($array['introtext']);
 }
 
-$array['disabled'] = '';
-if (defined('NV_IS_USER')) {
-    $array['disabled'] = ' disabled="disabled"';
-}
 $array['addfile'] = md5($client_info['session_id']);
 $array['upload_filetype'] = implode("|", $download_config['upload_filetype']);
 

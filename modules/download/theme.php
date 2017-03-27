@@ -335,6 +335,10 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
         $xtpl->assign(strtoupper('REQ_' . $field . '1'), !empty($download_config['req']['ur'][$field]) ? ' required' : '');
     }
 
+    if (!defined('NV_IS_USER')) {
+        $xtpl->parse('main.show_username');
+    }
+
     if ($download_config['is_upload_allow']) {
         $xtpl->parse('main.is_upload_allow');
     }

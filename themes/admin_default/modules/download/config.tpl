@@ -211,21 +211,29 @@ $(function() {
         e.preventDefault();
         var tg = $(this).data('target');
         var num = 0;
-        $('[data-type="' + tg + '"]').each(function() {
+        $('[data-type="' + tg + '"]:not(:disabled)').each(function() {
             if ($(this).is(':checked')) {
                 num++;
             }
         });
-        if (num >= 9) {
+        if (num >= $('[data-type="' + tg + '"]:not(:disabled)').length) {
             $('[data-type="' + tg + '"]').prop('checked', false);
             if (tg == "ck4") {
                 $('[data-type="ck2"]').prop('checked', false);
+                $('[data-type="ck2"]').prop('disabled', true);
             }
             if (tg == "ck3") {
                 $('[data-type="ck1"]').prop('checked', false);
+                $('[data-type="ck1"]').prop('disabled', true);
             }
         } else {
-            $('[data-type="' + tg + '"]').prop('checked', true);
+            $('[data-type="' + tg + '"]:not(:disabled)').prop('checked', true);
+            if (tg == "ck4") {
+                $('[data-type="ck2"]').prop('disabled', false);
+            }
+            if (tg == "ck3") {
+                $('[data-type="ck1"]').prop('disabled', false);
+            }
         }
     });
     $('[data-toggle="ckuncko"]').click(function(e) {
@@ -234,9 +242,18 @@ $(function() {
         if (!$(this).is(':checked')) {
             if (tp == "ck4") {
                 $('[data-type="ck2"]', rw).prop('checked', false);
+                $('[data-type="ck2"]', rw).prop('disabled', true);
             }
             if (tp == "ck3") {
                 $('[data-type="ck1"]', rw).prop('checked', false);
+                $('[data-type="ck1"]', rw).prop('disabled', true);
+            }
+        } else {
+            if (tp == "ck4") {
+                $('[data-type="ck2"]', rw).prop('disabled', false);
+            }
+            if (tp == "ck3") {
+                $('[data-type="ck1"]', rw).prop('disabled', false);
             }
         }
     })

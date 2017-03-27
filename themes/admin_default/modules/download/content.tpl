@@ -275,8 +275,8 @@
                         </script>
                     </td>
                 </tr>
-                <tr>
-                    <td style="vertical-align:top"> {LANG.file_linkdirect}
+                <tr{CSS_LINKDIRECT}>
+                    <td style="vertical-align:top"> {LANG.file_linkdirect} {REQ_LINKDIRECT}
                     <br />
                     (<em>{LANG.file_linkdirect_note}</em>) </td>
                     <td>
