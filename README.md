@@ -24,3 +24,41 @@ Cần chú ý một số công việc sau:
 - Nếu giao diện của bạn sử dụng không phải giao diện default cần thực hiện các công việc bên dưới
 
 ## Cập nhật giao diện
+
+### Cập nhật block_search.tpl
+
+Tìm:
+
+```html
+<form action="{BASE_URL_SITE}index.php" method="get">
+```
+
+Thay lại thành:
+
+```html
+<form action="{FORM_ACTION}" method="get">
+```
+
+Tìm:
+
+```html
+    <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
+    <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+    <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP_NAME}" />
+```
+
+Thêm lên trên:
+
+```html
+    <!-- BEGIN: no_rewrite -->
+```
+
+Thêm xuống dưới:
+
+```html
+    <!-- END: no_rewrite -->
+```
+
+### Cập nhật chức năng upload của thành viên
+
+Đối chiếu upload.tpl, download.js, download.css từ giao diện mặc định để sửa cho phù hợp
