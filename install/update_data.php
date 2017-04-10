@@ -17,17 +17,17 @@ $nv_update_config = array();
 $nv_update_config['type'] = 1;
 
 // ID goi cap nhat
-$nv_update_config['packageID'] = 'NVUDDOWNLOAD4101';
+$nv_update_config['packageID'] = 'NVUDDOWNLOAD4102';
 
 // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 $nv_update_config['formodule'] = 'download';
 
 // Thong tin phien ban, tac gia, ho tro
-$nv_update_config['release_date'] = 1479427200;
+$nv_update_config['release_date'] = 1491843600;
 $nv_update_config['author'] = 'VINADES.,JSC (contact@vinades.vn)';
-$nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.1.01';
-$nv_update_config['to_version'] = '4.1.01';
-$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00');
+$nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.1.02';
+$nv_update_config['to_version'] = '4.1.02';
+$nv_update_config['allow_old_version'] = array('4.1.01');
 
 // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 $nv_update_config['update_auto_type'] = 1;
@@ -36,32 +36,25 @@ $nv_update_config['lang'] = array();
 $nv_update_config['lang']['vi'] = array();
 
 // Tiếng Việt
-$nv_update_config['lang']['vi']['nv_up_addthis'] = 'Thêm chức năng chia sẻ';
-$nv_update_config['lang']['vi']['nv_up_onlineview'] = 'Thêm chức năng xử lý xem trực tuyến';
-$nv_update_config['lang']['vi']['nv_up_cuttitlelen'] = 'Thêm cấu hình cắt tiêu đề';
+$nv_update_config['lang']['vi']['nv_up_s1'] = 'Cấu hình ai được đăng tài liệu theo chủ đề';
+$nv_update_config['lang']['vi']['nv_up_s2'] = 'Cấu hình hiển thị, bắt buộc nhập các trường dữ liệu';
 $nv_update_config['lang']['vi']['nv_up_finish'] = 'Đánh dấu phiên bản mới';
 
 $nv_update_config['tasklist'] = array();
 $nv_update_config['tasklist'][] = array(
-    'r' => '4.1.00',
+    'r' => '4.1.02',
     'rq' => 1,
-    'l' => 'nv_up_addthis',
-    'f' => 'nv_up_addthis'
+    'l' => 'nv_up_s1',
+    'f' => 'nv_up_s1'
 );
 $nv_update_config['tasklist'][] = array(
-    'r' => '4.1.00',
+    'r' => '4.1.02',
     'rq' => 1,
-    'l' => 'nv_up_onlineview',
-    'f' => 'nv_up_onlineview'
+    'l' => 'nv_up_s2',
+    'f' => 'nv_up_s2'
 );
 $nv_update_config['tasklist'][] = array(
-    'r' => '4.1.01',
-    'rq' => 1,
-    'l' => 'nv_up_cuttitlelen',
-    'f' => 'nv_up_cuttitlelen'
-);
-$nv_update_config['tasklist'][] = array(
-    'r' => '4.1.01',
+    'r' => '4.1.02',
     'rq' => 1,
     'l' => 'nv_up_finish',
     'f' => 'nv_up_finish'
@@ -117,12 +110,12 @@ while (list($_tmp) = $result->fetch(PDO::FETCH_NUM)) {
 }
 
 /**
- * nv_up_addthis()
+ * nv_up_s1()
  *
  * @return
  *
  */
-function nv_up_addthis()
+function nv_up_s1()
 {
     global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
 
@@ -139,7 +132,7 @@ function nv_up_addthis()
         foreach ($array_mod['mod'] as $module_info) {
             $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
             try {
-                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('shareport', 'none'), ('addthis_pubid', '');");
+                $db->query("ALTER TABLE " . $table_prefix . "_categories ADD groups_addfile VARCHAR(255) NOT NULL DEFAULT '4' AFTER groups_download;");
             } catch (PDOException $e) {
                 trigger_error($e->getMessage());
             }
@@ -150,12 +143,12 @@ function nv_up_addthis()
 }
 
 /**
- * nv_up_onlineview()
+ * nv_up_s2()
  *
  * @return
  *
  */
-function nv_up_onlineview()
+function nv_up_s2()
 {
     global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
 
@@ -172,40 +165,47 @@ function nv_up_onlineview()
         foreach ($array_mod['mod'] as $module_info) {
             $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
             try {
-                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('pdf_handler', 'filetmp');");
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
-            }
-        }
-    }
-
-    return $return;
-}
-
-/**
- * nv_up_cuttitlelen()
- *
- * @return
- *
- */
-function nv_up_cuttitlelen()
-{
-    global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
-
-    $return = array(
-        'status' => 1,
-        'complete' => 1,
-        'next' => 1,
-        'link' => 'NO',
-        'lang' => 'NO',
-        'message' => ''
-    );
-
-    foreach ($array_modlang_update as $lang => $array_mod) {
-        foreach ($array_mod['mod'] as $module_info) {
-            $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
-            try {
-                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('list_title_length', '30');");
+                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES 
+                ('arr_dis_ad_author_name', '1'),
+                ('arr_dis_ad_author_email', '1'),
+                ('arr_dis_ad_author_url', '1'),
+                ('arr_dis_ad_fileimage', '1'),
+                ('arr_dis_ad_introtext', '1'),
+                ('arr_dis_ad_description', '1'),
+                ('arr_dis_ad_linkdirect', '1'),
+                ('arr_dis_ad_filesize', '1'),
+                ('arr_dis_ad_version', '1'),
+                ('arr_dis_ad_copyright', '1'),
+                ('arr_req_ad_author_name', '0'),
+                ('arr_req_ad_author_email', '0'),
+                ('arr_req_ad_author_url', '0'),
+                ('arr_req_ad_fileimage', '0'),
+                ('arr_req_ad_introtext', '0'),
+                ('arr_req_ad_description', '0'),
+                ('arr_req_ad_linkdirect', '0'),
+                ('arr_req_ad_filesize', '0'),
+                ('arr_req_ad_version', '0'),
+                ('arr_req_ad_copyright', '0'),
+                ('arr_dis_ur_author_name', '1'),
+                ('arr_dis_ur_author_email', '1'),
+                ('arr_dis_ur_author_url', '1'),
+                ('arr_dis_ur_fileimage', '1'),
+                ('arr_dis_ur_introtext', '1'),
+                ('arr_dis_ur_description', '1'),
+                ('arr_dis_ur_linkdirect', '1'),
+                ('arr_dis_ur_filesize', '1'),
+                ('arr_dis_ur_version', '1'),
+                ('arr_dis_ur_copyright', '1'),
+                ('arr_req_ur_author_name', '0'),
+                ('arr_req_ur_author_email', '0'),
+                ('arr_req_ur_author_url', '0'),
+                ('arr_req_ur_fileimage', '0'),
+                ('arr_req_ur_introtext', '0'),
+                ('arr_req_ur_description', '0'),
+                ('arr_req_ur_linkdirect', '0'),
+                ('arr_req_ur_filesize', '0'),
+                ('arr_req_ur_version', '0'),
+                ('arr_req_ur_copyright', '0');");
             } catch (PDOException $e) {
                 trigger_error($e->getMessage());
             }
@@ -233,8 +233,6 @@ function nv_up_finish()
         'lang' => 'NO',
         'message' => ''
     );
-
-    @nv_deletefile(NV_ROOTDIR . '/themes/default/js/pdf.js', true);
 
     try {
         $num = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'")->fetchColumn();
