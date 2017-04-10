@@ -20,7 +20,7 @@ Tải gói cập nhật tại https://github.com/nukeviet/module-download/releas
 
 Cần chú ý một số công việc sau:
 
-- Vào mục cấu hình module để thiết lập chức năng share qua cổng AddThis, chức năng xử lý phần xem trực tuyến.
+- Vào mục cấu hình module để thiết lập quyền thêm file, các trường dữ liệu.
 - Nếu giao diện của bạn sử dụng không phải giao diện default cần thực hiện các công việc bên dưới
 
 ## Cập nhật giao diện
