@@ -131,8 +131,9 @@
             </div>
             <!-- END: show_username -->
 
+            <!-- BEGIN: captcha -->
             <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{LANG.file_upload_captcha}</label>
+                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
                 <div class="col-sm-10 col-md-10">
                     <input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
                 </div>
@@ -141,6 +142,22 @@
                     <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
                 </div>
             </div>
+            <!-- END: captcha -->
+
+            <!-- BEGIN: recaptcha -->
+            <div class="form-group">
+                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
+                <div class="col-sm-18 col-md-18">
+                    <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                    <script type="text/javascript">
+                    nv_recaptcha_elements.push({
+                        id: "{RECAPTCHA_ELEMENT}",
+                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                    })
+                    </script>
+                </div>
+            </div>
+            <!-- END: recaptcha -->
 
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label"></label>

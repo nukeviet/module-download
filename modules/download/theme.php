@@ -303,7 +303,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
  */
 function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
-    global $module_info, $module_name, $lang_module, $lang_global;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
 
     $array['parentid'] = 0;
     if ($array['catid'] and isset($list_cats[$array['catid']])) {
@@ -320,9 +320,19 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->assign('UPLOAD', $array);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload');
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+
+    if ($global_config['captcha_type'] == 2) {
+        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->parse('main.recaptcha');
+    } else {
+        $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+        $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
+        $xtpl->parse('main.captcha');
+    }
 
     if (!empty($error)) {
         $xtpl->assign('ERROR', $error);

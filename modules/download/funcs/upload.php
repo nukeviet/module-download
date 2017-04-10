@@ -97,7 +97,12 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     $array['copyright'] = nv_substr($nv_Request->get_title('upload_copyright', 'post', '', 1), 0, 255);
     $array['user_name'] = nv_substr($nv_Request->get_title('upload_user_name', 'post', '', 1), 0, 100);
     $array['user_id'] = 0;
-    $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
+    
+    if ($global_config['captcha_type'] == 2) {
+        $seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
+    }
 
     if (defined('NV_IS_USER')) {
         $array['user_name'] = $user_info['username'];

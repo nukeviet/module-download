@@ -13,7 +13,7 @@ if (! defined('NV_MAINFILE')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $module_info, $lang_module, $nv_Request, $nv_Cache;
+    global $site_mods, $module_name, $module_info, $lang_module, $nv_Request, $nv_Cache, $global_config;
 
     $module = $block_config['module'];
 
@@ -43,19 +43,26 @@ if (defined('NV_SYSTEM')) {
         $xtpl = new XTemplate("block_search.tpl", $path);
         $xtpl->assign('LANG', $lang_block_module);
         $xtpl->assign('keyvalue', $key);
-        $xtpl->assign('BASE_URL_SITE', NV_BASE_SITEURL);
-        $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-        $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-        $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-        $xtpl->assign('MODULE_NAME', $module);
-        $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-        $xtpl->assign('OP_NAME', 'search');
-
+        
+        if (!$global_config['rewrite_enable']) {
+            $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php');
+            $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+            $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
+            $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+            $xtpl->assign('MODULE_NAME', $module);
+            $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+            $xtpl->assign('OP_NAME', 'search');
+            $xtpl->parse('main.no_rewrite');
+        } else {
+            $xtpl->assign('FORM_ACTION', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=search', true));
+        }
+        
         foreach ($list as $row) {
             $row['select'] = ($row['id'] == $cat) ? 'selected=selected' : '';
             $xtpl->assign('loop', $row);
             $xtpl->parse('main.loop');
         }
+        
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }

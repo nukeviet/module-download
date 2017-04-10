@@ -1,9 +1,11 @@
 <!-- BEGIN: main -->
-<form action="{BASE_URL_SITE}index.php" method="get">
+<form action="{FORM_ACTION}" method="get">
+    <!-- BEGIN: no_rewrite -->
     <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
     <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
     <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP_NAME}" />
-
+    <!-- END: no_rewrite -->
+    
     <div class="form-group">
         <input type="text" name="q" value="{keyvalue}" class="form-control" placeholder="{LANG.search_key}..." />
     </div>
