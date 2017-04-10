@@ -13,7 +13,7 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
 }
 
 if (empty($list_cats)) {
-    $page_title = $module_info['custom_title'];
+    $page_title = $module_info['site_title'];
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme('');
     include NV_ROOTDIR . '/includes/footer.php';
@@ -82,7 +82,8 @@ if ($nv_Request->isset_request('rating', 'post')) {
     die($lang_module['rating_error1']);
 }
 
-$page_title = $mod_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
+$mod_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $viewcat = $download_config['indexfile'];
 $contents = '';

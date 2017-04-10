@@ -12,14 +12,14 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-global $module_name, $lang_module, $list_cats, $module_file;
+global $module_name, $lang_module, $list_cats;
 
 $mainmenu = 20; // Do dai tieu de menu chinh
 $submenu = 30; // Do dai tieu de menu con
 
 $download_config = nv_mod_down_config();
 
-$xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+$xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
 
 if ($download_config['is_addfile_allow']) {
