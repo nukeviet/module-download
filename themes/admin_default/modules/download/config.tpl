@@ -108,6 +108,10 @@
                             <td><input type="checkbox" value="1" name="tags_alias" {DATA.tags_alias}/></td>
                         </tr>
                         <tr>
+                            <td>{LANG.config_copy_document}</td>
+                            <td><input name="copy_document" value="1" type="checkbox" {DATA.copy_document} /></td>
+                        </tr>
+                        <tr>
                             <td>{LANG.is_zip}</td>
                             <td><input name="is_zip" value="1" type="checkbox" {DATA.is_zip} /></td>
                         </tr>

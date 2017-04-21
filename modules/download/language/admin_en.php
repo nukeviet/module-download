@@ -32,6 +32,7 @@ $lang_module['config_confirm'] = 'Confirm';
 $lang_module['config_share_shareport'] = 'Share Port';
 $lang_module['config_share_shareport_none'] = 'None';
 $lang_module['config_share_shareport_addthis'] = 'AddThis';
+$lang_module['config_copy_document'] = 'Copy the document';
 $lang_module['addthis_pubid'] = 'AddThis PubID';
 $lang_module['note_cat'] = 'You need to create a category before';
 $lang_module['error_cat1'] = 'Error: Category was used!';
@@ -122,3 +123,6 @@ $lang_module['siteinfo_users_send'] = 'Uncheck files';
 $lang_module['siteinfo_eror'] = 'Errors report';
 $lang_module['siteinfo_comment'] = 'Comments';
 $lang_module['siteinfo_comment_pending'] = 'Uncheck comments';
+
+$lang_module['copy_title'] = 'Copy document';
+$lang_module['copy_feature'] = 'Copy';

@@ -76,6 +76,7 @@ $lang_module['config_field_required_admin'] = 'Bắt buộc nhập với admin';
 $lang_module['config_field_required_user'] = 'Bắt buộc nhập với thành viên';
 $lang_module['config_field_display_admin'] = 'Hiển thị trang đăng admin';
 $lang_module['config_field_display_user'] = 'Hiển thị ở trang đăng thành viên';
+$lang_module['config_copy_document'] = 'Cho phép copy tài liệu';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
@@ -236,3 +237,6 @@ $lang_module['fileserver_edit'] = 'Sửa FileServer';
 $lang_module['fileserver_error_server_name'] = 'Lỗi: Tên FileServer không được để trống';
 $lang_module['fileserver_error_upload_url'] = 'Lỗi: Tham số upload_url không được để trống';
 $lang_module['fileserver_error_exists'] = 'Lỗi: Tên FileServer bị trùng';
+
+$lang_module['copy_title'] = 'Sao chép tài liệu';
+$lang_module['copy_feature'] = 'Copy';

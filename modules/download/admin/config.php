@@ -44,6 +44,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
+	$array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -65,17 +66,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $array_config['upload_filetype'] = (! empty($array_config['upload_filetype'])) ? implode(',', $array_config['upload_filetype']) : '';
-    
+
     if (!in_array($array_config['shareport'], $global_array_shareport)) {
         $array_config['shareport'] = $global_array_shareport[0];
     } elseif ($array_config['shareport'] == 'addthis' and empty($array_config['addthis_pubid'])) {
         $array_config['shareport'] = $global_array_shareport[0];
     }
-    
+
     if (!in_array($array_config['pdf_handler'], $array_pdf_handler)) {
         $array_config['pdf_handler'] = $array_pdf_handler[0];
     }
-    
+
     foreach ($array_config as $config_name => $config_value) {
         if ($config_name != 'readme') {
             try {
@@ -99,7 +100,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             @nv_deletefile($readme_file);
         }
     }
-    
+
     $nv_Cache->delMod('settings');
     $nv_Cache->delMod($module_name);
 
@@ -140,7 +141,8 @@ while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
 $array_config['is_addfile'] = ! empty($array_config['is_addfile']) ? ' checked="checked"' : '';
 $array_config['is_zip'] = ! empty($array_config['is_zip']) ? ' checked="checked"' : '';
 $array_config['is_resume'] = ! empty($array_config['is_resume']) ? ' checked="checked"' : '';
-$array_config['tags_alias'] = ! empty($array_config['tags_alias']) ? ' checked="checked"' : '';
+$array_config['is_resume'] = ! empty($array_config['is_resume']) ? ' checked="checked"' : '';
+$array_config['copy_document'] = ! empty($array_config['copy_document']) ? ' checked="checked"' : '';
 
 $groups_addfile = explode(',', $array_config['groups_addfile']);
 $array_config['groups_addfile'] = array();
@@ -284,7 +286,7 @@ foreach ($global_array_shareport as $shareport) {
         'title' => $lang_module['config_share_shareport_' . $shareport],
         'selected' => $shareport == $array_config['shareport'] ? ' selected="selected"' : ''
     );
-    
+
     $xtpl->assign('SHAREPORT', $shareport);
     $xtpl->parse('main.shareport');
 }
@@ -297,7 +299,7 @@ foreach ($array_pdf_handler as $_pdf_handler) {
         'title' => $lang_module['config_pdf_handler_' . $_pdf_handler],
         'selected' => $_pdf_handler == $array_config['pdf_handler'] ? ' selected="selected"' : ''
     );
-    
+
     $xtpl->assign('PDF_HANDLER', $pdf_handler);
     $xtpl->parse('main.pdf_handler');
 }
