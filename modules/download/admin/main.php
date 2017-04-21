@@ -161,7 +161,7 @@ if ($array_search['active'] >= 0) {
     $where[] = 'status=' . $array_search['active'];
 }
 
-$db->sqlreset()->select('COUNT(*)')->from(NV_MOD_TABLE);
+$db->sqlreset()->select('COUNT(*)')->from(NV_MOD_TABLE . ' t1')->join('INNER JOIN ' . NV_MOD_TABLE . '_detail t2 ON t1.id = t2.id');
 
 if (!empty($where)) {
     $db->where(implode(' AND ', $where));
@@ -177,7 +177,6 @@ $db->select('*')->order('uploadtime DESC')->limit($per_page)->offset(($page - 1)
 $result2 = $db->query($db->sql());
 
 $array = array();
-
 while ($row = $result2->fetch()) {
     $array[$row['id']] = array(
         'id' => $row['id'],
