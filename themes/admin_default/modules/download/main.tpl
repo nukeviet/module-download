@@ -72,7 +72,7 @@
                     <th class="text-center">{LANG.file_download_hits}</th>
                     <th class="text-center">{LANG.file_comment_hits}</th>
                     <th class="text-center">{LANG.file_active}</th>
-                    <th class="text-center">{LANG.file_feature}</th>
+                    <th class="text-center w200" >{LANG.file_feature}</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,6 +87,9 @@
                     <td class="text-center">{ROW.comment_hits}</td>
                     <td class="text-center"><input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status} onclick="nv_chang_file_status({ROW.id})" /></td>
                     <td class="text-center">
+                    	<!-- BEGIN: is_copy -->
+                    	<em class="fa fa-copy fa-lg">&nbsp;</em><a href="{COPY_URL}" title="{LANG.copy_title}">{LANG.copy_feature}</a> &nbsp;&nbsp;
+                        <!-- END: is_copy -->
                         <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;
                         <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id}, {DELETEFILE_MODE});">{GLANG.delete}</a></td>
                 </tr>
