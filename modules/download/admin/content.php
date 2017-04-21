@@ -262,6 +262,7 @@ if ($id) {
     $array['user_name'] = $row['user_name'];
 	$array['referer'] = $crypt->encrypt($client_info['referer']);
 
+
     if (! empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
         $array['linkdirect'] = array_map('nv_br2nl', $array['linkdirect']);
@@ -1039,6 +1040,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 				$referer = $crypt->decrypt($array['referer']);
                 if (!empty($referer)) {
                     Header('Location: ' . $referer);
+					exit();
                 }
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 exit();

@@ -46,7 +46,7 @@
                             <td> {LANG.file_image} {REQ_FILEIMAGE}</td>
                             <td>
                                 <!-- BEGIN: fileimage_tmp -->
-                                <div class="clearfix" style="margin-bottom: 5px"> 
+                                <div class="clearfix" style="margin-bottom: 5px">
                                     <strong>{LANG.file_fileimage_tmp}:</strong>
                                     <div class="clearfix" style="margin-bottom: 5px">
                                         <input readonly="readonly" class="w300 form-control pull-left" type="text" style="margin-right: 5px" value="{DATA.fileimage_tmp}" name="fileimage_tmp" id="fileimage_tmp" maxlength="255" />
@@ -150,7 +150,7 @@
                     <td class="w250" style="vertical-align:top"> {LANG.file_myfile} <sup class="required">(*)</sup></td>
                     <td>
                         <!-- BEGIN: fileupload_tmp -->
-                        <div class="clearfix" style="margin-bottom: 5px"> 
+                        <div class="clearfix" style="margin-bottom: 5px">
                             <strong>{LANG.file_fileupload_tmp}:</strong>
                             <!-- BEGIN: loop -->
                             <div class="clearfix" style="margin-bottom: 5px">
@@ -247,7 +247,7 @@
                                         }else{
                                             file.name = response;
                                         }
-                                        
+
                                         $.each(uploader.files, function(i, f){
                                             if( f.id == file.id ){
                                                 uploader.files[i].status = file.status;
@@ -255,7 +255,7 @@
                                                 uploader.files[i].name = file.name;
                                             }
                                         });
-                                        
+
                                         if (file.status == plupload.DONE) {
                                             $('[name="fileupload[]"]', $('[data-fileid="' + file.id + '"]')).val(nv_base_siteurl + file_dir + '/' + file.name);
                                         } else {
@@ -270,7 +270,7 @@
                                     }
                                 }
                             });
-                            uploader.init();                        
+                            uploader.init();
                         })
                         </script>
                     </td>
@@ -309,6 +309,7 @@
         </table>
     </div>
     <div style="text-align:center;padding-top:15px">
+    	<input type="hidden" value="{DATA.referer}" name="referer">
         <!-- BEGIN: is_del_report -->
         <input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
         <!-- END: is_del_report -->
