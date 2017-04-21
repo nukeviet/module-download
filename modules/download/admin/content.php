@@ -260,6 +260,7 @@ if ($id) {
     $array['groups_download'] = $row['groups_download'];
     $array['user_id'] = $row['user_id'];
     $array['user_name'] = $row['user_name'];
+	$array['referer'] = $crypt->encrypt($client_info['referer']);
 
     if (! empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
@@ -294,7 +295,9 @@ if ($id) {
             'scorm_path' => $file['scorm_path']
         );
         if (!empty($file['file_path'])) {
-            $array['fileupload_key'][md5($file['server_id'] . '_' . $file['file_path'])] = $file['file_id'];
+        	if(!$copy) {
+        		$array['fileupload_key'][md5($file['server_id'] . '_' . $file['file_path'])] = $file['file_id'];
+        	}
             $array['fileupload'][] = $file['file_path'];
         }
         if (!empty($file['scorm_path'])) {
@@ -391,6 +394,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['copyright'] = $nv_Request->get_title('copyright', 'post', '', 1);
     $array['is_del_report'] = $nv_Request->get_int('is_del_report', 'post', 0);
 	$is_copy = $nv_Request->get_int('copy', 'get', 0);
+	$array['referer'] = $nv_Request->get_string('referer', 'post');
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $array['groups_view'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -1032,7 +1036,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
 
                 $nv_Cache->delMod($module_name);
-
+				$referer = $crypt->decrypt($array['referer']);
+                if (!empty($referer)) {
+                    Header('Location: ' . $referer);
+                }
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 exit();
             }
