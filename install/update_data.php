@@ -27,7 +27,7 @@ $nv_update_config['release_date'] = 1491843600;
 $nv_update_config['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.1.02';
 $nv_update_config['to_version'] = '4.1.02';
-$nv_update_config['allow_old_version'] = array('4.1.01');
+$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00', '4.1.01');
 
 // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 $nv_update_config['update_auto_type'] = 1;
@@ -36,11 +36,32 @@ $nv_update_config['lang'] = array();
 $nv_update_config['lang']['vi'] = array();
 
 // Tiếng Việt
+$nv_update_config['lang']['vi']['nv_up_addthis'] = 'Thêm chức năng chia sẻ';
+$nv_update_config['lang']['vi']['nv_up_onlineview'] = 'Thêm chức năng xử lý xem trực tuyến';
+$nv_update_config['lang']['vi']['nv_up_cuttitlelen'] = 'Thêm cấu hình cắt tiêu đề';
 $nv_update_config['lang']['vi']['nv_up_s1'] = 'Cấu hình ai được đăng tài liệu theo chủ đề';
 $nv_update_config['lang']['vi']['nv_up_s2'] = 'Cấu hình hiển thị, bắt buộc nhập các trường dữ liệu';
 $nv_update_config['lang']['vi']['nv_up_finish'] = 'Đánh dấu phiên bản mới';
 
 $nv_update_config['tasklist'] = array();
+$nv_update_config['tasklist'][] = array(
+    'r' => '4.1.00',
+    'rq' => 1,
+    'l' => 'nv_up_addthis',
+    'f' => 'nv_up_addthis'
+);
+$nv_update_config['tasklist'][] = array(
+    'r' => '4.1.00',
+    'rq' => 1,
+    'l' => 'nv_up_onlineview',
+    'f' => 'nv_up_onlineview'
+);
+$nv_update_config['tasklist'][] = array(
+    'r' => '4.1.01',
+    'rq' => 1,
+    'l' => 'nv_up_cuttitlelen',
+    'f' => 'nv_up_cuttitlelen'
+);
 $nv_update_config['tasklist'][] = array(
     'r' => '4.1.02',
     'rq' => 1,
@@ -107,6 +128,96 @@ while (list($_tmp) = $result->fetch(PDO::FETCH_NUM)) {
         $array_modlang_update[$_tmp]['mod'][] = array("module_title" => $_modt, "module_data" => $_modd);
         $array_modtable_update[] = $db_config['prefix'] . "_" . $_tmp . "_" . $_modd;
     }
+}
+
+/**
+ * nv_up_addthis()
+ *
+ * @return
+ *
+ */
+function nv_up_addthis()
+{
+    global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
+    $return = array(
+        'status' => 1,
+        'complete' => 1,
+        'next' => 1,
+        'link' => 'NO',
+        'lang' => 'NO',
+        'message' => ''
+    );
+    foreach ($array_modlang_update as $lang => $array_mod) {
+        foreach ($array_mod['mod'] as $module_info) {
+            $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
+            try {
+                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('shareport', 'none'), ('addthis_pubid', '');");
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+    }
+    return $return;
+}
+
+/**
+ * nv_up_onlineview()
+ *
+ * @return
+ *
+ */
+function nv_up_onlineview()
+{
+    global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
+    $return = array(
+        'status' => 1,
+        'complete' => 1,
+        'next' => 1,
+        'link' => 'NO',
+        'lang' => 'NO',
+        'message' => ''
+    );
+    foreach ($array_modlang_update as $lang => $array_mod) {
+        foreach ($array_mod['mod'] as $module_info) {
+            $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
+            try {
+                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('pdf_handler', 'filetmp');");
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+    }
+    return $return;
+}
+
+/**
+ * nv_up_cuttitlelen()
+ *
+ * @return
+ *
+ */
+function nv_up_cuttitlelen()
+{
+    global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
+    $return = array(
+        'status' => 1,
+        'complete' => 1,
+        'next' => 1,
+        'link' => 'NO',
+        'lang' => 'NO',
+        'message' => ''
+    );
+    foreach ($array_modlang_update as $lang => $array_mod) {
+        foreach ($array_mod['mod'] as $module_info) {
+            $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
+            try {
+                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES ('list_title_length', '30');");
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+    }
+    return $return;
 }
 
 /**
@@ -234,6 +345,8 @@ function nv_up_finish()
         'message' => ''
     );
 
+    @nv_deletefile(NV_ROOTDIR . '/themes/default/js/pdf.js', true);
+    
     try {
         $num = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'")->fetchColumn();
         $version = $nv_update_config['to_version'] . " " . $nv_update_config['release_date'];
