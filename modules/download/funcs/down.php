@@ -135,7 +135,6 @@ $file_basename = $filename;
 $directory = NV_UPLOADS_REAL_DIR;
 
 if ($is_zip) {
-    $upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir;
     $subfile = nv_pathinfo_filename($filename);
     $tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
 
@@ -152,7 +151,10 @@ if ($is_zip) {
 
         $zip = new PclZip($tem_file);
 
-        $zip->add($file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir);
+        $paths = explode('/', $file_src);
+        array_pop($paths);
+        $paths = implode('/', $paths);
+        $zip->add($file_src, PCLZIP_OPT_REMOVE_PATH, $paths);
 
         if (isset($global_config['site_logo']) and ! empty($global_config['site_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_logo'])) {
             $paths = explode('/', $global_config['site_logo']);
