@@ -56,9 +56,12 @@ if ($nv_Request->isset_request('code', 'get')) {
     if (empty($code) or ! preg_match("/^([a-z0-9]{32})$/i", $code) or ! isset($session_files['linkdirect'][$code])) {
         die('Wrong URL');
     }
-
-    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['linkdirect'][$code]['id']);
-    $db->query($sql);
+    $_fid = intval($session_files['linkdirect'][$code]['id']);
+    $_setdown = $nv_Request->get_int($module_data . '_' . $op . '_setdown_' . $_fid, 'session');
+    if (empty($_setdown)) {
+        $nv_Request->set_Session($module_data . '_' . $op . '_setdown_' . $_fid, NV_CURRENTTIME);
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . $_fid);
+    }
 
     $content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
     $content .= sprintf($lang_module['download_wait2'], $session_files['linkdirect'][$code]['link']);
@@ -115,8 +118,12 @@ if ($filepdf == 1) {
     $html = theme_viewpdf($file_url);
     die($html);
 } elseif (empty($filepdf)) {
-    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . intval($session_files['fileupload'][$filename]['id']);
-    $db->query($sql);
+    $_fid = intval($session_files['fileupload'][$filename]['id']);
+    $_setdown = $nv_Request->get_int($module_data . '_' . $op . '_setdown_' . $_fid, 'session');
+    if (empty($_setdown)) {
+        $nv_Request->set_Session($module_data . '_' . $op . '_setdown_' . $_fid, NV_CURRENTTIME);
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . $_fid);
+    }
 }
 
 $sql = "SELECT config_name, config_value FROM " . NV_MOD_TABLE . "_config WHERE config_name='upload_dir' OR config_name='is_zip' OR config_name='is_resume' OR config_name='max_speed'";
