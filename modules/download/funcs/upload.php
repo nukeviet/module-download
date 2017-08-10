@@ -228,7 +228,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                     $is_error = true;
                     $error = $upload_info['error'];
                 }
-                print_r($upload_info['error']);die('pass');
+
                 unset($upload, $upload_info);
             }
         }
