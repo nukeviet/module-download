@@ -200,6 +200,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                     nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, 'temp');
                 }
                 $upload = new NukeViet\Files\Upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], $download_config['maxfilesize'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                $upload->setLanguage($lang_global);
                 $upload_info = $upload->save_file($_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp', false);
 
                 @unlink($_FILES['upload_fileupload']['tmp_name']);
@@ -244,6 +245,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                 $fileimage = '';
                 if (isset($_FILES['upload_fileimage']) and is_uploaded_file($_FILES['upload_fileimage']['tmp_name'])) {
                     $upload = new NukeViet\Files\Upload( array('images'), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                    $upload->setLanguage($lang_global);
                     $upload_info = $upload->save_file($_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/temp', false);
 
                     @unlink($_FILES['upload_fileimage']['tmp_name']);
