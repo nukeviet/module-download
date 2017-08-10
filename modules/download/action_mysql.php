@@ -199,6 +199,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('fileserver', '0'),
         ('shareport', 'none'),
         ('addthis_pubid', ''),
+        ('copy_document', ''),
         ('pdf_handler', 'phpattachment'),
         ('list_title_length', '30'),
         ('arr_dis_ad_author_name', '1'),
