@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -19,6 +19,10 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['onlineview'] = 'View online';
+$lang_module['onlineview_path'] = 'Part';
+$lang_module['page'] = 'Page';
+$lang_module['file'] = 'File';
 $lang_module['unknown'] = 'N/A';
 $lang_module['author_name'] = 'Author';
 $lang_module['author_email'] = 'Email';
@@ -32,9 +36,12 @@ $lang_module['detail_or_download'] = 'Detail / Download';
 $lang_module['view_hits'] = 'Views';
 $lang_module['download_hits'] = 'Downloads';
 $lang_module['comment_hits'] = 'Comments';
+$lang_module['expand'] = 'See more';
+$lang_module['collapse'] = 'Close';
 $lang_module['today'] = 'Today';
 $lang_module['yesterday'] = 'Yesterday';
 $lang_module['download'] = 'Download';
+$lang_module['upload_to'] = 'Upload';
 $lang_module['upload'] = 'Upload';
 $lang_module['report'] = 'Broken link';
 $lang_module['listing_details'] = 'Detail';
@@ -71,6 +78,17 @@ $lang_module['file_error_title'] = 'Subject missing!';
 $lang_module['file_title_exists'] = 'Error: File\'s name was used.';
 $lang_module['file_error_author_url'] = 'Error: Invalid URL!';
 $lang_module['file_error_fileupload'] = 'Upload file or paste link to file!';
+$lang_module['file_error_fileupload1'] = 'Error: You have not selected the upload file';
+$lang_module['file_error_author_email'] = 'Error: Author email can not be empty';
+$lang_module['file_error_author_url_empty'] = 'Error: The author\'s personal page can not be left blank';
+$lang_module['file_error_author_name'] = 'Error: Author name can not be empty';
+$lang_module['file_error_filesize'] = 'Error: File size can not be zero';
+$lang_module['file_error_version'] = 'Error: Version information may not be empty';
+$lang_module['file_error_copyright'] = 'Error: Copyright information may not be left blank';
+$lang_module['file_error_introtext'] = 'Error: Summary can not be empty';
+$lang_module['file_error_description'] = 'Error: The file description can not be empty';
+$lang_module['file_error_linkdirect'] = 'Error: No external source';
+$lang_module['file_error_fileimage'] = 'Error: No image selected';
 $lang_module['file_catid_exists'] = 'Error: Empty category';
 $lang_module['upload_error1'] = 'Error: Wrong captcha code';
 $lang_module['upload_error2'] = 'Error: Name too short or empty';
@@ -88,16 +106,28 @@ $lang_module['upload_valid_ext_info'] = 'Allowed ';
 $lang_module['upload_linkdirect_info'] = 'Only one link per line';
 $lang_module['file_upload_captcha'] = 'Captcha';
 $lang_module['file_upload_captcha2'] = 'Copy captcha code';
-$lang_module['file_upload_ok'] = 'Upload successfully!';
+$lang_module['file_upload_success_title'] = 'Send the file successfully';
+$lang_module['file_upload_success_content'] = 'Your file submission has been received. It will be displayed after being checked. Thank you!';
+$lang_module['back'] = 'Back';
 $lang_module['categories'] = 'Navigation';
+$lang_module['categories_main'] = 'Main topic';
 $lang_module['viewcat_download_hits'] = 'down';
 $lang_module['viewcat_view_hits'] = 'Views';
+$lang_module['viewcat_listfile'] = 'File list under topic "% s"';
 $lang_module['categories_viewall'] = 'See all';
 $lang_module['search'] = 'Search data';
 $lang_module['search_key'] = 'search key';
 $lang_module['search_option'] = 'Please select a topic';
 $lang_module['search_result'] = 'Search Results';
+$lang_module['search_result_count'] = 'Search results <br  /> Find the <strong />% d  matching results for the request';
+$lang_module['search_input'] = 'Please enter a search value';
 $lang_module['search_noresult'] = 'No data suitable to your requirements!';
 $lang_module['upload_files_log'] = 'Post new file';
-$lang_module['error_not_permission_title'] = 'Sorry, You do not have permission to view document this!';
 $lang_module['error_not_permission_content'] = 'Administrator is not allow you to access access to the contents of the document. Please Contact us to be decode reply';
+$lang_module['error_not_permission_title'] = 'Sorry, You do not have permission to view document this!';
+$lang_module['error_not_permission_upload_content_guest'] = 'You are not authorized to access this area, please login to the system to determine the file upload permission, we will forward you to the login page in a moment ...';
+$lang_module['error_not_permission_upload_content_user'] = 'The group you are currently in is not authorized to access this area, please contact the administrator for more information.';
+$lang_module['keywords'] = 'Keywords';
+$lang_module['load_parentcat'] = 'Return to the topic of father';
+$lang_module['load_subcat'] = 'Go to the child topic';
+$lang_module['file_upload_ok'] = 'Upload successfully!';
