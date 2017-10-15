@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
@@ -74,12 +74,12 @@ if ($nv_Request->isset_request('rating', 'post')) {
                     $content = $lang_module['file_rating0'];
                 }
 
-                die($content);
+                nv_htmlOutput($content);
             }
         }
     }
 
-    die($lang_module['rating_error1']);
+    nv_htmlOutput($lang_module['rating_error1']);
 }
 
 $page_title = $module_info['site_title'];

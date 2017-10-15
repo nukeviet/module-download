@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -47,7 +47,7 @@ if ($nv_Request->isset_request('changestatus', 'post') or $nv_Request->isset_req
     }
 
     $nv_Cache->delMod($module_name);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // Delete file
@@ -128,7 +128,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $nv_Cache->delMod($module_name);
 
     nv_insert_logs(NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid']);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // List file
@@ -144,8 +144,7 @@ $array_search = array(
 );
 
 if (empty($list_cats)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-content');
-    exit();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-content');
 }
 
 if (!empty($array_search['q'])) {

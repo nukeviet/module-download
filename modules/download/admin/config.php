@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -45,6 +45,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
 	$array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
+	$array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -104,8 +105,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $nv_Cache->delMod('settings');
     $nv_Cache->delMod($module_name);
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
 $array_config['is_addfile'] = 0;
@@ -119,6 +119,8 @@ $array_config['is_resume'] = 0;
 $array_config['max_speed'] = 0;
 $array_config['tags_alias'] = 0;
 $array_config['delfile_mode'] = 0;
+$array_config['copy_document'] = 0;
+$array_config['allow_fupload_import'] = 0;
 $array_config['structure_upload'] = 'Ym';
 $array_config['scorm_handle_mode'] = 0;
 $array_config['fileserver'] = 0;
@@ -138,11 +140,12 @@ while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 
-$array_config['is_addfile'] = ! empty($array_config['is_addfile']) ? ' checked="checked"' : '';
-$array_config['is_zip'] = ! empty($array_config['is_zip']) ? ' checked="checked"' : '';
-$array_config['is_resume'] = ! empty($array_config['is_resume']) ? ' checked="checked"' : '';
-$array_config['is_resume'] = ! empty($array_config['is_resume']) ? ' checked="checked"' : '';
-$array_config['copy_document'] = ! empty($array_config['copy_document']) ? ' checked="checked"' : '';
+$array_config['is_addfile'] = !empty($array_config['is_addfile']) ? ' checked="checked"' : '';
+$array_config['is_zip'] = !empty($array_config['is_zip']) ? ' checked="checked"' : '';
+$array_config['is_resume'] = !empty($array_config['is_resume']) ? ' checked="checked"' : '';
+$array_config['is_resume'] = !empty($array_config['is_resume']) ? ' checked="checked"' : '';
+$array_config['copy_document'] = !empty($array_config['copy_document']) ? ' checked="checked"' : '';
+$array_config['allow_fupload_import'] = !empty($array_config['allow_fupload_import']) ? ' checked="checked"' : '';
 
 $groups_addfile = explode(',', $array_config['groups_addfile']);
 $array_config['groups_addfile'] = array();

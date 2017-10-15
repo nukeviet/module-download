@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -77,6 +77,8 @@ $lang_module['config_field_required_user'] = 'Bắt buộc nhập với thành v
 $lang_module['config_field_display_admin'] = 'Hiển thị trang đăng admin';
 $lang_module['config_field_display_user'] = 'Hiển thị ở trang đăng thành viên';
 $lang_module['config_copy_document'] = 'Cho phép copy tài liệu';
+$lang_module['config_allow_fupload_import'] = 'Kích hoạt chức năng nhập file từ thư mục upload';
+$lang_module['config_display'] = 'Cấu hình hiển thị';
 
 $lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
@@ -240,3 +242,34 @@ $lang_module['fileserver_error_exists'] = 'Lỗi: Tên FileServer bị trùng';
 
 $lang_module['copy_title'] = 'Sao chép tài liệu';
 $lang_module['copy_feature'] = 'Copy';
+$lang_module['fimport'] = 'Import từ thư mục upload';
+$lang_module['fimport_dotitle'] = 'Thực hiện import từ thư mục upload';
+$lang_module['fimport_help_title'] = 'Hướng dẫn nhập file từ thư mục upload';
+$lang_module['fimport_help_1'] = 'Bước 1: Chuẩn bị thư mục import';
+$lang_module['fimport_help_2'] = 'Hệ thống hỗ trợ import với cấu trúc như sau';
+$lang_module['fimport_help_3'] = 'Mỗi thư mục chính đầu tiên sẽ được tự động tạo một chủ đề riêng, tên thư mục là tên chủ đề. Để sắp xếp thứ tự hãy sử dụng số phía trước ví dụ <em>1. Bài giảng điện tử</em>';
+$lang_module['fimport_help_4'] = 'Bên trong thư mục chính có thể là thư mục con chứa các tập tin hoặc trực tiếp chứa các tập tin';
+$lang_module['fimport_help_5'] = 'Nếu trong thư mục chính trực tiếp chứa các tập tin thì mỗi tập tin sẽ được sử dụng làm một file/tài liệu mới';
+$lang_module['fimport_help_6'] = 'Nếu trong thư mục chính chứa các thư mục con thì tên mỗi thư mục con sẽ được sử dụng làm một file/tài liệu mới và tất cả các tập tin bên trong đó sẽ là một phần của tài liệu';
+$lang_module['fimport_help_7'] = 'Sau khi chuẩn bị dữ liệu theo cấu trúc trên, sử dụng phần mềm FTP để toàn bộ vào thư mục';
+$lang_module['fimport_help_8'] = 'và đợi cho đến khi quá trình upload hoàn tất';
+$lang_module['fimport_help_9'] = 'Bước 2: Thực hiện import';
+$lang_module['fimport_help_10'] = 'Sau khi quá trình upload đã hoàn tất, truy cập lại khu vực này. Điền các thông tin cần thiết sau đó nhấp nút <em>Thực hiện</em> để tiến hành import';
+$lang_module['fimport_help_11'] = 'Bước 3: Hiệu chỉnh dữ liệu';
+$lang_module['fimport_help_12'] = 'Do dữ liệu import chưa đầy đủ nên bạn cần truy cập phần quản lý chủ đề, phần danh sách các file/tài liệu để tiến hành bổ sung thêm các thông tin.';
+$lang_module['fimport_status'] = 'Trạng thái sau khi import';
+$lang_module['fimport_status0'] = 'Hoạt động';
+$lang_module['fimport_status1'] = 'Dừng hoạt động';
+$lang_module['fimport_mode'] = 'Hình thức import';
+$lang_module['fimport_mode0'] = 'Bỏ qua nếu bị trùng';
+$lang_module['fimport_mode1'] = 'Luôn tạo mới';
+$lang_module['fimport_catprocess'] = 'Hình thức xử lý tên chủ đề';
+$lang_module['fimport_catprocess0'] = 'Cắt bỏ số thứ tự ở trước tên thư mục';
+$lang_module['fimport_catprocess1'] = 'Giữ nguyên tên thư mục';
+$lang_module['fimport_submit'] = 'Thực hiện';
+$lang_module['fimport_error_nofolder'] = 'Không có gì để import';
+$lang_module['fimport_success'] = 'Nhập file/tài liệu thành công, dưới đây là thông tin';
+$lang_module['fimport_stat_cat_add'] = 'Số chủ đề được tạo mới';
+$lang_module['fimport_stat_cat_ignore'] = 'Số chủ đề đã bỏ qua do đã có';
+$lang_module['fimport_stat_file_add'] = 'Số file/tài liệu được tạo mới';
+$lang_module['fimport_stat_file_ignore'] = 'Số file/tài liệu đã bỏ qua do đã có';

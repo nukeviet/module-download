@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_drop_module = array();
-    
+
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data;
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail";
@@ -25,15 +25,15 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id";
     $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_server";
-    
+
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comment'");
     $rows = $result->fetchAll();
     if (sizeof($rows)) {
         $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comment WHERE module='" . $module_name . "'";
     }
-    
+
     $sql_create_module = $sql_drop_module;
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
          id int(11) unsigned NOT NULL AUTO_INCREMENT,
          catid smallint(5) unsigned NOT NULL,
@@ -62,7 +62,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          KEY catid (catid),
          KEY user_id (user_id)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_files (
          file_id int(11) unsigned NOT NULL AUTO_INCREMENT,
          download_id int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'ID file download',
@@ -76,7 +76,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          KEY download_id (download_id),
          KEY server_id (server_id)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (
          id int(11) unsigned NOT NULL,
          description mediumtext NOT NULL,
@@ -88,7 +88,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          rating_detail varchar(255) NOT NULL,
          PRIMARY KEY (id)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
          id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
          catid int(10) unsigned NOT NULL DEFAULT '0',
@@ -111,7 +111,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          UNIQUE KEY title (title),
          KEY catid (catid)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories (
          id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
          parentid smallint(5) unsigned NOT NULL,
@@ -133,7 +133,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          PRIMARY KEY (id),
          UNIQUE KEY alias (alias)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report (
          fid int(11) unsigned NOT NULL DEFAULT '0',
          post_ip varchar(45) NOT NULL,
@@ -141,13 +141,13 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          UNIQUE KEY fid (fid),
          KEY post_time (post_time)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config (
          config_name varchar(30) NOT NULL,
          config_value varchar(255) NOT NULL,
          UNIQUE KEY config_name (config_name)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
          did int(11) unsigned NOT NULL AUTO_INCREMENT,
          numdownload mediumint(8) NOT NULL DEFAULT '0',
@@ -157,7 +157,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
          keywords varchar(255),
          PRIMARY KEY (did)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (
           id int(11) unsigned NOT NULL DEFAULT '0',
           did int(11) unsigned NOT NULL DEFAULT '0',
@@ -165,7 +165,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
           UNIQUE KEY id_tid (id,did),
           KEY did (did)
         )ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_server (
           server_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
           server_name varchar(250) NOT NULL DEFAULT '',
@@ -176,9 +176,9 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
           UNIQUE KEY server_name (server_name),
           PRIMARY KEY (server_id)
         )ENGINE=MyISAM";
-    
+
     $maxfilesize = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
-    
+
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
         ('indexfile', 'viewcat_main_bottom'),
         ('viewlist_type', 'list'),
@@ -199,7 +199,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('fileserver', '0'),
         ('shareport', 'none'),
         ('addthis_pubid', ''),
-        ('copy_document', ''),
+        ('copy_document', '0'),
         ('pdf_handler', 'phpattachment'),
         ('list_title_length', '30'),
         ('arr_dis_ad_author_name', '1'),
@@ -241,9 +241,10 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('arr_req_ur_linkdirect', '0'),
         ('arr_req_ur_filesize', '0'),
         ('arr_req_ur_version', '0'),
-        ('arr_req_ur_copyright', '0')
+        ('arr_req_ur_copyright', '0'),
+        ('allow_fupload_import', '0')
     ";
-    
+
     // Comments
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";

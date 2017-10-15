@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -120,7 +120,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     nv_fix_cat_order();
     $nv_Cache->delMod($module_name);
 
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // Change weight cat
@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $db->query('UPDATE ' . NV_MOD_TABLE . '_categories SET weight=' . $new . ' WHERE id=' . $catid);
 
     $nv_Cache->delMod($module_name);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // Active - Deactive
@@ -175,7 +175,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // List cat
@@ -193,8 +193,7 @@ if (! $num) {
     } else {
         $_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
     }
-    Header('Location: ' . $_url);
-    exit();
+    nv_redirect_location($_url);
 }
 
 if ($pid) {

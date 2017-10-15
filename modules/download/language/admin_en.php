@@ -2,7 +2,7 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
+* @Author VINADES.,JSC <contact@vinades.vn>
 * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die( 'Stop!!!' );
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -75,6 +75,8 @@ $lang_module['config_field_required_user'] = 'Mandatory input with admin';
 $lang_module['config_field_display_admin'] = 'Show admin page';
 $lang_module['config_field_display_user'] = 'Show on the post a member page';
 $lang_module['config_copy_document'] = 'Copy the document';
+$lang_module['config_allow_fupload_import'] = 'Enables importing files from the upload directory';
+$lang_module['config_display'] = 'Configuration display';
 $lang_module['note_cat'] = 'You need to create a category before';
 $lang_module['error_cat1'] = 'Error: Category was used!';
 $lang_module['error_cat2'] = 'Error: Empty category!';

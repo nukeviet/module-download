@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'upload_new', $id);
     }
 
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // All del
@@ -85,7 +85,7 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 
     $db->query('TRUNCATE TABLE ' . NV_MOD_TABLE . '_tmp');
 
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // List files
@@ -110,8 +110,7 @@ if (! $all_file) {
 }
 
 if (empty($list_cats)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-content');
-    exit();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-content');
 }
 
 $sql2 = 'SELECT * ' . $sql . ' ORDER BY uploadtime DESC';

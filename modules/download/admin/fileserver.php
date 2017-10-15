@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    die("OK");
+    nv_htmlOutput("OK");
 }
 
 $data = array();
@@ -134,8 +134,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     }
 
                     $nv_Cache->delMod($module_name);
-                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                 } else {
                     $error = $lang_module['errorsave'];
                 }

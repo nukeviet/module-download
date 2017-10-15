@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -19,8 +19,7 @@ if ($catid) {
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid;
     $row = $db->query($sql)->fetch();
     if (empty($row)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
     }
 
     $page_title = $lang_module['editcat_cat'];
@@ -129,8 +128,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editcat_cat'], $array['title'], $admin_info['userid']);
 
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
-                exit();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
             } else {
                 $error = $lang_module['error_cat5'];
             }
@@ -164,8 +162,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'], $array['title'], $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
     
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
-                exit();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
             } else {
                 $error = $lang_module['error_cat4'];
             }

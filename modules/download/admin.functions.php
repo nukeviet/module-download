@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 2:29
@@ -16,16 +16,8 @@ define('NV_IS_FILE_ADMIN', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 $allow_func = array('main', 'content', 'filequeue', 'report', 'config', 'cat', 'cat-content', 'view', 'tags', 'tagsajax', 'change_cat', 'fileserver');
-
-// Load config module
-$_sql_config = 'SELECT * FROM ' . NV_MOD_TABLE . '_config ';
-$_query_config = $db->query($_sql_config);
-while ($row_config = $_query_config->fetch()) {
-    if (preg_match('/^arr\_(dis|req)\_(ad|ur)\_([a-zA-Z0-9\_\-]+)$/', $row_config['config_name'], $m)) {
-        $module_config[$module_name][$m[1]][$m[2]][$m[3]] = $row_config['config_value'];
-    } else {
-        $module_config[$module_name][$row_config['config_name']] = $row_config['config_value'];
-    }
+if (!empty($module_config[$module_name]['allow_fupload_import'])) {
+    $allow_func[] = 'fimport';
 }
 
 /**
@@ -94,7 +86,7 @@ if ($nv_Request->isset_request('check', 'post')) {
         }
     }
 
-    die($lang_module['file_checkUrl_ok']);
+    nv_htmlOutput($lang_module['file_checkUrl_ok']);
 }
 
 // Download file
@@ -167,17 +159,17 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 function nv_get_viewImage($fileName)
 {
     global $db;
-    
+
     $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
     $result = $db->query($sql);
-    
+
     $array_thumb_config = array();
     while ($row = $result->fetch()) {
         if ($row['thumb_type']) {
             $array_thumb_config[$row['dirname']] = $row;
         }
     }
-    
+
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico)))$/i', $fileName, $m)) {
         $viewFile = NV_FILES_DIR . '/' . $m[1];
 
@@ -258,4 +250,176 @@ function nv_get_viewImage($fileName)
         return array( $fileName, $size[0], $size[1] );
     }
     return false;
+}
+
+/**
+ * list_all_file()
+ *
+ * @param string $dir
+ * @param string $base_dir
+ * @return
+ */
+function list_all_file($dir = '', $base_dir = '')
+{
+    if (empty($dir)) {
+        return array();
+    }
+
+    $file_list = array();
+
+    if (is_dir($dir)) {
+        $array_filedir = scandir($dir);
+
+        foreach ($array_filedir as $v) {
+            if ($v == '.' or $v == '..') {
+                continue;
+            }
+
+            if (is_dir($dir . '/' . $v)) {
+                foreach (list_all_file($dir . '/' . $v, $base_dir . '/' . $v) as $file) {
+                    $file_list[] = $file;
+                }
+            } else {
+                if ($v == 'index.html' or $v == 'index.htm') {
+                    continue;
+                }
+                $file_list[] = preg_replace('/^\//', '', $base_dir . '/' . $v);
+            }
+        }
+    }
+
+    return $file_list;
+}
+
+/**
+ * nv_update_upload_dir()
+ *
+ * @param mixed $dir
+ * @return void
+ */
+function nv_update_upload_dir($dir)
+{
+    global $db;
+    try {
+        $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $dir . "', 0)");
+    } catch (PDOException $e) {
+        trigger_error($e->getMessage());
+    }
+}
+
+/**
+ * getUploadcurrentPath()
+ *
+ * @return void
+ */
+function getUploadcurrentPath()
+{
+    global $admin_info, $module_upload, $module_config, $module_name;
+
+    // Thiết lập thư mục tải lên
+    $username_alias = change_alias($admin_info['username']);
+    $array_structure_image = array();
+    $array_structure_image[''] = $module_upload;
+    $array_structure_image['Y'] = $module_upload . '/' . date('Y');
+    $array_structure_image['Ym'] = $module_upload . '/' . date('Y_m');
+    $array_structure_image['Y_m'] = $module_upload . '/' . date('Y/m');
+    $array_structure_image['Ym_d'] = $module_upload . '/' . date('Y_m/d');
+    $array_structure_image['Y_m_d'] = $module_upload . '/' . date('Y/m/d');
+    $array_structure_image['username'] = $module_upload . '/' . $username_alias;
+
+    $array_structure_image['username_Y'] = $module_upload . '/' . $username_alias . '/' . date('Y');
+    $array_structure_image['username_Ym'] = $module_upload . '/' . $username_alias . '/' . date('Y_m');
+    $array_structure_image['username_Y_m'] = $module_upload . '/' . $username_alias . '/' . date('Y/m');
+    $array_structure_image['username_Ym_d'] = $module_upload . '/' . $username_alias . '/' . date('Y_m/d');
+    $array_structure_image['username_Y_m_d'] = $module_upload . '/' . $username_alias . '/' . date('Y/m/d');
+
+    $structure_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : 'Ym';
+    $currentpath = isset($array_structure_image[$structure_upload]) ? $array_structure_image[$structure_upload] : '';
+    $currentpath_files = $currentpath_images = '';
+
+    if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
+        $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $currentpath;
+    } else {
+        $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_upload;
+        $e = explode('/', $currentpath);
+        if (! empty($e)) {
+            $cp = '';
+            foreach ($e as $p) {
+                if (! empty($p) and ! is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
+                    $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $cp, $p);
+                    if ($mk[0] > 0) {
+                        $upload_real_dir_page = $mk[2];
+                        nv_update_upload_dir($cp . $p);
+                    }
+                } elseif (! empty($p)) {
+                    $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
+                }
+                $cp .= $p . '/';
+            }
+        }
+
+        $upload_real_dir_page = str_replace('\\', '/', $upload_real_dir_page);
+    }
+
+    $currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
+    $currentpath_tmp = str_replace(NV_UPLOADS_REAL_DIR . '/', '', $upload_real_dir_page);
+    $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
+
+    if (!is_dir($upload_real_dir_page . '/images')) {
+        $mk = nv_mkdir($upload_real_dir_page, 'images');
+        if ($mk[0] > 0) {
+            $currentpath_images = '/images';
+            nv_update_upload_dir($currentpath_tmp . '/images');
+        }
+    } else {
+        $currentpath_images = '/images';
+    }
+    if (!is_dir($upload_real_dir_page . '/files')) {
+        $mk = nv_mkdir($upload_real_dir_page, 'files');
+        if ($mk[0] > 0) {
+            $currentpath_files = '/files';
+            nv_update_upload_dir($currentpath_tmp . '/files');
+        }
+    } else {
+        $currentpath_files = '/files';
+    }
+    unset($currentpath_tmp);
+
+    if (!defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
+        $array_currentpath = explode('/', $currentpath);
+        if ($array_currentpath[2] == $username_alias) {
+            $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
+        }
+    }
+
+    $currentpath_images = $currentpath . $currentpath_images;
+    $currentpath_files = $currentpath . $currentpath_files;
+
+    return array($currentpath_images, $currentpath_files, $uploads_dir_user);
+}
+
+/**
+ * string_to_filename()
+ *
+ * @param mixed $word
+ * @return
+ */
+function string_to_filename($word)
+{
+    if (defined('NV_LANG_DATA') and file_exists(NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php')) {
+        include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php';
+        $word = strtr($word, $utf8_lookup_lang);
+    }
+
+    if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup.php')) {
+        $utf8_lookup = false;
+        include NV_ROOTDIR . '/includes/utf8/lookup.php';
+        $word = strtr($word, $utf8_lookup['romanize']);
+    }
+
+    $word = rawurldecode($word);
+    $word = preg_replace('/[^a-z0-9\.\-\_ ]/i', '', $word);
+    $word = preg_replace('/^\W+|\W+$/', '', $word);
+    $word = preg_replace('/[ ]+/', '-', $word);
+    return strtolower(preg_replace('/\W-/', '', $word));
 }

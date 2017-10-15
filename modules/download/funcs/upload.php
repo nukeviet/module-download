@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
@@ -32,8 +32,7 @@ foreach ($list_cats as $_catid => $_catvalue) {
 }
 
 if (empty($list_cats)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 if (!$download_config['is_addfile_allow'] or empty($list_cats_addfile)) {
@@ -69,7 +68,7 @@ if ($nv_Request->isset_request('loadcat', 'post')) {
     }
 
     $contents = theme_upload_getcat($parentid, $catid, $list_cats_addfile);
-    die($contents);
+    nv_htmlOutput($contents);
 }
 
 $is_error = false;
@@ -80,8 +79,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     $addfile = $nv_Request->get_string('addfile', 'post', '');
 
     if (empty($addfile) or $addfile != md5($client_info['session_id'])) {
-        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     }
 
     $array['catid'] = $nv_Request->get_int('upload_catid', 'post', 0);

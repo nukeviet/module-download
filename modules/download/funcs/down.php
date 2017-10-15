@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
@@ -116,7 +116,7 @@ if ($filepdf == 1) {
     }    
     
     $html = theme_viewpdf($file_url);
-    die($html);
+    nv_htmlOutput($html);
 } elseif (empty($filepdf)) {
     $_fid = intval($session_files['fileupload'][$filename]['id']);
     $_setdown = $nv_Request->get_int($module_data . '_' . $op . '_setdown_' . $_fid, 'session');

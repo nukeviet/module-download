@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 19-09-2010 23:30
@@ -20,8 +20,7 @@ $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 $yesterday = $today - 86400;
 
 if (!preg_match('/^([a-z0-9\-\_\.]+)$/i', $filealias)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE alias= :filealias AND catid=' . $catid . ' AND status=1');
@@ -30,8 +29,7 @@ $stmt->execute();
 $row = $stmt->fetch();
 
 if (empty($row)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 $row['description'] = '';
@@ -66,8 +64,7 @@ $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARI
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    Header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 } else {
     $canonicalUrl = $base_url_rewrite;
 }
