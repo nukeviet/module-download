@@ -28,9 +28,9 @@ if (defined('NV_SYSTEM')) {
             $lang_module = $temp_lang_module;
         }
         $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
-        
-        $sql = "SELECT id, title, alias, parentid FROM " . $_mod_table . "_categories WHERE parentid=0 ORDER BY weight";
-        $list = $nv_Cache->db($sql, '', $module);
+
+        $sql = "SELECT id, title, alias, parentid, lev FROM " . $_mod_table . "_categories WHERE status=1 ORDER BY sort ASC";
+        $list = $nv_Cache->db($sql, 'id', $module);
 
         $key = nv_substr($nv_Request->get_title('q', 'get', '', 1), 0, NV_MAX_SEARCH_LENGTH);
         $cat = $nv_Request->get_int('cat', 'get');
@@ -43,7 +43,7 @@ if (defined('NV_SYSTEM')) {
         $xtpl = new XTemplate("block_search.tpl", $path);
         $xtpl->assign('LANG', $lang_block_module);
         $xtpl->assign('keyvalue', $key);
-        
+
         if (!$global_config['rewrite_enable']) {
             $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php');
             $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
@@ -56,13 +56,20 @@ if (defined('NV_SYSTEM')) {
         } else {
             $xtpl->assign('FORM_ACTION', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=search', true));
         }
-        
+
         foreach ($list as $row) {
-            $row['select'] = ($row['id'] == $cat) ? 'selected=selected' : '';
-            $xtpl->assign('loop', $row);
-            $xtpl->parse('main.loop');
+            if (!$row['parentid'] or isset($list[$row['parentid']])) {
+                $row['select'] = ($row['id'] == $cat) ? 'selected=selected' : '';
+                $space = '';
+                for ($i = 0; $i < $row['lev']; $i++) {
+                    $space .= '&nbsp; &nbsp; ';
+                }
+                $row['space'] = $space;
+                $xtpl->assign('loop', $row);
+                $xtpl->parse('main.loop');
+            }
         }
-        
+
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }
