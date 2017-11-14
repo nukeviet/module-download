@@ -1,7 +1,7 @@
-# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01 lên 4.3.00
+# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02 lên 4.3.00
 
 Chú ý:
-- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
+- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02, nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
 - Module download 4.3.00 hiện tại hoạt động trên NukeViet 4.3.00
 
 ## Chuẩn bị cập nhật
