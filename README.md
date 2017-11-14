@@ -27,7 +27,20 @@ Cần chú ý một số công việc sau:
 
 ### Nếu hiện tại module đang là 4.2.01 hoặc nhỏ hơn
 
+#### Cập nhật block_search.tpl
 
+Nếu tồn tại file `themes/ten-theme/modules/download/block_search.tpl`, mở nó tìm
+
+```html
+            <option value="{loop.id}" {loop.select}>{loop.title}</option>
+            {subcat}
+```
+
+Thay lại thành
+
+```html
+            <option value="{loop.id}" {loop.select}>{loop.space}{loop.title}</option>
+```
 
 Nếu module của bạn hiện tại < 4.2.01 tiếp tục làm các việc bên dưới, nếu đang là 4.2.01 thì tạm dừng tại đây.
 
