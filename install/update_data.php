@@ -17,17 +17,17 @@ $nv_update_config = array();
 $nv_update_config['type'] = 1;
 
 // ID goi cap nhat
-$nv_update_config['packageID'] = 'NVUDDOWNLOAD4102';
+$nv_update_config['packageID'] = 'NVUDDOWNLOAD4300';
 
 // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 $nv_update_config['formodule'] = 'download';
 
 // Thong tin phien ban, tac gia, ho tro
-$nv_update_config['release_date'] = 1491843600;
+$nv_update_config['release_date'] = 1510628543;
 $nv_update_config['author'] = 'VINADES.,JSC (contact@vinades.vn)';
-$nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.1.02';
-$nv_update_config['to_version'] = '4.1.02';
-$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00', '4.1.01');
+$nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.3.00';
+$nv_update_config['to_version'] = '4.3.00';
+$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00', '4.1.01', '4.2.01', '4.2.02', '4.2.03');
 
 // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 $nv_update_config['update_auto_type'] = 1;
@@ -41,6 +41,9 @@ $nv_update_config['lang']['vi']['nv_up_onlineview'] = 'Thêm chức năng xử l
 $nv_update_config['lang']['vi']['nv_up_cuttitlelen'] = 'Thêm cấu hình cắt tiêu đề';
 $nv_update_config['lang']['vi']['nv_up_s1'] = 'Cấu hình ai được đăng tài liệu theo chủ đề';
 $nv_update_config['lang']['vi']['nv_up_s2'] = 'Cấu hình hiển thị, bắt buộc nhập các trường dữ liệu';
+
+$nv_update_config['lang']['vi']['nv_up_4300_config'] = 'Thêm các cấu hình bản 4.3.00';
+
 $nv_update_config['lang']['vi']['nv_up_finish'] = 'Đánh dấu phiên bản mới';
 
 $nv_update_config['tasklist'] = array();
@@ -75,7 +78,13 @@ $nv_update_config['tasklist'][] = array(
     'f' => 'nv_up_s2'
 );
 $nv_update_config['tasklist'][] = array(
-    'r' => '4.1.02',
+    'r' => '4.3.00',
+    'rq' => 1,
+    'l' => 'nv_up_4300_config',
+    'f' => 'nv_up_4300_config'
+);
+$nv_update_config['tasklist'][] = array(
+    'r' => '4.3.00',
     'rq' => 1,
     'l' => 'nv_up_finish',
     'f' => 'nv_up_finish'
@@ -86,7 +95,7 @@ $nv_update_config['tasklist'][] = array(
 Chuan hoa tra ve:
 array(
 'status' =>
-'complete' => 
+'complete' =>
 'next' =>
 'link' =>
 'lang' =>
@@ -276,7 +285,7 @@ function nv_up_s2()
         foreach ($array_mod['mod'] as $module_info) {
             $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
             try {
-                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES 
+                $db->query("INSERT INTO " . $table_prefix . "_config (config_name, config_value) VALUES
                 ('arr_dis_ad_author_name', '1'),
                 ('arr_dis_ad_author_email', '1'),
                 ('arr_dis_ad_author_url', '1'),
@@ -327,6 +336,44 @@ function nv_up_s2()
 }
 
 /**
+ * nv_up_4300_config()
+ *
+ * @return
+ *
+ */
+function nv_up_4300_config()
+{
+    global $nv_update_baseurl, $db, $db_config, $nv_Cache, $array_modlang_update;
+
+    $return = array(
+        'status' => 1,
+        'complete' => 1,
+        'next' => 1,
+        'link' => 'NO',
+        'lang' => 'NO',
+        'message' => ''
+    );
+
+    foreach ($array_modlang_update as $lang => $array_mod) {
+        foreach ($array_mod['mod'] as $module_info) {
+            $table_prefix = $db_config['prefix'] . "_" . $lang . "_" . $module_info['module_data'];
+            try {
+                $db->query("INSERT INTO `" . $table_prefix . "_config` (`config_name`, `config_value`) VALUES ('copy_document', '0');");
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+            try {
+                $db->query("INSERT INTO `" . $table_prefix . "_config` (`config_name`, `config_value`) VALUES ('allow_fupload_import', '0');");
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+    }
+
+    return $return;
+}
+
+/**
  * nv_up_finish()
  *
  * @return
@@ -346,29 +393,29 @@ function nv_up_finish()
     );
 
     @nv_deletefile(NV_ROOTDIR . '/themes/default/js/pdf.js', true);
-    
+
     try {
         $num = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'")->fetchColumn();
         $version = $nv_update_config['to_version'] . " " . $nv_update_config['release_date'];
-        
+
         if (!$num) {
             $db->query("INSERT INTO " . $db_config['prefix'] . "_setup_extensions (
                 id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
             ) VALUES (
-                25, 'module', 'download', 0, 1, 'download', 'download', '" . $nv_update_config['to_version'] . " " . $nv_update_config['release_date'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC (contact@vinades.vn)', 
+                25, 'module', 'download', 0, 1, 'download', 'download', '" . $nv_update_config['to_version'] . " " . $nv_update_config['release_date'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC (contact@vinades.vn)',
                 'Module download for NukeViet'
             )");
         } else {
-            $db->query("UPDATE " . $db_config['prefix'] . "_setup_extensions SET 
-                id=25, 
-                version='" . $version . "', 
-                author='VINADES.,JSC (contact@vinades.vn)' 
+            $db->query("UPDATE " . $db_config['prefix'] . "_setup_extensions SET
+                id=25,
+                version='" . $version . "',
+                author='VINADES.,JSC (contact@vinades.vn)'
             WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'");
         }
     } catch (PDOException $e) {
         trigger_error($e->getMessage());
     }
 
-    $nv_Cache->delAll();
+    $nv_Cache->delAll(true);
     return $return;
 }

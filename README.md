@@ -1,8 +1,8 @@
-# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01 lên 4.1.02
+# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01 lên 4.3.00
 
-Chú ý: 
-- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
-- Module download 4.1.02 hiện tại hoạt động trên NukeViet 4.1 Beta 2 (4.1.01) và NukeViet 4.1 Official (4.1.02)
+Chú ý:
+- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
+- Module download 4.3.00 hiện tại hoạt động trên NukeViet 4.3.00
 
 ## Chuẩn bị cập nhật
 
@@ -14,7 +14,7 @@ Backup toàn bộ CSDL dữ liệu và code của site đề phòng rủi ro.
 
 Nếu không cập nhật được theo cách trên hãy thực hiện cập nhật thủ công như sau:
 
-Tải gói cập nhật tại https://github.com/nukeviet/module-download/releases/download/4.1.02/update-to-4.1.02.zip. Giải nén và upload thư mục install lên ngang hàng với thư mục install trên server. Đăng nhập quản trị site, nhận được thông báo cập nhật và tiến hành cập nhật theo hướng dẫn của hệ thống.
+Tải gói cập nhật tại https://github.com/nukeviet/module-download/releases/download/4.3.00/update-to-4.3.00.zip. Giải nén và upload thư mục install lên ngang hàng với thư mục install trên server. Đăng nhập quản trị site, nhận được thông báo cập nhật và tiến hành cập nhật theo hướng dẫn của hệ thống.
 
 ## Xử lý sau cập nhật
 
@@ -25,7 +25,15 @@ Cần chú ý một số công việc sau:
 
 ## Cập nhật giao diện
 
-### Cập nhật theme.php
+### Nếu hiện tại module đang là 4.2.01 hoặc nhỏ hơn
+
+
+
+Nếu module của bạn hiện tại < 4.2.01 tiếp tục làm các việc bên dưới, nếu đang là 4.2.01 thì tạm dừng tại đây.
+
+### Nếu hiện tại module < 4.2.01
+
+#### Cập nhật theme.php
 
 Nếu tồn tại file `themes/ten-theme/modules/download/theme.php`, mở nó, tìm vị trí hàm view_file. Bên trong hàm thêm vào vị trí thích hợp đoạn
 
@@ -36,7 +44,7 @@ Nếu tồn tại file `themes/ten-theme/modules/download/theme.php`, mở nó, 
     }
 ```
 
-### Cập nhật viewfile.tpl
+#### Cập nhật viewfile.tpl
 
 Nếu tồn tại file `themes/ten-theme/modules/download/viewfile.tpl`, mở nó tìm
 
@@ -55,7 +63,7 @@ Hoặc tương đương thêm vào sau
     <!-- END: addthis -->
 ```
 
-### Cập nhật block_search.tpl
+#### Cập nhật block_search.tpl
 
 Tìm:
 
@@ -89,6 +97,6 @@ Thêm xuống dưới:
     <!-- END: no_rewrite -->
 ```
 
-### Cập nhật chức năng upload của thành viên
+#### Cập nhật chức năng upload của thành viên
 
 Đối chiếu upload.tpl, download.js, download.css từ giao diện mặc định để sửa cho phù hợp
