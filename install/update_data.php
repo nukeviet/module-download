@@ -27,7 +27,7 @@ $nv_update_config['release_date'] = 1510628543;
 $nv_update_config['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $nv_update_config['support_website'] = 'https://github.com/nukeviet/module-download/tree/to-4.3.00';
 $nv_update_config['to_version'] = '4.3.00';
-$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00', '4.1.01', '4.2.01', '4.2.02', '4.2.03');
+$nv_update_config['allow_old_version'] = array('4.0.29', '4.1.00', '4.1.01', '4.1.02', '4.2.01', '4.2.02', '4.2.03');
 
 // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 $nv_update_config['update_auto_type'] = 1;
