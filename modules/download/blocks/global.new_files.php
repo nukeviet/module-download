@@ -13,25 +13,40 @@ if (! defined('NV_MAINFILE')) {
 }
 
 if (! nv_function_exists('nv_bdown_news')) {
+    /**
+     * nv_block_config_bdown_news()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_bdown_news($module, $data_block, $lang_block)
     {
         global $db, $site_mods;
         $html = '';
-        $html .= '<tr>';
-        $html .= '    <td>' . $lang_block['title_length'] . '</td>';
-        $html .= '    <td><input type="text" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '    <td>' . $lang_block['numrow'] . '</td>';
-        $html .= '    <td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '    <td>' . $lang_block['class_name'] . '</td>';
-        $html .= '    <td><input type="text" name="config_class_name" size="5" value="' . $data_block['class_name'] . '"/></td>';
-        $html .= '</tr>';
+        $html .= '<div class="form-group">';
+        $html .= '    <label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '    <div class="col-sm-5"><input class="form-control" type="text" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '    <label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '    <div class="col-sm-5"><input class="form-control" type="text" name="config_numrow" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '    <label class="control-label col-sm-6">' . $lang_block['class_name'] . ':</label>';
+        $html .= '    <div class="col-sm-18"><input class="form-control" type="text" name="config_class_name" value="' . $data_block['class_name'] . '"/></div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_bdown_news_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_bdown_news_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -44,6 +59,12 @@ if (! nv_function_exists('nv_bdown_news')) {
         return $return;
     }
 
+    /**
+     * nv_bdown_news()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_bdown_news($block_config)
     {
         global $db, $module_info, $site_mods, $global_config, $nv_Cache;

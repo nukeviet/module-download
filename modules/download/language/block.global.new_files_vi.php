@@ -21,5 +21,5 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['title_length'] = 'Độ dài tiêu đề';
 $lang_block['numrow'] = 'Số files hiển thị';
-$lang_block['class_name'] = 'Tên lớp (class) cho thẻ <ul>';
+$lang_block['class_name'] = 'Tên lớp (class) cho thẻ &lt;ul&gt;';
 $lang_block['img_bullet'] = 'Ảnh dạng liệt kê';
