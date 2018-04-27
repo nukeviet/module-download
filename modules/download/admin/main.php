@@ -191,6 +191,8 @@ while ($row = $result2->fetch()) {
     );
 }
 
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&q=' . $array_search['q'] . '&catid=' . $array_search['catid'] . '&active=' . $array_search['active'] . '&per_page=' . $per_page;
+
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $array_list_action = array(
