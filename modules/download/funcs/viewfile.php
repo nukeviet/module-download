@@ -60,7 +60,7 @@ if (!nv_user_in_groups($row['groups_view'])) {
     exit();
 }
 
-$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true);
+$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
@@ -257,8 +257,8 @@ if (!in_array($row['id'], $dfile)) {
 }
 
 $array_keyword = array();
-$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1 
-            INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
+$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1
+            INNER JOIN ' . NV_MOD_TABLE . '_tags a2
             ON a1.did=a2.did WHERE a1.id=' . $row['id']);
 while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
