@@ -20,7 +20,7 @@
     </div>
     <!-- END: scorms -->
     
-    <h2 class="m-bottom">{ROW.title}</h2>
+    <h1 class="m-bottom">{ROW.title}</h1>
     
     <!-- BEGIN: addthis -->
     <div class="m-bottom clearfix">
