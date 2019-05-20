@@ -21,6 +21,7 @@ $download_config = nv_mod_down_config();
 
 $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('TEMPLATE', $module_info['template']);
 
 if ($download_config['is_addfile_allow']) {
     $xtpl->assign('UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload');
