@@ -5,7 +5,7 @@
     <!-- BEGIN: scorm -->
     <a class="btn btn-success pull-right btn-xs" href="{SCORM_LINK}" target="_blank">{LANG.onlineview}</a>
     <!-- END: scorm -->
-    
+
     <!-- BEGIN: scorms -->
     <div class="pull-right">
         <div class="dropdown">
@@ -19,16 +19,16 @@
         </div>
     </div>
     <!-- END: scorms -->
-    
+
     <h2 class="m-bottom">{ROW.title}</h2>
-    
+
     <!-- BEGIN: addthis -->
     <div class="m-bottom clearfix">
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={ADDTHIS_PUBID}"></script>
         <div class="addthis_sharing_toolbox"></div>
     </div>
     <!-- END: addthis -->
-    
+
     <!-- BEGIN: introtext -->
     <div class="panel panel-default">
         <div class="panel-body">
@@ -193,7 +193,7 @@
 
         <div class="panel-body">
             <!-- BEGIN: row -->
-            <em class="fa fa-link">&nbsp;</em>&nbsp;<a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
+            <a class="file-download-link" id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;"><i class="fa fa-link text-black"></i> {FILEUPLOAD.title}</a>
             <!-- END: row -->
         </div>
     </div>

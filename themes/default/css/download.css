@@ -132,3 +132,10 @@
     font-weight: normal;
     margin-bottom: 0;
 }
+
+.file-download-link {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
