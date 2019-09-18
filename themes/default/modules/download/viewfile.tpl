@@ -207,7 +207,7 @@
 
         <div class="panel-body">
             <!-- BEGIN: row -->
-            <span class="fa fa-link">&nbsp;</span>&nbsp;<a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a>
+            <a class="file-download-link" href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;"><i class="fa fa-link text-black"></i> {LINKDIRECT.name}</a>
             <!-- END: row -->
         </div>
     </div>
