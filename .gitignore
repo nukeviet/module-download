@@ -42,3 +42,4 @@
 !/themes/default/modules/download
 !/themes/default/modules/download/*
 /error.php
+/.github
