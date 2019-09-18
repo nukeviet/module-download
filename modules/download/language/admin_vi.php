@@ -212,7 +212,6 @@ $lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['numlinks'] = 'Số liên kết';
-$lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
 $lang_module['content_homeimg'] = 'Hình minh họa';
 $lang_module['save'] = 'Lưu thay đổi';
 $lang_module['download_tags'] = 'Quản lý Tags';
