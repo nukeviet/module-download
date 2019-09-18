@@ -229,7 +229,8 @@ if ($row['is_download_allow']) {
     $row['linkdirect'] = array();
     $session_files = array();
 
-    $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
+    $login_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
+    $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], $login_link, NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
 }
 
 unset($fileuploads, $file);
@@ -257,8 +258,8 @@ if (!in_array($row['id'], $dfile)) {
 }
 
 $array_keyword = array();
-$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1 
-            INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
+$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1
+            INNER JOIN ' . NV_MOD_TABLE . '_tags a2
             ON a1.did=a2.did WHERE a1.id=' . $row['id']);
 while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
