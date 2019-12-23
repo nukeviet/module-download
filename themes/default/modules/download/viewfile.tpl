@@ -59,7 +59,7 @@
         <script>
         $(document).ready(function() {
             $('.introtext').shorten({
-                showChars: 300,
+                showChars: 1500,
                 moreText: '<p class="text-center"><button class="btn btn-primary btn-xs">{LANG.expand}</button></p>',
                 lessText: '<p class="text-center"><button class="btn btn-primary btn-xs">{LANG.collapse}</button></p>',
             });
@@ -74,100 +74,102 @@
         <div class="panel-heading">
             <em class="fa fa-tasks">&nbsp;</em> {LANG.listing_details}
         </div>
-        <dl class="dl-horizontal">
-            <dt>
-                {LANG.file_title}:
-            </dt>
-            <dd>
-                {ROW.title}
-            </dd>
+        <div class="panel-body">
+            <dl class="row mb-0">
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.file_title}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.title}
+                </dd>
 
-            <dt>
-                {LANG.file_version}:
-            </dt>
-            <dd>
-                {ROW.version}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.file_version}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.version}
+                </dd>
 
-            <dt>
-                {LANG.author_name}:
-            </dt>
-            <dd>
-                {ROW.author_name}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.author_name}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.author_name}
+                </dd>
 
-            <dt>
-                {LANG.author_url}:
-            </dt>
-            <dd>
-                {ROW.author_url}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.author_url}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.author_url}
+                </dd>
 
-            <dt>
-                {LANG.bycat2}:
-            </dt>
-            <dd>
-                {ROW.catname}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.bycat2}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.catname}
+                </dd>
 
-            <dt>
-                {LANG.uploadtime}:
-            </dt>
-            <dd>
-                {ROW.uploadtime}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.uploadtime}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.uploadtime}
+                </dd>
 
-            <dt>
-                {LANG.updatetime}:
-            </dt>
-            <dd>
-                {ROW.updatetime}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.updatetime}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.updatetime}
+                </dd>
 
-            <dt>
-                {LANG.user_name}:
-            </dt>
-            <dd>
-                {ROW.user_name}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.user_name}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.user_name}
+                </dd>
 
-            <dt>
-                {LANG.copyright}:
-            </dt>
-            <dd>
-                {ROW.copyright}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.copyright}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.copyright}
+                </dd>
 
-            <dt>
-                {LANG.filesize}:
-            </dt>
-            <dd>
-                {ROW.filesize}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.filesize}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.filesize}
+                </dd>
 
-            <dt>
-                {LANG.view_hits}:
-            </dt>
-            <dd>
-                {ROW.view_hits}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.view_hits}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.view_hits}
+                </dd>
 
-            <dt>
-                {LANG.download_hits}:
-            </dt>
-            <dd id="download_hits">
-                {ROW.download_hits}
-            </dd>
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.download_hits}:
+                </dt>
+                <dd id="download_hits">
+                    {ROW.download_hits}
+                </dd>
 
-            <!-- BEGIN: comment_hits -->
-            <dt>
-                {LANG.comment_hits}:
-            </dt>
-            <dd>
-                {ROW.comment_hits}
-            </dd>
-            <!-- END: comment_hits -->
-        </dl>
+                <!-- BEGIN: comment_hits -->
+                <dt class="col-xs-12 col-sm-10 col-md-8 col-lg-6 text-right">
+                    {LANG.comment_hits}:
+                </dt>
+                <dd class="col-xs-12 col-sm-14 col-md-16 col-lg-18">
+                    {ROW.comment_hits}
+                </dd>
+                <!-- END: comment_hits -->
+            </dl>
+        </div>
     </div>
 
     <!-- BEGIN: report -->
