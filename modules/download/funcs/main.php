@@ -51,7 +51,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
                 }
 
                 $flrt = $nv_Request->get_string('flrt', 'session', '');
-                $flrt = !empty($flrt) ? unserialize($flrt) : array();
+                $flrt = !empty($flrt) ? unserialize($flrt) : [];
 
                 if ($id and !in_array($id, $flrt)) {
                     $flrt[] = $id;
@@ -89,9 +89,9 @@ $viewcat = $download_config['indexfile'];
 $contents = '';
 
 if ($viewcat == 'viewcat_main_bottom') {
-    $array_cats = array();
+    $array_cats = [];
     foreach ($list_cats as $value) {
-        if (empty($value['parentid'])) {
+        if (empty($value['parentid']) and !empty($value['status'])) {
             $array_cat = GetCatidInParent($value['id']);
 
             $db->sqlreset()
@@ -109,7 +109,7 @@ if ($viewcat == 'viewcat_main_bottom') {
 
                 $result = $db->query($db->sql());
 
-                $array_item = array();
+                $array_item = [];
                 while ($row = $result->fetch()) {
                     $uploadtime = (int) $row['uploadtime'];
                     if ($uploadtime >= $today) {
@@ -120,7 +120,7 @@ if ($viewcat == 'viewcat_main_bottom') {
                         $uploadtime = nv_date('d/m/Y H:i', $row['uploadtime']);
                     }
 
-                    $array_item[$row['id']] = array(
+                    $array_item[$row['id']] = [
                         'id' => (int) $row['id'],
                         'title' => $row['title'],
                         'introtext' => $row['introtext'],
@@ -134,12 +134,12 @@ if ($viewcat == 'viewcat_main_bottom') {
                         'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
                         'edit_link' => (defined('NV_IS_MODADMIN')) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
                         'del_link' => (defined('NV_IS_MODADMIN')) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
-                    );
+                    ];
                 }
 
                 $numfile = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE catid IN ( ' . implode(',', $array_cat) . ' )')->fetchColumn();
 
-                $array_cats[$value['id']] = array();
+                $array_cats[$value['id']] = [];
                 $array_cats[$value['id']]['catid'] = $value['id'];
                 $array_cats[$value['id']]['title'] = $value['title'];
                 $array_cats[$value['id']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
@@ -154,7 +154,7 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $contents = theme_viewcat_main($viewcat, $array_cats);
 } elseif ($viewcat == 'viewcat_list_new') {
-    $array_files = array();
+    $array_files = [];
     $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
     // Fetch Limit
@@ -183,7 +183,7 @@ if ($viewcat == 'viewcat_main_bottom') {
             $uploadtime = nv_date('d/m/Y H:i', $row['uploadtime']);
         }
 
-        $array_files[$row['id']] = array(
+        $array_files[$row['id']] = [
             'id' => (int) $row['id'],
             'title' => $row['title'],
             'introtext' => $row['introtext'],
@@ -197,11 +197,11 @@ if ($viewcat == 'viewcat_main_bottom') {
             'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
             'edit_link' => (defined('NV_IS_MODADMIN')) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
             'del_link' => (defined('NV_IS_MODADMIN')) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
-        );
+        ];
     }
     $page_title = $page > 1 ? $page_title . ' - ' . $lang_module['page'] . ' ' . $page : $page_title;
     $page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
-    $contents = theme_viewcat_list($array_files, $page, array(), 0);
+    $contents = theme_viewcat_list($array_files, $page, [], 0);
 }
 
 include NV_ROOTDIR . '/includes/header.php';
