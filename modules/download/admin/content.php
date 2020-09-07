@@ -100,7 +100,6 @@ $currentpath = getUploadcurrentPath();
 $currentpath_images = $currentpath[0];
 $currentpath_files = $currentpath[1];
 $uploads_dir_user = $currentpath[2];
-
 $id = $nv_Request->get_int('id', 'get', 0);
 $filequeueid = $nv_Request->get_int('filequeueid', 'get', 0);
 $copy = $nv_Request->get_int('copy', 'get',0);
@@ -967,7 +966,6 @@ if (! empty($array['fileimage'])) {
         $array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
     }
 }
-
 // Build fileimage tmp
 if (! empty($array['fileimage_tmp'])) {
     if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage_tmp'])) {
@@ -1063,12 +1061,11 @@ if (defined('NV_EDITOR')) {
 }
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description']);
+    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description'],'', $uploads_dir_user, $currentpath_images);
 } else {
     $array['description'] = '<textarea style="width:100%; height:300px" name="description" id="description">' . $array['description'] . '</textarea>';
 }
 $array['id'] = 0;
-
 if (! $array['filesize']) {
     $array['filesize'] = '';
 }
@@ -1079,6 +1076,7 @@ if ($array['catid'] and isset($list_cats[$array['catid']])) {
 }
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array);
