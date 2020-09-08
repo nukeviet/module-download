@@ -15,16 +15,17 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 // Get alias
 if ($nv_Request->isset_request('gettitle', 'post')) {
     $title = $nv_Request->get_title('gettitle', 'post', '');
+    $id = $nv_Request->get_int('id', 'post', 0);
+    $edit_content = ($id > 0) ? 'AND id != '.$id : ''; 
     $alias = change_alias($title);
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias ' . $edit_content);
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         $weight = $db->query('SELECT MAX(id) FROM ' . NV_MOD_TABLE)->fetchColumn();
         $weight = intval($weight) + 1;
         $alias = $alias . '-' . $weight;
-    }
-
+    } 
     include NV_ROOTDIR . '/includes/header.php';
     echo $alias;
     include NV_ROOTDIR . '/includes/footer.php';
@@ -1076,9 +1077,9 @@ if ($array['catid'] and isset($list_cats[$array['catid']])) {
 }
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('ID', $id);
 $xtpl->assign('DATA', $array);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

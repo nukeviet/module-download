@@ -334,7 +334,7 @@
     function get_alias() {
         var title = strip_tags(document.getElementById('title').value);
         if (title != '') {
-            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title), function(res) {
+            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title) + '&id={ID}', function(res) {
                 if (res != "") {
                     document.getElementById('alias').value = res;
                 } else {
