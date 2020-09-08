@@ -288,7 +288,7 @@ if ($id) {
     $array_keywords_old = array();
     $report = false;
 }
-
+$is_copy = $nv_Request->get_int('copy', 'get', 0);
 if ($nv_Request->isset_request('submit', 'post')) {
     $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
@@ -302,7 +302,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['fileimage'] = $nv_Request->get_title('fileimage', 'post', '');
     $array['copyright'] = $nv_Request->get_title('copyright', 'post', '', 1);
     $array['is_del_report'] = $nv_Request->get_int('is_del_report', 'post', 0);
-	$is_copy = $nv_Request->get_int('copy', 'get', 0);
+	
 	$array['referer'] = $nv_Request->get_string('referer', 'post');
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
@@ -1079,7 +1079,7 @@ if ($array['catid'] and isset($list_cats[$array['catid']])) {
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
-$xtpl->assign('ID', $id);
+$xtpl->assign('ID', $is_copy ? 0 : $id);
 $xtpl->assign('DATA', $array);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
