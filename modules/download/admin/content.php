@@ -1061,7 +1061,7 @@ if (defined('NV_EDITOR')) {
 }
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description'],'', $uploads_dir_user, $currentpath_images);
+    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description'], '', $uploads_dir_user, $currentpath_images);
 } else {
     $array['description'] = '<textarea style="width:100%; height:300px" name="description" id="description">' . $array['description'] . '</textarea>';
 }
