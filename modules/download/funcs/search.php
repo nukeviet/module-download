@@ -20,6 +20,7 @@ $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = $download_config['per_page_child'];
 $base_url_rewrite = $request_uri = urldecode($_SERVER['REQUEST_URI']);
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=search';
+
 $where = $generate_page = '';
 $is_search = false;
 $array = array();
@@ -42,18 +43,17 @@ if (! empty($cat) and isset($list_cats[$cat])) {
     $base_url .= '&cat=' . $cat;
     $array_cat = GetCatidInParent($cat);
     $where .= ' AND catid IN (' . implode(',', $array_cat) . ')';
-} else {
-    $base_url_rewrite = str_replace('&cat=' . $cat, '', $base_url_rewrite);
 }
+
+if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
+    $page = intval(substr($array_op[0], 5));
+}
+
+$page_url = $base_url;
+$canonicalUrl = getCanonicalUrl($page_url);
 
 if (!empty($where)) {
     $is_search = true;
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-
-    if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-        nv_redirect_location($base_url_rewrite);
-    }
-
     $db->where('status=1' . $where);
 
     $sth = $db->prepare($db->sql());
@@ -64,6 +64,8 @@ if (!empty($where)) {
     }
     $sth->execute();
     $num_items = $sth->fetchColumn();
+    $urlappend = '/page-';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
     if (! empty($num_items)) {
         $download_config = nv_mod_down_config();
@@ -120,6 +122,7 @@ if (!empty($where)) {
 $contents = theme_search($array, $generate_page, $is_search);
 if ($page > 1) {
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    $page_url .= '/page-' . $page;
 }
 
 $key_words = $description = 'no';

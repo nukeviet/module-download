@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-sm-8 col-md-8">
                     <img class="middle captchaImg" height="31" name="upload_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{GLANG.captcha}" />
-                    <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
+                    <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
                 </div>
             </div>
             <!-- END: captcha -->
@@ -169,8 +169,8 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 var uploadForm = true;
 </script>

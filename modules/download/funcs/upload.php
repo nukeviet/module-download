@@ -22,6 +22,11 @@ $array_mod_title[] = array('title' => $page_title);
 $download_config = nv_mod_down_config();
 $array_field_key = array_keys($download_config['dis']['ad']);
 
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
+
+
 $list_cats_addfile = array();
 foreach ($list_cats as $_catid => $_catvalue) {
     if (!empty($_catvalue['is_addfile_allow'])) {

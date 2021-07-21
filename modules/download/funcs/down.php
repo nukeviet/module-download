@@ -50,6 +50,9 @@ if (!nv_user_in_groups($row['groups_view'])
     die('Wrong URL');
 }
 
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_NAME_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
+
 if ($nv_Request->isset_request('code', 'get')) {
     $code = $nv_Request->get_string('code', 'get', '');
 
@@ -63,7 +66,7 @@ if ($nv_Request->isset_request('code', 'get')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . $_fid);
     }
 
-    $content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
+    $content = "<br /><img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
     $content .= sprintf($lang_module['download_wait2'], $session_files['linkdirect'][$code]['link']);
     $content .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $session_files['linkdirect'][$code]['link'] . "\" />";
 

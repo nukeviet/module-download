@@ -28,7 +28,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/');
+    $xtpl->assign('IMG_FOLDER', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/');
     $xtpl->assign('MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
 
     foreach ($array_cats as $cat) {
@@ -175,9 +175,9 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
 {
     global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
-    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.pack.js\"></script>\n";
-    $my_head .= "<script src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
-    $my_head .= "<link href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
+    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.pack.js\"></script>\n";
+    $my_head .= "<script src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
+    $my_head .= "<link href=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
 
     $xtpl = new XTemplate('viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -441,7 +441,7 @@ function theme_viewpdf($file_url)
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
     return $xtpl->text('main');
