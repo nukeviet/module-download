@@ -50,6 +50,9 @@ if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
 }
 
 $page_url = $base_url;
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
 $canonicalUrl = getCanonicalUrl($page_url);
 
 if (!empty($where)) {
@@ -122,7 +125,6 @@ if (!empty($where)) {
 $contents = theme_search($array, $generate_page, $is_search);
 if ($page > 1) {
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
-    $page_url .= '/page-' . $page;
 }
 
 $key_words = $description = 'no';

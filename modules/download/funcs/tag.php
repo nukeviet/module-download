@@ -26,6 +26,9 @@ if (isset($array_op[1])) {
 
 // URL chính tắc: $page_url, $base_url và $canonicalUrl
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
 $canonicalUrl = getCanonicalUrl($page_url);
 
 
@@ -44,7 +47,6 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
         if ($page > 1) {
             $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
-            $page_url .= '/page-' . $page;
         }
 
         $array_mod_title[] = array(

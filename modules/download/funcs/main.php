@@ -111,7 +111,6 @@ if ($viewcat == 'viewcat_main_bottom') {
 
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
-
             $urlappend = '/page-';
             betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);    
 

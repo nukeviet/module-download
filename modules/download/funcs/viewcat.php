@@ -45,8 +45,12 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
     $page = intval(substr($array_op[0], 5));
 }
-
 $page_url = $base_url;
+
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
+
 $canonicalUrl = getCanonicalUrl($page_url);
 
 
@@ -101,7 +105,6 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
 
     if ($page > 1) {
         $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
-        $page_url .= '/page-' . $page;
     }
 
     $subs = [];
