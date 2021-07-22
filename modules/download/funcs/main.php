@@ -105,13 +105,12 @@ if ($viewcat == 'viewcat_main_bottom') {
             }
 
             if ($page > 1) {
-                $page_url .= '/page-' . $page;
+                $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
             }
             $canonicalUrl = getCanonicalUrl($page_url);
-
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
-            $urlappend = '/page-';
+            $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
             betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);    
 
             if ($num_items) {
@@ -171,7 +170,7 @@ if ($viewcat == 'viewcat_main_bottom') {
     }
 
     if ($page > 1) {
-        $page_url .= '/page-' . $page;
+        $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
     }
     $canonicalUrl = getCanonicalUrl($page_url);
 
@@ -185,7 +184,7 @@ if ($viewcat == 'viewcat_main_bottom') {
     $all_page = $db->query($db->sql())
         ->fetchColumn();
 
-    $urlappend = '/page-';
+    $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
     betweenURLs($page, ceil($all_page/$per_page), $base_url, $urlappend, $prevPage, $nextPage);   
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
