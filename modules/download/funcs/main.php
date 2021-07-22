@@ -26,7 +26,7 @@ $per_page = $download_config['per_page_home'];
 
 $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 $yesterday = $today - 86400;
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 // Rating
 if ($nv_Request->isset_request('rating', 'post')) {
