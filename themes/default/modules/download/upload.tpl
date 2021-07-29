@@ -6,7 +6,8 @@
 </div>
 <!-- END: is_error -->
 
-<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}">
+<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}" <!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+>
     <div class="panel panel-default">
         <div class="panel-heading">
             {LANG.upload}
@@ -131,7 +132,7 @@
             </div>
             <!-- END: show_username -->
 
-            <!-- BEGIN: captcha -->
+            <!-- BEGIN: recaptcha3 -->
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
                 <div class="col-sm-10 col-md-10">
@@ -142,19 +143,14 @@
                     <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
                 </div>
             </div>
-            <!-- END: captcha -->
+            <!-- END: recaptcha3 -->
 
             <!-- BEGIN: recaptcha -->
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
                 <div class="col-sm-18 col-md-18">
-                    <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
-                    <script type="text/javascript">
-                    nv_recaptcha_elements.push({
-                        id: "{RECAPTCHA_ELEMENT}",
-                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
-                    })
-                    </script>
+                    <div class="nv-recaptcha-default">
+                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
                 </div>
             </div>
             <!-- END: recaptcha -->

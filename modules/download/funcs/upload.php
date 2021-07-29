@@ -80,6 +80,9 @@ $is_error = false;
 $error = '';
 $array = array();
 
+// Xác định có áp dụng reCaptcha hay không
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
 if ($nv_Request->isset_request('addfile', 'post')) {
     $addfile = $nv_Request->get_string('addfile', 'post', '');
 
@@ -153,9 +156,21 @@ if ($nv_Request->isset_request('addfile', 'post')) {
         $is_exists = $stmt->fetchColumn();
     }
 
-    if (!nv_capcha_txt($seccode)) {
+    // kiểm tra capcha
+    unset($fcaptcha);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    if ($global_array_config['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($global_array_config['captcha_type'] == 'captcha') {
+        $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
+    }
+
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($array['captcha']) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
         $is_error = true;
-        $error = $lang_module['upload_error1'];
+        $error[] = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['user_name'])) {
         $is_error = true;
         $error = $lang_module['upload_error2'];

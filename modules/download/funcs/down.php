@@ -50,9 +50,6 @@ if (!nv_user_in_groups($row['groups_view'])
     die('Wrong URL');
 }
 
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_NAME_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
-
 if ($nv_Request->isset_request('code', 'get')) {
     $code = $nv_Request->get_string('code', 'get', '');
 

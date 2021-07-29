@@ -131,3 +131,5 @@ $lang_module['error_not_permission_upload_content_user'] = 'Nhóm thành viên b
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['load_parentcat'] = 'Trở về các chủ đề cha';
 $lang_module['load_subcat'] = 'Đi đến các chủ đề con';
+$lang_module['securitycodeincorrect1'] = 'Chưa xác thực capcha';
+$lang_module['securitycodeincorrect'] = 'Chưa xác thực capcha';

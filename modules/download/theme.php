@@ -303,7 +303,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
  */
 function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_config;
 
     $array['parentid'] = 0;
     if ($array['catid'] and isset($list_cats[$array['catid']])) {
@@ -323,15 +323,16 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
-    if ($global_config['captcha_type'] == 2) {
-        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
-        $xtpl->parse('main.recaptcha');
-    } else {
+    // Nếu dùng reCaptcha v3
+    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
-        $xtpl->parse('main.captcha');
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->parse('main.recaptcha');
     }
 
     if (!empty($error)) {
