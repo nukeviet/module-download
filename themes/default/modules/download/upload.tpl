@@ -7,7 +7,6 @@
 <!-- END: is_error -->
 
 <form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}" <!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
->
     <div class="panel panel-default">
         <div class="panel-heading">
             {LANG.upload}

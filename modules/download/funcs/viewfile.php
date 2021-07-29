@@ -208,7 +208,7 @@ if ($row['is_download_allow']) {
                         $row['linkdirect'][$host][] = array(
                             'link' => $link,
                             'code' => $code,
-                            'name' => isset($link{70}) ? $scheme . '://' . $host . '...' . substr($link, -(70 - strlen($scheme . '://' . $host))) : $link);
+                            'name' => isset($link[70]) ? $scheme . '://' . $host . '...' . substr($link, -(70 - strlen($scheme . '://' . $host))) : $link);
                         $session_files['linkdirect'][$code] = array('link' => $link, 'id' => $row['id']);
                     }
                 }
