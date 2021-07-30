@@ -149,7 +149,8 @@
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
                 <div class="col-sm-18 col-md-18">
                     <div class="nv-recaptcha-default">
-                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
+                        <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
+                    </div>
                 </div>
             </div>
             <!-- END: recaptcha -->

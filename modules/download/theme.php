@@ -304,7 +304,6 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
 function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
     global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_config;
-
     $array['parentid'] = 0;
     if ($array['catid'] and isset($list_cats[$array['catid']])) {
         $array['parentid'] = $list_cats[$array['catid']]['parentid'];
@@ -322,7 +321,8 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
-
+    // Xác định có áp dụng reCaptcha hay không
+    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
     // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
@@ -357,6 +357,7 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 
 /**
  * theme_upload_getcat()

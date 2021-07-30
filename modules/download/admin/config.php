@@ -21,6 +21,7 @@ $array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 
 $array_config = array();
 $array_pdf_handler = array('filetmp', 'phpattachment');
+$array = [];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', 'none');
@@ -46,7 +47,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
     $array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
     $array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
-    $array_config['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
+    $array['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
+    $array['captcha_type_comm'] = $nv_Request->get_string('captcha_type', 'post', '');
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -95,6 +97,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
     }
 
+    foreach ($array as $config_name => $config_value) {
+        try {
+            $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . ' (lang, module, config_name, config_name) VALUES (' . NV_LANG_DATA . ', ' . $module_name . ', :config_name, :config_value)');
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        } catch (Exception $e) {
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name");
+            $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+    }
+
     if (! empty($array_config['readme'])) {
         file_put_contents($readme_file, $array_config['readme']);
     } else {
@@ -129,7 +146,7 @@ $array_config['shareport'] = 0;
 $array_config['addthis_pubid'] = 0;
 $array_config['pdf_handler'] = $array_pdf_handler[0];
 $array_config['list_title_length'] = 0;
-$array_config['captcha_type'] = '';
+$array['captcha_type'] = $module_config[$module_name]['captcha_type'];
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -204,7 +221,7 @@ $captcha_types = [
 foreach ($captcha_types as $type) {
     $captcha_type = [
         'key' => $type,
-        'selected' => $array_config['captcha_type'] == $type ? ' selected="selected"' : '',
+        'selected' => $array['captcha_type'] == $type ? ' selected="selected"' : '',
         'title' => $lang_module['captcha_type_' . $type]
     ];
     $xtpl->assign('CAPTCHATYPE', $captcha_type);
@@ -214,7 +231,7 @@ foreach ($captcha_types as $type) {
 $is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
 $xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
 $xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
-if (!$is_recaptcha_note or $array_config['captcha_type'] != 'recaptcha') {
+if (!$is_recaptcha_note or $array['captcha_type'] != 'recaptcha') {
     $xtpl->parse('main.recaptcha_note_hide');
 }
 

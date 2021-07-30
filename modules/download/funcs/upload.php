@@ -78,9 +78,6 @@ $array = array();
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url);
 
-// Xác định có áp dụng reCaptcha hay không
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
 if ($nv_Request->isset_request('addfile', 'post')) {
     $addfile = $nv_Request->get_string('addfile', 'post', '');
 
