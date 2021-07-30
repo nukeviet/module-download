@@ -99,11 +99,11 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     $array['user_name'] = nv_substr($nv_Request->get_title('upload_user_name', 'post', '', 1), 0, 100);
     $array['user_id'] = 0;
 
-    if ($global_config['captcha_type'] == 2) {
-        $seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
-        $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
-    }
+    // if ($global_config['captcha_type'] == 2) {
+    //     $seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    // } else {
+    //     $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
+    // }
 
     if (defined('NV_IS_USER')) {
         $array['user_name'] = $user_info['username'];
@@ -154,18 +154,18 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     // kiểm tra capcha
     unset($fcaptcha);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($global_array_config['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($global_array_config['captcha_type'] == 'captcha') {
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
     }
 
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    if (isset($array['captcha']) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
         $is_error = true;
-        $error[] = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+        $error = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['user_name'])) {
         $is_error = true;
         $error = $lang_module['upload_error2'];
