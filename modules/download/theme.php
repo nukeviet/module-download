@@ -321,19 +321,32 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    
     // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
     // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
+    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+        $xtpl->assign('N_CAPTCHA', $lang_module['captcha']);
+        $xtpl->parse('main.captcha');
     }
+    
 
     if (!empty($error)) {
         $xtpl->assign('ERROR', $error);

@@ -131,6 +131,19 @@
             </div>
             <!-- END: show_username -->
 
+             <!-- BEGIN: captcha -->
+            <div class="form-group">
+                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
+                <div class="col-sm-6 col-md-6">
+                    <input type="text" placeholder="{LANG.captcha}" maxlength="{NV_GFX_NUM}" value="" name="fcode" class="fcode required form-control display-inline-block" style="width:100px;" data-pattern="/^(.){{NV_GFX_NUM},{NV_GFX_NUM}}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_captcha}"/>
+                </div>
+                <div class="col-sm-10 col-md-10">
+                    <img width="{GFX_WIDTH}" height="{GFX_HEIGHT}" title="{LANG.captcha}" alt="{LANG.captcha}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" class="captchaImg display-inline-block">
+                    <em onclick="change_captcha('.fcode');" title="{GLANG.captcharefresh}" class="fa fa-pointer fa-refresh margin-left margin-right"></em>
+                </div>
+            </div>
+            <!-- END: captcha -->
+
             <!-- BEGIN: recaptcha3 -->
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>

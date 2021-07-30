@@ -133,3 +133,4 @@ $lang_module['load_subcat'] = 'Go to the child topic';
 $lang_module['file_upload_ok'] = 'Upload successfully!';
 $lang_module['securitycodeincorrect1'] = 'Unauthenticated capcha';
 $lang_module['securitycodeincorrect'] = 'Unauthenticated capcha';
+$lang_module['captcha'] = 'Security code';
