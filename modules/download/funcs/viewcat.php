@@ -41,6 +41,16 @@ $description = $cat_data['description'];
 $per_page = $download_config['per_page_child'];
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias;
 
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+$page_url = $base_url;
+
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
+
+$canonicalUrl = getCanonicalUrl($page_url);
+
+
 if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
     $db->sqlreset()
         ->select('COUNT(*)')
@@ -48,6 +58,9 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
         ->where('catid=' . $cat_data['id'] . ' AND status=1');
 
     $num_items = $db->query($db->sql())->fetchColumn();
+
+    $urlappend = '/page-';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
         ->order('uploadtime DESC')
@@ -156,6 +169,9 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
         ->where('catid IN (' . implode(',', $array_cat) . ') AND status=1');
 
     $num_items = $db->query($db->sql())->fetchColumn();
+    $urlappend = '/page-';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
+    
     $cat_data['numfile'] = $num_items;
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')

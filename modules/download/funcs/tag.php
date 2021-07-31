@@ -23,6 +23,15 @@ if (isset($array_op[1])) {
         $alias = '';
     }
 }
+
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
+$canonicalUrl = getCanonicalUrl($page_url);
+
+
 $page_title = trim(str_replace('-', ' ', $alias));
 $per_page=10;
 
@@ -52,6 +61,9 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
             ->where('status=1 AND id IN (SELECT id FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $tid . ')');
 
         $num_items = $db->query($db->sql())->fetchColumn();
+
+        $urlappend = '/page-';
+        betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
         $db->select('*')
             ->order('uploadtime DESC')

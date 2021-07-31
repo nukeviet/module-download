@@ -26,6 +26,7 @@ $per_page = $download_config['per_page_home'];
 
 $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 $yesterday = $today - 86400;
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 // Rating
 if ($nv_Request->isset_request('rating', 'post')) {
@@ -98,10 +99,10 @@ if ($viewcat == 'viewcat_main_bottom') {
                 ->select('COUNT(*)')
                 ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
-
+            $canonicalUrl = getCanonicalUrl($page_url);
+            
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
-
             if ($num_items) {
                 $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits');
                 $db->order('uploadtime DESC');
@@ -154,9 +155,12 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $contents = theme_viewcat_main($viewcat, $array_cats);
 } elseif ($viewcat == 'viewcat_list_new') {
-    $array_files = [];
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+    if ($page > 1) {
+        $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
+    }
+    $canonicalUrl = getCanonicalUrl($page_url);
 
+    $array_files = [];
     // Fetch Limit
     $db->sqlreset()
         ->select('COUNT(*)')
@@ -165,6 +169,9 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $all_page = $db->query($db->sql())
         ->fetchColumn();
+
+    $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
+    betweenURLs($page, ceil($all_page/$per_page), $base_url, $urlappend, $prevPage, $nextPage);   
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
         ->order('uploadtime DESC')

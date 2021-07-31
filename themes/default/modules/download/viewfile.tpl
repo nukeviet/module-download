@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_FILE}_jquery.shorten.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE}/js/{MODULE_FILE}_jquery.shorten.js"></script>
 
 <div class="block_download">
     <!-- BEGIN: scorm -->

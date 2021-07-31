@@ -60,14 +60,9 @@ if (!nv_user_in_groups($row['groups_view'])) {
     exit();
 }
 
-$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    nv_redirect_location($base_url_rewrite);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $row['cattitle'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '">' . $list_cats[$row['catid']]['title'] . '</a>';
 
@@ -213,7 +208,7 @@ if ($row['is_download_allow']) {
                         $row['linkdirect'][$host][] = array(
                             'link' => $link,
                             'code' => $code,
-                            'name' => isset($link{70}) ? $scheme . '://' . $host . '...' . substr($link, -(70 - strlen($scheme . '://' . $host))) : $link);
+                            'name' => isset($link[70]) ? $scheme . '://' . $host . '...' . substr($link, -(70 - strlen($scheme . '://' . $host))) : $link);
                         $session_files['linkdirect'][$code] = array('link' => $link, 'id' => $row['id']);
                     }
                 }

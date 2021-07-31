@@ -5,7 +5,7 @@
 </div>
 <!-- END: error -->
 
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
 <form action="{FORM_ACTION}" method="post" class="confirm-reload" id="file-upload-form" data-busy="false">
     <div class="row">
@@ -205,8 +205,8 @@
                                         <!-- END: mime -->
                                     ]
                                 },
-                                flash_swf_url: '{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/Moxie.swf',
-                                silverlight_xap_url: '{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/Moxie.xap',
+                                flash_swf_url: '{NV_STATIC_URL}{NV_ASSETS_DIR}/js/plupload/Moxie.swf',
+                                silverlight_xap_url: '{NV_STATIC_URL}{NV_ASSETS_DIR}/js/plupload/Moxie.xap',
                                 multipart : true,
                                 init: {
                                       // Event on init uploader
@@ -356,9 +356,9 @@
 </script>
 <!-- END: get_alias -->
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {

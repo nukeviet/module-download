@@ -21,7 +21,6 @@ $array_mod_title[] = array('title' => $page_title);
 
 $download_config = nv_mod_down_config();
 $array_field_key = array_keys($download_config['dis']['ad']);
-
 $list_cats_addfile = array();
 foreach ($list_cats as $_catid => $_catvalue) {
     if (!empty($_catvalue['is_addfile_allow'])) {
@@ -75,6 +74,10 @@ $is_error = false;
 $error = '';
 $array = array();
 
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
+
 if ($nv_Request->isset_request('addfile', 'post')) {
     $addfile = $nv_Request->get_string('addfile', 'post', '');
 
@@ -96,11 +99,11 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     $array['user_name'] = nv_substr($nv_Request->get_title('upload_user_name', 'post', '', 1), 0, 100);
     $array['user_id'] = 0;
 
-    if ($global_config['captcha_type'] == 2) {
-        $seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
-        $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
-    }
+    // if ($global_config['captcha_type'] == 2) {
+    //     $seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    // } else {
+    //     $seccode = $nv_Request->get_title('upload_seccode', 'post', '');
+    // }
 
     if (defined('NV_IS_USER')) {
         $array['user_name'] = $user_info['username'];
@@ -148,9 +151,21 @@ if ($nv_Request->isset_request('addfile', 'post')) {
         $is_exists = $stmt->fetchColumn();
     }
 
-    if (!nv_capcha_txt($seccode)) {
+    // kiểm tra capcha
+    unset($fcaptcha);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+        $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
+    }
+
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
         $is_error = true;
-        $error = $lang_module['upload_error1'];
+        $error = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['user_name'])) {
         $is_error = true;
         $error = $lang_module['upload_error2'];
