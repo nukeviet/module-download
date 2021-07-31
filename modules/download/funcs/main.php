@@ -99,20 +99,10 @@ if ($viewcat == 'viewcat_main_bottom') {
                 ->select('COUNT(*)')
                 ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
-
-            if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-                $page = intval(substr($array_op[0], 5));
-            }
-
-            if ($page > 1) {
-                $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
-            }
             $canonicalUrl = getCanonicalUrl($page_url);
+            
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
-            $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
-            betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);    
-
             if ($num_items) {
                 $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits');
                 $db->order('uploadtime DESC');
@@ -165,10 +155,6 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $contents = theme_viewcat_main($viewcat, $array_cats);
 } elseif ($viewcat == 'viewcat_list_new') {
-    if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-        $page = intval(substr($array_op[0], 5));
-    }
-
     if ($page > 1) {
         $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
     }

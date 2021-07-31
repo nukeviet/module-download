@@ -42,9 +42,6 @@ $per_page = $download_config['per_page_child'];
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias;
 
 // URL chính tắc: $page_url, $base_url và $canonicalUrl
-if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-    $page = intval(substr($array_op[0], 5));
-}
 $page_url = $base_url;
 
 if ($page > 1) {
@@ -217,7 +214,6 @@ if ($cat_data['viewcat'] == 'viewcat_main_bottom') {
 
     if ($page > 1) {
         $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
-        $page_url .= '/page-' . $page;
     }
 
     $contents = theme_viewcat_list($array, $generate_page, $cat_data);

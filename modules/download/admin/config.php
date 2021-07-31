@@ -47,8 +47,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
     $array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
     $array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
-    $array['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
-    $array['captcha_type_comm'] = $nv_Request->get_string('captcha_type', 'post', '');
+    $array['captcha_type'] = $nv_Request->get_title('captcha_type', 'post', '');
+    $array['captcha_type_comm'] = $nv_Request->get_title('captcha_type', 'post', '');
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -99,7 +99,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     foreach ($array as $config_name => $config_value) {
         try {
-            $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . ' (lang, module, config_name, config_name) VALUES (' . NV_LANG_DATA . ', ' . $module_name . ', :config_name, :config_value)');
+            $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . ' (lang, module, config_name, config_name) VALUES (' . NV_LANG_DATA . ', :module, :config_name, :config_value)');
+            $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
