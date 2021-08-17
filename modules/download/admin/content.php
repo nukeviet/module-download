@@ -930,13 +930,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
                 }
 
-                if (!empty($array['fileimage_tmp'])) {
-                    nv_deletefile(NV_ROOTDIR . $array['fileimage_tmp']);
+                if (!empty($array['fileimage_tmp']) and file_exists(NV_UPLOADS_REAL_DIR . $array['fileimage_tmp'])) {
+                    nv_deletefile(NV_UPLOADS_REAL_DIR . $array['fileimage_tmp']);
                 }
 
                 if (!empty($array['fileupload_tmp'])) {
                     foreach ($array['fileupload_tmp'] as $fileupload_tmp) {
-                        nv_deletefile(NV_ROOTDIR . $fileupload_tmp);
+                        if (file_exists(NV_UPLOADS_REAL_DIR . $fileupload_tmp)) {
+                            nv_deletefile(NV_UPLOADS_REAL_DIR . $fileupload_tmp);
+                        }
                     }
                 }
 
