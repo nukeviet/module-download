@@ -159,7 +159,7 @@
                 <label class="col-sm-6 col-md-6 control-label"></label>
                 <div class="col-sm-18 col-md-18">
                     <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
-                    <input type="hidden" name="submit" value="1" />
+                    <input type="hidden" name="fsubmit" value="1" />
                     <input class="btn btn-primary" type="submit" value="{LANG.upload}" onclick="btnClickSubmit(event,this.form);"/>
                 </div>
             </div>
