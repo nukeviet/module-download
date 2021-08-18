@@ -12,7 +12,10 @@ if (!defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
 if (empty($list_cats)) {
+    $canonicalUrl = getCanonicalUrl($page_url);
     $page_title = $module_info['site_title'];
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme('');
@@ -26,7 +29,6 @@ $per_page = $download_config['per_page_home'];
 
 $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 $yesterday = $today - 86400;
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 // Rating
 if ($nv_Request->isset_request('rating', 'post')) {
@@ -90,6 +92,7 @@ $viewcat = $download_config['indexfile'];
 $contents = '';
 
 if ($viewcat == 'viewcat_main_bottom') {
+    $canonicalUrl = getCanonicalUrl($page_url);
     $array_cats = [];
     foreach ($list_cats as $value) {
         if (empty($value['parentid']) and !empty($value['status'])) {
@@ -99,7 +102,6 @@ if ($viewcat == 'viewcat_main_bottom') {
                 ->select('COUNT(*)')
                 ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
-            $canonicalUrl = getCanonicalUrl($page_url);
             
             $num_items = $db->query($db->sql())
                 ->fetchColumn();

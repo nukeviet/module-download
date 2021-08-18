@@ -242,7 +242,8 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('arr_req_ur_filesize', '0'),
         ('arr_req_ur_version', '0'),
         ('arr_req_ur_copyright', '0'),
-        ('allow_fupload_import', '0')
+        ('allow_fupload_import', '0'),
+        ('captcha_type', 'captcha')
     ";
 
     // Comments
@@ -261,7 +262,4 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'timeoutcomm', '360')";
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowattachcomm', '0')";
 	$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'alloweditorcomm', '0')";
-
-    $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha_type', 'captcha')";
-
 }

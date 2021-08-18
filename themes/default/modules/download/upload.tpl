@@ -144,19 +144,6 @@
             </div>
             <!-- END: captcha -->
 
-            <!-- BEGIN: recaptcha3 -->
-            <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
-                <div class="col-sm-10 col-md-10">
-                    <input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
-                </div>
-                <div class="col-sm-8 col-md-8">
-                    <img class="middle captchaImg" height="31" name="upload_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{GLANG.captcha}" />
-                    <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
-                </div>
-            </div>
-            <!-- END: recaptcha3 -->
-
             <!-- BEGIN: recaptcha -->
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
@@ -172,7 +159,8 @@
                 <label class="col-sm-6 col-md-6 control-label"></label>
                 <div class="col-sm-18 col-md-18">
                     <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
-                    <input class="btn btn-primary" type="submit" name="submit" value="{LANG.upload}" />
+                    <input type="hidden" name="submit" value="1" />
+                    <input class="btn btn-primary" type="submit" value="{LANG.upload}" onclick="btnClickSubmit(event,this.form);"/>
                 </div>
             </div>
         </div>
