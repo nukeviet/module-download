@@ -8,14 +8,15 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_DOWNLOAD')) {
+if (!defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
+$download_config = nv_mod_down_config();
 $alias = $nv_Request->get_title('alias', 'get');
 $array_op = explode('/', $alias);
 $alias = $array_op[0];
-$page=1;
+$page = 1;
 if (isset($array_op[1])) {
     if (sizeof($array_op) == 2 and preg_match('/^page\-([0-9]+)$/', $array_op[1], $m)) {
         $page = intval($m[1]);
@@ -31,12 +32,11 @@ if ($page > 1) {
 }
 $canonicalUrl = getCanonicalUrl($page_url);
 
-
 $page_title = trim(str_replace('-', ' ', $alias));
-$per_page=10;
+$per_page = $download_config['per_page_child'];
 
-if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
-    $array_item=array();
+if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
+    $array_item = array();
 
     $stmt = $db->prepare('SELECT did, image, description, keywords FROM ' . NV_MOD_TABLE . '_tags WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
@@ -63,7 +63,7 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $num_items = $db->query($db->sql())->fetchColumn();
 
         $urlappend = '/page-';
-        betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
         $db->select('*')
             ->order('uploadtime DESC')
@@ -73,9 +73,9 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $result = $db->query($db->sql());
 
         while ($rows = $result->fetch()) {
-            $rows['fileimage']=(! empty($rows['fileimage'])) ? NV_BASE_SITEURL . NV_FILES_DIR . $rows['fileimage'] : '';
-            $rows['more_link']=NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$rows['catid']]['alias'] . '/' . $rows['alias'] . $global_config['rewrite_exturl'];
-            $array_item[$rows['id']]=$rows;
+            $rows['fileimage'] = (!empty($rows['fileimage'])) ? NV_BASE_SITEURL . NV_FILES_DIR . $rows['fileimage'] : '';
+            $rows['more_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$rows['catid']]['alias'] . '/' . $rows['alias'] . $global_config['rewrite_exturl'];
+            $array_item[$rows['id']] = $rows;
         }
 
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);

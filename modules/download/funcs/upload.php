@@ -74,6 +74,9 @@ $is_error = false;
 $error = '';
 $array = array();
 
+// Xác định có áp dụng reCaptcha hay không
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
 // URL chính tắc: $page_url, $base_url và $canonicalUrl
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url);
@@ -154,18 +157,18 @@ if ($nv_Request->isset_request('addfile', 'post')) {
     // kiểm tra capcha
     unset($fcaptcha);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($download_config['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    elseif ($download_config['captcha_type'] == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
     }
 
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $download_config['captcha_type'])) {
         $is_error = true;
-        $error = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+        $error = ($download_config['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['user_name'])) {
         $is_error = true;
         $error = $lang_module['upload_error2'];
