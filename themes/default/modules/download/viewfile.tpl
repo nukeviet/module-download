@@ -70,6 +70,9 @@
     <!-- BEGIN: filepdf -->
     <iframe frameborder="0" height="600" scrolling="yes" src="{FILEPDF}" width="100%"></iframe>
     <!-- END: filepdf -->
+    <div class="report pull-right">
+        <a href="javascript:void(0);" data-thanks="{LANG.report_thanks}" onclick="nv_link_report( $(this), {ROW.id} );">{LANG.report}</a>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <em class="fa fa-tasks">&nbsp;</em> {LANG.listing_details}
@@ -174,9 +177,6 @@
 
     <!-- BEGIN: report -->
     <div class="info_download">
-        <div class="report pull-right">
-            <a href="javascript:void(0);" data-thanks="{LANG.report_thanks}" onclick="nv_link_report( $(this), {ROW.id} );">{LANG.report}</a>
-        </div>
         <em class="fa fa-download">&nbsp;</em> {LANG.download_detail}
     </div>
     <!-- END: report -->
