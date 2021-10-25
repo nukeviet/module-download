@@ -97,7 +97,7 @@
                             </button> </span>
                     </div>
                     <em class="help-block">{LANG.upload_valid_ext_info}: jpg, gif, png</em>
-                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display: none" />
+                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display:none" />
                 </div>
             </div>
 
