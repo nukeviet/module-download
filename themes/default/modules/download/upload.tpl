@@ -97,7 +97,7 @@
                             </button> </span>
                     </div>
                     <em class="help-block">{LANG.upload_valid_ext_info}: jpg, gif, png</em>
-                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display: none" />
+                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display:none" />
                 </div>
             </div>
 
@@ -160,7 +160,7 @@
                 <div class="col-sm-18 col-md-18">
                     <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
                     <input type="hidden" name="fsubmit" value="1" />
-                    <input class="btn btn-primary" type="submit" value="{LANG.upload}" onclick="btnClickSubmit(event,this.form);"/>
+                    <input class="btn btn-primary" type="submit" value="{LANG.upload}" />
                 </div>
             </div>
         </div>
