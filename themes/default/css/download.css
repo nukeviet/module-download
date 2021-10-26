@@ -37,9 +37,20 @@
     padding: 3px
 }
 
-.block_download .info_download .report {
+.report {
     background: url(../images/download/report.gif) no-repeat center left;
-    padding-left: 20px
+    padding-left: 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.report a{
+    color: #333
+}
+
+.report a:hover, .report a:focus {
+    text-decoration: none;
+    color: #0e2132;
 }
 
 .block_download .image{
