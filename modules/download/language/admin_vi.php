@@ -273,8 +273,3 @@ $lang_module['fimport_stat_cat_ignore'] = 'Số chủ đề đã bỏ qua do đ�
 $lang_module['fimport_stat_file_add'] = 'Số file/tài liệu được tạo mới';
 $lang_module['fimport_stat_file_ignore'] = 'Số file/tài liệu đã bỏ qua do đã có';
 $lang_module['process'] = 'Đã xử lý';
-$lang_module['captcha_type'] = 'Kiểu captcha khi người dùng gửi liên hệ';
-$lang_module['captcha_type_'] = 'Không sử dụng';
-$lang_module['captcha_type_captcha'] = 'Captcha hình';
-$lang_module['captcha_type_recaptcha'] = 'reCaptcha';
-$lang_module['captcha_type_recaptcha_note'] = 'Captcha sẽ không chạy cho đến khi bạn <a href="%s">định cấu hình reCaptcha</a>';

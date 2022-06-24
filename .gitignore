@@ -43,3 +43,4 @@
 !/themes/default/modules/download/*
 /error.php
 /.github
+/api.php

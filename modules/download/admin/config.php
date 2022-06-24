@@ -22,11 +22,6 @@ $array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 $array_config = array();
 $array_pdf_handler = array('filetmp', 'phpattachment');
 $array = [];
-$captcha_types = [
-    '',
-    'captcha',
-    'recaptcha'
-];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', 'none');
@@ -52,8 +47,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
     $array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
     $array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
-    $array_config['captcha_type'] = $nv_Request->get_title('captcha_type', 'post', '');
-    $array['captcha_type_comm'] = $nv_Request->get_title('captcha_type', 'post', '');
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -152,7 +145,6 @@ $array_config['shareport'] = 0;
 $array_config['addthis_pubid'] = 0;
 $array_config['pdf_handler'] = $array_pdf_handler[0];
 $array_config['list_title_length'] = 0;
-$array_config['captcha_type'] = 'captcha';
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -218,23 +210,6 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-
-foreach ($captcha_types as $type) {
-    $captcha_type = [
-        'key' => $type,
-        'selected' => $array_config['captcha_type'] == $type ? ' selected="selected"' : '',
-        'title' => $lang_module['captcha_type_' . $type]
-    ];
-    $xtpl->assign('CAPTCHATYPE', $captcha_type);
-    $xtpl->parse('main.captcha_type');
-}
-
-$is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
-$xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
-$xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
-if (!$is_recaptcha_note or $array_config['captcha_type'] != 'recaptcha') {
-    $xtpl->parse('main.recaptcha_note_hide');
-}
 
 foreach ($array_config['groups_addfile'] as $group) {
     $xtpl->assign('GROUPS_ADDFILE', $group);

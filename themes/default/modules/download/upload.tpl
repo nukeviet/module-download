@@ -135,7 +135,7 @@
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
                 <div class="col-sm-6 col-md-6">
-                    <input type="text" placeholder="{LANG.captcha}" maxlength="{NV_GFX_NUM}" value="" name="fcode" class="fcode required form-control display-inline-block" style="width:100px;" data-pattern="/^(.){{NV_GFX_NUM},{NV_GFX_NUM}}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_captcha}"/>
+                    <input type="text" placeholder="{LANG.captcha}" maxlength="{NV_GFX_NUM}" value="" name="fcode" class="fcode required form-control display-inline-block" style="width:100px;" data-pattern="/^(.){{NV_GFX_NUM},{NV_GFX_NUM}}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_captcha}" autocomplete="off"/>
                 </div>
                 <div class="col-sm-10 col-md-10">
                     <img width="{GFX_WIDTH}" height="{GFX_HEIGHT}" title="{LANG.captcha}" alt="{LANG.captcha}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" class="captchaImg display-inline-block">
@@ -146,11 +146,9 @@
 
             <!-- BEGIN: recaptcha -->
             <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
+                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-18 col-md-18">
-                    <div class="nv-recaptcha-default">
-                        <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
-                    </div>
+                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
                 </div>
             </div>
             <!-- END: recaptcha -->
@@ -159,7 +157,6 @@
                 <label class="col-sm-6 col-md-6 control-label"></label>
                 <div class="col-sm-18 col-md-18">
                     <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
-                    <input type="hidden" name="fsubmit" value="1" />
                     <input class="btn btn-primary" type="submit" value="{LANG.upload}" />
                 </div>
             </div>

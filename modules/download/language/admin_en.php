@@ -259,8 +259,3 @@ $lang_module['fimport_stat_cat_add'] = 'Number of newly created categories';
 $lang_module['fimport_stat_cat_ignore'] = 'Number of categories omitted due to availability';
 $lang_module['fimport_stat_file_add'] = 'Number of newly created files/documents';
 $lang_module['fimport_stat_file_ignore'] = 'The number of files/documents that have been skipped due to an existing file';
-$lang_module['captcha_type'] = 'Captcha style when user sends contact';
-$lang_module['captcha_type_'] = 'Do not use';
-$lang_module['captcha_type_captcha'] = 'Captcha pictures';
-$lang_module['captcha_type_recaptcha'] = 'reCaptcha';
-$lang_module['captcha_type_recaptcha_note'] = 'Captcha wont run until you <a href="%s">configure reCaptcha</a>';
