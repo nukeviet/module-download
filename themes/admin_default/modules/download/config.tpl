@@ -58,7 +58,7 @@
             </table>
         </div>
         <div class="text-center form-group">
-            <input type="submit" value="{LANG.config_confirm}" class="btn btn-primary" />
+            <input type="submit" name="submit" value="{LANG.config_confirm}" class="btn btn-primary" />
         </div>
         <div class="panel panel-default">
             <div class="panel-heading"><strong>{LANG.config_basic}</strong></div>
@@ -191,7 +191,7 @@
             </table>
         </div>
         <div class="text-center form-group">
-            <input type="submit" value="{LANG.config_confirm}" class="btn btn-primary" />
+            <input type="submit" name="submit" value="{LANG.config_confirm}" class="btn btn-primary" />
         </div>
         <div class="panel panel-default">
             <div class="panel-heading"><strong>{LANG.config_field}</strong></div>
