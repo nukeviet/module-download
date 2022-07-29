@@ -8,15 +8,17 @@
  * @Createdate 12/9/2010, 22:27
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 // Get alias
 if ($nv_Request->isset_request('gettitle', 'post')) {
     $title = $nv_Request->get_title('gettitle', 'post', '');
+    $id = $nv_Request->get_int('id', 'post', 0);
+    $edit_content = ($id > 0) ? 'AND id != ' . $id : '';
     $alias = change_alias($title);
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias ' . $edit_content);
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -24,7 +26,6 @@ if ($nv_Request->isset_request('gettitle', 'post')) {
         $weight = intval($weight) + 1;
         $alias = $alias . '-' . $weight;
     }
-
     include NV_ROOTDIR . '/includes/header.php';
     echo $alias;
     include NV_ROOTDIR . '/includes/footer.php';
@@ -32,7 +33,7 @@ if ($nv_Request->isset_request('gettitle', 'post')) {
 
 // Load cat
 if ($nv_Request->isset_request('loadcat', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -100,10 +101,9 @@ $currentpath = getUploadcurrentPath();
 $currentpath_images = $currentpath[0];
 $currentpath_files = $currentpath[1];
 $uploads_dir_user = $currentpath[2];
-
 $id = $nv_Request->get_int('id', 'get', 0);
 $filequeueid = $nv_Request->get_int('filequeueid', 'get', 0);
-$copy = $nv_Request->get_int('copy', 'get',0);
+$copy = $nv_Request->get_int('copy', 'get', 0);
 $groups_list = nv_groups_list();
 $array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 $array = array();
@@ -144,13 +144,13 @@ if ($id) {
     $report = $report ? '&amp;report=1' : '';
 
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id . $report;
-    if($copy == 1) {
-    	$form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;copy=1&amp;id=' . $id;
+    if ($copy == 1) {
+        $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;copy=1&amp;id=' . $id;
     }
     $page_title = $lang_module['download_editfile'];
 
-    $array['id'] = ( int )$row['id'];
-    $array['catid'] = ( int )$row['catid'];
+    $array['id'] = (int)$row['id'];
+    $array['catid'] = (int)$row['catid'];
     $array['title'] = $row['title'];
     $array['alias'] = $row['alias'];
     $array['description'] = nv_editor_br2nl($row['description']);
@@ -160,7 +160,7 @@ if ($id) {
     $array['author_url'] = $row['author_url'];
     $array['linkdirect'] = $row['linkdirect'];
     $array['version'] = $row['version'];
-    $array['filesize'] = ( int )$row['filesize'];
+    $array['filesize'] = (int)$row['filesize'];
     $array['fileimage'] = $row['fileimage'];
     $array['copyright'] = $row['copyright'];
     $array['groups_comment'] = $row['groups_comment'];
@@ -169,10 +169,10 @@ if ($id) {
     $array['groups_download'] = $row['groups_download'];
     $array['user_id'] = $row['user_id'];
     $array['user_name'] = $row['user_name'];
-	$array['referer'] = $crypt->encrypt($client_info['referer']);
+    $array['referer'] = $crypt->encrypt($client_info['referer']);
 
 
-    if (! empty($array['linkdirect'])) {
+    if (!empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
         $array['linkdirect'] = array_map('nv_br2nl', $array['linkdirect']);
     } else {
@@ -205,9 +205,9 @@ if ($id) {
             'scorm_path' => $file['scorm_path']
         );
         if (!empty($file['file_path'])) {
-        	if(!$copy) {
-        		$array['fileupload_key'][md5($file['server_id'] . '_' . $file['file_path'])] = $file['file_id'];
-        	}
+            if (!$copy) {
+                $array['fileupload_key'][md5($file['server_id'] . '_' . $file['file_path'])] = $file['file_id'];
+            }
             $array['fileupload'][] = $file['file_path'];
         }
         if (!empty($file['scorm_path'])) {
@@ -227,7 +227,7 @@ if ($id) {
 
     nv_status_notification(NV_LANG_DATA, $module_name, 'upload_new', $filequeueid);
 
-    $array['catid'] = ( int )$row['catid'];
+    $array['catid'] = (int)$row['catid'];
     $array['title'] = $row['title'];
     $array['alias'] = '';
     $array['description'] = nv_editor_br2nl($row['description']);
@@ -237,7 +237,7 @@ if ($id) {
     $array['author_url'] = $row['author_url'];
     $array['linkdirect'] = $row['linkdirect'];
     $array['version'] = $row['version'];
-    $array['filesize'] = ( int )$row['filesize'];
+    $array['filesize'] = (int)$row['filesize'];
     $array['copyright'] = $row['copyright'];
     $array['user_id'] = $row['user_id'];
     $array['user_name'] = $row['user_name'];
@@ -245,7 +245,7 @@ if ($id) {
     $array['fileimage'] = '';
     $array['fileimage_tmp'] = $row['fileimage'];
 
-    if (! empty($array['linkdirect'])) {
+    if (!empty($array['linkdirect'])) {
         $array['linkdirect'] = explode('[NV]', $array['linkdirect']);
         $array['linkdirect'] = array_map('nv_br2nl', $array['linkdirect']);
     } else {
@@ -261,7 +261,7 @@ if ($id) {
     $array['fileupload_del'] = array();
     $array['scorm_path_old'] = array();
 
-    $array['fileupload_tmp'] = ! empty($row['fileupload']) ? explode('[NV]', $row['fileupload']) : array();
+    $array['fileupload_tmp'] = !empty($row['fileupload']) ? explode('[NV]', $row['fileupload']) : array();
 
     $array['groups_comment'] = $module_config[$module_name]['setcomm'];
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
@@ -288,7 +288,7 @@ if ($id) {
     $array_keywords_old = array();
     $report = false;
 }
-
+$is_copy = $nv_Request->get_int('copy', 'get', 0);
 if ($nv_Request->isset_request('submit', 'post')) {
     $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
@@ -302,26 +302,26 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['fileimage'] = $nv_Request->get_title('fileimage', 'post', '');
     $array['copyright'] = $nv_Request->get_title('copyright', 'post', '', 1);
     $array['is_del_report'] = $nv_Request->get_int('is_del_report', 'post', 0);
-	$is_copy = $nv_Request->get_int('copy', 'get', 0);
-	$array['referer'] = $nv_Request->get_string('referer', 'post');
+
+    $array['referer'] = $nv_Request->get_string('referer', 'post');
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
-    $array['groups_view'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $array['groups_view'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $_groups_post = $nv_Request->get_array('groups_onlineview', 'post', array());
-    $array['groups_onlineview'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $array['groups_onlineview'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $_groups_post = $nv_Request->get_array('groups_download', 'post', array());
-    $array['groups_download'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $array['groups_download'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $_groups_post = $nv_Request->get_array('groups_comment', 'post', array());
-    $array['groups_comment'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $array['groups_comment'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $array['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $array['keywords'] = implode(', ', $array['keywords']);
 
-    if (! empty($array['author_url'])) {
-        if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['author_url'])) {
+    if (!empty($array['author_url'])) {
+        if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['author_url'])) {
             $array['author_url'] = 'http://' . $array['author_url'];
         }
     }
@@ -349,9 +349,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['fileupload_new'] = array();
     $array['fileupload_all_key'] = array();
 
-    if (! empty($fileupload_submit)) {
+    if (!empty($fileupload_submit)) {
         foreach ($fileupload_submit as $file) {
-            if (! empty($file)) {
+            if (!empty($file)) {
                 $file2 = substr($file, strlen(NV_BASE_SITEURL));
                 $file3 = substr($file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR));
                 $file_key = md5($fileserver . '_' . $file3);
@@ -383,25 +383,25 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     // Sort image
-    if (! empty($array['fileimage'])) {
-        if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'])) {
+    if (!empty($array['fileimage'])) {
+        if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'])) {
             $array['fileimage'] = substr($array['fileimage'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR));
         }
     }
 
-    if (! empty($array['linkdirect'])) {
+    if (!empty($array['linkdirect'])) {
         $linkdirect = $array['linkdirect'];
         $array['linkdirect'] = array();
         foreach ($linkdirect as $links) {
             $linkdirect2 = array();
-            if (! empty($links)) {
+            if (!empty($links)) {
                 $links = nv_nl2br($links, '<br />');
                 $links = explode('<br />', $links);
                 $links = array_map('trim', $links);
                 $links = array_unique($links);
 
                 foreach ($links as $link) {
-                    if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $link)) {
+                    if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $link)) {
                         $link = 'http://' . $link;
                     }
                     if (nv_is_url($link)) {
@@ -410,32 +410,32 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
             }
 
-            if (! empty($linkdirect2)) {
+            if (!empty($linkdirect2)) {
                 $array['linkdirect'][] = implode("\n", $linkdirect2);
             }
         }
     } else {
         $array['linkdirect'] = array();
     }
-    if (! empty($array['linkdirect'])) {
+    if (!empty($array['linkdirect'])) {
         $array['linkdirect'] = array_unique($array['linkdirect']);
     }
 
-    if (! empty($array['linkdirect']) and empty($array['fileupload'])) {
+    if (!empty($array['linkdirect']) and empty($array['fileupload'])) {
         $array['filesize'] = $nv_Request->get_int('filesize', 'post', 0);
     }
 
     // Xử lý liên kết tĩnh
     $array['alias'] = $nv_Request->get_title('alias', 'post', '');
     $array['alias'] = !empty($array['alias']) ? change_alias($array['alias']) : change_alias($array['title']);
-	if($is_copy) $array['alias'] = 'copy';
+    if ($is_copy) $array['alias'] = 'copy';
 
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE alias= :alias' . ($id ? ' AND id!=' . $id : ''));
     $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
     $stmt->execute();
     $is_exists = $stmt->fetchColumn();
 
-    if (! $is_exists and !$filequeueid) {
+    if (!$is_exists and !$filequeueid) {
         $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tmp WHERE title= :title');
         $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
         $stmt->execute();
@@ -452,11 +452,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error = $lang_module['file_error_author_name'];
     } elseif (empty($array['author_email']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_email'])) {
         $error = $lang_module['file_error_author_email'];
-    } elseif (! empty($array['author_email']) and ($check_valid_email = nv_check_valid_email($array['author_email'])) != '') {
+    } elseif (!empty($array['author_email']) and ($check_valid_email = nv_check_valid_email($array['author_email'])) != '') {
         $error = $check_valid_email;
     } elseif (empty($array['author_url']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_url'])) {
         $error = $lang_module['file_error_author_url_empty'];
-    } elseif (! empty($array['author_url']) and ! nv_is_url($array['author_url'])) {
+    } elseif (!empty($array['author_url']) and !nv_is_url($array['author_url'])) {
         $error = $lang_module['file_error_author_url'];
     } elseif (empty($array['fileimage']) and empty($array['fileimage_tmp']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['fileimage'])) {
         $error = $lang_module['file_error_fileimage'];
@@ -549,7 +549,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         $num_check = 0;
                         foreach ($ziplistContent as $zipCt) {
                             if ($zipCt['filename'] == 'SCORM.htm' or $zipCt['filename'] == 'index.htm' or $zipCt['filename'] == 'viewer.swf') {
-                                $num_check ++;
+                                $num_check++;
                             }
                             if ($num_check >= 3) {
                                 break;
@@ -580,7 +580,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                                         $conn_id = ftp_connect($ftp_server, $ftp_port, 10);
                                         // login with username and password
                                         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-                                        if ((! $conn_id) || (! $login_result)) {
+                                        if ((!$conn_id) || (!$login_result)) {
                                             $ftp_check_login = 3;
                                         } elseif (ftp_chdir($conn_id, $ftp_path)) {
                                             $ftp_check_login = 1;
@@ -599,11 +599,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
                                         }
 
                                         foreach ($ziplistContent as $array_file) {
-                                            if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $array_file['filename'])) {
+                                            if (!empty($array_file['folder']) and !file_exists(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $array_file['filename'])) {
                                                 $cp = '';
                                                 $e = explode('/', $array_file['filename']);
                                                 foreach ($e as $p) {
-                                                    if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $cp . $p)) {
+                                                    if (!empty($p) and !is_dir(NV_ROOTDIR . '/' . $scorm_path1 . '/' . $cp . $p)) {
                                                         ftp_mkdir($conn_id, $scorm_path1 . '/' . $cp . $p);
                                                         if (substr($sys_info['os'], 0, 3) != 'WIN') {
                                                             ftp_chmod($conn_id, 0777, $scorm_path1 . '/' . $cp . $p);
@@ -678,11 +678,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
 
         if (empty($error)) {
-            $array['introtext'] = ! empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
+            $array['introtext'] = !empty($array['introtext']) ? nv_nl2br($array['introtext'], '<br />') : '';
             $array['num_fileupload'] = sizeof($array['fileupload']);
             $array['num_linkdirect'] = sizeof($array['linkdirect']);
 
-            if ((! empty($array['linkdirect']))) {
+            if ((!empty($array['linkdirect']))) {
                 $array['linkdirect'] = array_map('nv_nl2br', $array['linkdirect']);
                 $array['linkdirect'] = implode('[NV]', $array['linkdirect']);
             } else {
@@ -735,7 +735,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $array['id'] = $db->insert_id($sql, 'id', $data_insert);
 
                 if ($array['id'] != 0) {
-                	if ($is_copy) {
+                    if ($is_copy) {
                         $id_row_copy = $db->lastInsertId();
                         $db->query('UPDATE ' . NV_MOD_TABLE . ' SET alias = ' . $db->quote(change_alias($row['title']) . '-' . $id_row_copy) . ' WHERE id=' . $id_row_copy);
                     }
@@ -773,7 +773,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $stmt->bindParam(':num_fileupload', $array['num_fileupload'], PDO::PARAM_INT);
                 $stmt->bindParam(':num_linkdirect', $array['num_linkdirect'], PDO::PARAM_INT);
 
-                if (! $stmt->execute()) {
+                if (!$stmt->execute()) {
                     $error = $lang_module['file_error1'];
                 } else {
                     $action_db = true;
@@ -790,7 +790,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $keywords = explode(',', $array['keywords']);
                     $keywords = array_map('strip_punctuation', $keywords);
                     $keywords = array_map('trim', $keywords);
-                    $keywords = array_diff($keywords, array( '' ));
+                    $keywords = array_diff($keywords, array(''));
                     $keywords = array_unique($keywords);
 
                     foreach ($keywords as $keyword) {
@@ -805,7 +805,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         list($did, $alias, $keywords_i) = $sth->fetch(3);
 
                         if (empty($did)) {
-                            $array_insert = array( );
+                            $array_insert = array();
                             $array_insert['alias'] = $alias_i;
                             $array_insert['keyword'] = $keyword;
 
@@ -832,7 +832,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     }
 
                     foreach ($array_keywords_old as $did => $keyword) {
-                        if (! in_array($keyword, $keywords)|| $is_copy) {
+                        if (!in_array($keyword, $keywords) || $is_copy) {
                             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_id WHERE id = ' . $array['id'] . ' AND did=' . $did);
 
                             $count_tag = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_id WHERE did=' . $did);
@@ -872,7 +872,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
                     // Thêm file mới
                     $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $id)->fetchColumn();
-                    $weight ++;
+                    $weight++;
                     foreach ($array['fileupload_new'] as $fileupload) {
                         $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_files (
                             download_id, server_id, file_path, scorm_path, filesize, weight, status
@@ -930,13 +930,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
                 }
 
-                if (!empty($array['fileimage_tmp'])) {
-                    nv_deletefile(NV_ROOTDIR . $array['fileimage_tmp']);
+                if (!empty($array['fileimage_tmp']) and file_exists(NV_UPLOADS_REAL_DIR . $array['fileimage_tmp'])) {
+                    nv_deletefile(NV_UPLOADS_REAL_DIR . $array['fileimage_tmp']);
                 }
 
                 if (!empty($array['fileupload_tmp'])) {
                     foreach ($array['fileupload_tmp'] as $fileupload_tmp) {
-                        nv_deletefile(NV_ROOTDIR . $fileupload_tmp);
+                        if (file_exists(NV_UPLOADS_REAL_DIR . $fileupload_tmp)) {
+                            nv_deletefile(NV_UPLOADS_REAL_DIR . $fileupload_tmp);
+                        }
                     }
                 }
 
@@ -945,7 +947,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
 
                 $nv_Cache->delMod($module_name);
-				$referer = $crypt->decrypt($array['referer']);
+                $referer = $crypt->decrypt($array['referer']);
                 if (!empty($referer)) {
                     nv_redirect_location($referer);
                 }
@@ -962,25 +964,24 @@ $array['fileupload_num'] = sizeof($array['fileupload']);
 $array['linkdirect_num'] = sizeof($array['linkdirect']);
 
 // Build fileimage
-if (! empty($array['fileimage'])) {
-    if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'])) {
+if (!empty($array['fileimage'])) {
+    if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'])) {
         $array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
     }
 }
-
 // Build fileimage tmp
-if (! empty($array['fileimage_tmp'])) {
-    if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage_tmp'])) {
+if (!empty($array['fileimage_tmp'])) {
+    if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage_tmp'])) {
         $array['fileimage_tmp'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage_tmp'];
     }
 }
 
 // Rebuild fileupload
-if (! empty($array['fileupload'])) {
+if (!empty($array['fileupload'])) {
     $fileupload = $array['fileupload'];
     $array['fileupload'] = array();
     foreach ($fileupload as $tmp) {
-        if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $tmp)) {
+        if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $tmp)) {
             $tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
         }
         $array['fileupload'][] = $tmp;
@@ -988,21 +989,21 @@ if (! empty($array['fileupload'])) {
 }
 
 // Rebuild fileupload tmp
-if (! empty($array['fileupload_tmp'])) {
+if (!empty($array['fileupload_tmp'])) {
     $fileupload = $array['fileupload_tmp'];
     $array['fileupload_tmp'] = array();
     foreach ($fileupload as $tmp) {
-        if (! preg_match('#^(http|https|ftp|gopher)\:\/\/#', $tmp)) {
+        if (!preg_match('#^(http|https|ftp|gopher)\:\/\/#', $tmp)) {
             $tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
         }
         $array['fileupload_tmp'][] = $tmp;
     }
 }
 
-if (! sizeof($array['linkdirect'])) {
+if (!sizeof($array['linkdirect'])) {
     array_push($array['linkdirect'], '');
 }
-if (! sizeof($array['fileupload'])) {
+if (!sizeof($array['fileupload'])) {
     array_push($array['fileupload'], '');
 }
 
@@ -1063,13 +1064,12 @@ if (defined('NV_EDITOR')) {
 }
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description']);
+    $array['description'] = nv_aleditor('description', '100%', '300px', $array['description'], '', $uploads_dir_user, $currentpath_images);
 } else {
     $array['description'] = '<textarea style="width:100%; height:300px" name="description" id="description">' . $array['description'] . '</textarea>';
 }
 $array['id'] = 0;
-
-if (! $array['filesize']) {
+if (!$array['filesize']) {
     $array['filesize'] = '';
 }
 
@@ -1081,6 +1081,7 @@ if ($array['catid'] and isset($list_cats[$array['catid']])) {
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('ID', $is_copy ? 0 : $id);
 $xtpl->assign('DATA', $array);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -1110,10 +1111,10 @@ if ($num_display_field >= 5) {
 $mimes = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
 
 foreach ($mimes as $mime_type => $file_ext) {
-    if (! in_array($mime_type, $global_config['forbid_mimes']) and in_array($mime_type, $admin_info['allow_files_type'])) {
+    if (!in_array($mime_type, $global_config['forbid_mimes']) and in_array($mime_type, $admin_info['allow_files_type'])) {
         $file_ext = array_diff(array_keys($file_ext), $global_config['forbid_extensions']);
 
-        if (! empty($file_ext)) {
+        if (!empty($file_ext)) {
             $xtpl->assign('MIMI_TYPE', ucfirst($mime_type));
             $xtpl->assign('MIME_EXTS', implode(',', $file_ext));
 
@@ -1122,7 +1123,7 @@ foreach ($mimes as $mime_type => $file_ext) {
     }
 }
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }
@@ -1143,14 +1144,14 @@ if (!empty($list_cats)) {
 }
 
 $array['keywords'] = array_filter(array_map('trim', explode(',', $array['keywords'])));
-foreach ($array['keywords'] as $keywords){
+foreach ($array['keywords'] as $keywords) {
     $xtpl->assign('KEYWORDS', $keywords);
     $xtpl->parse('main.keywords');
 }
 
 $a = 0;
 foreach ($array['fileupload'] as $file) {
-    $xtpl->assign('FILEUPLOAD', array( 'value' => $file, 'key' => $a ));
+    $xtpl->assign('FILEUPLOAD', array('value' => $file, 'key' => $a));
     $xtpl->parse('main.fileupload');
     ++$a;
 }
@@ -1158,7 +1159,7 @@ foreach ($array['fileupload'] as $file) {
 if (!empty($array['fileupload_tmp'])) {
     $a = 0;
     foreach ($array['fileupload_tmp'] as $file) {
-        $xtpl->assign('FILEUPLOAD_TMP', array( 'value' => $file, 'key' => $a ));
+        $xtpl->assign('FILEUPLOAD_TMP', array('value' => $file, 'key' => $a));
         $xtpl->parse('main.fileupload_tmp.loop');
         ++$a;
     }
@@ -1168,7 +1169,7 @@ if (!empty($array['fileupload_tmp'])) {
 
 $a = 0;
 foreach ($array['linkdirect'] as $link) {
-    $xtpl->assign('LINKDIRECT', array( 'value' => $link, 'key' => $a ));
+    $xtpl->assign('LINKDIRECT', array('value' => $link, 'key' => $a));
     $xtpl->parse('main.linkdirect');
     ++$a;
 }

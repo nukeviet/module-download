@@ -36,6 +36,7 @@ if (! nv_function_exists('nv_bdown_news')) {
         $html .= '<div class="form-group">';
         $html .= '    <label class="control-label col-sm-6">' . $lang_block['class_name'] . ':</label>';
         $html .= '    <div class="col-sm-18"><input class="form-control" type="text" name="config_class_name" value="' . $data_block['class_name'] . '"/></div>';
+
         $html .= '</div>';
         return $html;
     }

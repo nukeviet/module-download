@@ -72,7 +72,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
             }
 
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $thefirstcat['id']);
+                $xtpl->assign('EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $thefirstcat['id']);
                 $xtpl->assign('DEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 $xtpl->parse('main.catbox.itemcat.adminlink');
             }
@@ -191,7 +191,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
         $xtpl->assign('UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload');
         $xtpl->parse('main.is_addfile_allow');
     }
-    
+
     if ($download_config['shareport'] == 'addthis') {
         $xtpl->assign('ADDTHIS_PUBID', $download_config['addthis_pubid']);
         $xtpl->parse('main.addthis');
@@ -338,7 +338,7 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
         $xtpl->assign('ERROR', $error);
         $xtpl->parse('main.is_error');
     }
-    
+
     foreach ($array_field_key as $field) {
         $xtpl->assign(strtoupper('CSS_' . $field), empty($download_config['dis']['ur'][$field]) ? ' style="display:none;"' : '');
         $xtpl->assign(strtoupper('REQ_' . $field), !empty($download_config['req']['ur'][$field]) ? ' <sup class="text-danger">(*)</sup>' : '');
@@ -352,14 +352,14 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     if ($download_config['is_upload_allow']) {
         $xtpl->parse('main.is_upload_allow');
     }
-    
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
  * theme_upload_getcat()
- * 
+ *
  * @param mixed $parentid
  * @param mixed $catid
  * @param mixed $list_cats_addfile
@@ -374,14 +374,14 @@ function theme_upload_getcat($parentid, $catid, $list_cats_addfile)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
     $xtpl->assign('CATID', $catid);
-    
+
     $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats_addfile[$parentid]['title'] : $lang_module['categories_main']);
-    
+
     foreach ($list_cats_addfile as $cat) {
         if ($cat['parentid'] == $parentid) {
             $cat['checked'] = $cat['id'] == $catid ? ' checked="checked"' : '';
             $xtpl->assign('CAT', $cat);
-            
+
             if (!empty($cat['parentid'])) {
                 $xtpl->assign('PARENTID', $list_cats_addfile[$cat['parentid']]['parentid']);
                 $xtpl->parse('cat.loop.loadparentcat');
@@ -389,11 +389,11 @@ function theme_upload_getcat($parentid, $catid, $list_cats_addfile)
             if ($cat['numsubcat'] > 0) {
                 $xtpl->parse('cat.loop.hassubcat');
             }
-            
+
             $xtpl->parse('cat.loop');
         }
     }
-    
+
     $xtpl->parse('cat');
     return $xtpl->text('cat');
 }
@@ -431,7 +431,7 @@ function theme_search($array, $generate_page, $is_search)
 
 /**
  * theme_viewpdf()
- * 
+ *
  * @param mixed $file_url
  * @return
  */
