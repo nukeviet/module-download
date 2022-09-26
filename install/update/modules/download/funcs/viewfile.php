@@ -136,12 +136,12 @@ if ($row['is_onlineview_allow']) {
     $row['is_onlineview_allow'] = nv_user_in_groups($row['groups_onlineview']);
 }
 
-$session_files = array();
-$session_files['fileupload'] = array();
-$session_files['linkdirect'] = array();
+$session_files = [];
+$session_files['fileupload'] = [];
+$session_files['linkdirect'] = [];
 $row['filepdf'] = '';
-$row['scorm'] = array();
-$row['fileupload'] = array();
+$row['scorm'] = [];
+$row['fileupload'] = [];
 $row['scorm_num'] = 0;
 
 $fileuploads = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_files WHERE download_id=' . $row['id'] . ' ORDER BY weight ASC')->fetchAll();
@@ -189,7 +189,7 @@ if ($row['is_download_allow']) {
 
     if (!empty($row['linkdirect'])) {
         $linkdirect = explode('[NV]', $row['linkdirect']);
-        $row['linkdirect'] = array();
+        $row['linkdirect'] = [];
 
         foreach ($linkdirect as $links) {
             if (!empty($links)) {
@@ -206,7 +206,7 @@ if ($row['is_download_allow']) {
                             $host = $host['host'];
                             $host = preg_replace('/^www\./', '', $host);
 
-                            $row['linkdirect'][$host] = array();
+                            $row['linkdirect'][$host] = [];
                         }
 
                         $code = md5($link);
@@ -220,16 +220,17 @@ if ($row['is_download_allow']) {
             }
         }
     } else {
-        $row['linkdirect'] = array();
+        $row['linkdirect'] = [];
     }
 
     $row['download_info'] = '';
 } else {
-    $row['fileupload'] = array();
-    $row['linkdirect'] = array();
-    $session_files = array();
+    $row['fileupload'] = [];
+    $row['linkdirect'] = [];
+    $session_files = [];
 
-    $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
+    $login_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
+    $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], $login_link, NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
 }
 
 unset($fileuploads, $file);
@@ -244,7 +245,7 @@ $row['fileimage'] = nv_ImageInfo(NV_ROOTDIR . '/' . $img, 300, true, NV_ROOTDIR 
 
 $dfile = $nv_Request->get_string('dfile', 'session', '');
 
-$dfile = !empty($dfile) ? unserialize($dfile) : array();
+$dfile = !empty($dfile) ? unserialize($dfile) : [];
 
 if (!in_array($row['id'], $dfile)) {
     $dfile[] = $row['id'];
@@ -256,9 +257,9 @@ if (!in_array($row['id'], $dfile)) {
     ++$row['view_hits'];
 }
 
-$array_keyword = array();
-$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1 
-            INNER JOIN ' . NV_MOD_TABLE . '_tags a2 
+$array_keyword = [];
+$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_MOD_TABLE . '_tags_id a1
+            INNER JOIN ' . NV_MOD_TABLE . '_tags a2
             ON a1.did=a2.did WHERE a1.id=' . $row['id']);
 while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
@@ -296,10 +297,10 @@ if ($row['rating_point']) {
 }
 
 $flrt = $nv_Request->get_string('flrt', 'session', '');
-$flrt = !empty($flrt) ? unserialize($flrt) : array();
+$flrt = !empty($flrt) ? unserialize($flrt) : [];
 $row['rating_disabled'] = !in_array($row['id'], $flrt) ? false : true;
 
-$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'];
+$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
 $row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $page_title = $row['title'];

@@ -269,7 +269,7 @@ if (!empty($generate_page)) {
     $xtpl->parse('main.generate_page');
 }
 
-while (list($action_i, $title_i) = each($array_list_action)) {
+foreach ($array_list_action as $action_i => $title_i) {
     $action_assign = array(
         'value' => $action_i,
         'title' => $title_i

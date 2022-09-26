@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -33,7 +33,7 @@ $lang_module['search_per_page'] = 'Số file hiển thị';
 $lang_module['download_config'] = 'Cấu hình module';
 $lang_module['config_confirm'] = 'Chấp nhận';
 $lang_module['config_indexfile'] = 'Phương án hiển thị trên trang chủ';
-$lang_module['config_indexfile_main_bottom'] = 'Chuyên mục, tập tin khác nằm bên dưới';
+$lang_module['config_indexfile_main_bottom'] = 'Chủ đề, tập tin khác nằm bên dưới';
 $lang_module['config_indexfile_list_new'] = 'Danh sách, tập tin mới lên trên';
 $lang_module['config_indexfile_none'] = 'Không hiển thị';
 $lang_module['config_viewlist_type'] = 'Trình bày danh sách';
@@ -80,12 +80,12 @@ $lang_module['config_copy_document'] = 'Cho phép copy tài liệu';
 $lang_module['config_allow_fupload_import'] = 'Kích hoạt chức năng nhập file từ thư mục upload';
 $lang_module['config_display'] = 'Cấu hình hiển thị';
 
-$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
-$lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
-$lang_module['error_cat2'] = 'Lỗi: Chủ đề chưa được khai báo !';
-$lang_module['error_cat3'] = 'Lỗi: Chủ đề mẹ mà bạn chọn không tồn tại !';
-$lang_module['error_cat4'] = 'Vì một lý do nào đó, chủ đề mới đã không được tạo !';
-$lang_module['error_cat5'] = 'Vì một lý do nào đó, các thay đổi mà bạn vừa khai báo đã không được lưu !';
+$lang_module['note_cat'] = 'Bạn cần tạo chủ đề trước';
+$lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có!';
+$lang_module['error_cat2'] = 'Lỗi: Chủ đề chưa được khai báo!';
+$lang_module['error_cat3'] = 'Lỗi: Chủ đề mẹ mà bạn chọn không tồn tại!';
+$lang_module['error_cat4'] = 'Vì một lý do nào đó, chủ đề mới đã không được tạo!';
+$lang_module['error_cat5'] = 'Vì một lý do nào đó, các thay đổi mà bạn vừa khai báo đã không được lưu!';
 $lang_module['addcat_titlebox'] = 'Thêm chủ đề';
 $lang_module['category_cat_name'] = 'Tên chủ đề';
 $lang_module['category_cat_parent'] = 'Thuộc chủ đề';
@@ -120,8 +120,8 @@ $lang_module['file_error_linkdirect'] = 'Lỗi: Chưa nhập nguồn bên ngoài
 $lang_module['file_error_filesize'] = 'Lỗi: Dung lượng file không thể bằng 0';
 $lang_module['file_error_version'] = 'Lỗi: Thông tin phiên bản không được để trống';
 $lang_module['file_error_copyright'] = 'Lỗi: Thông tin bản quyền không được để trống';
-$lang_module['file_error1'] = 'Vì một lý do nào đó, các thay đổi mà bạn vừa khai báo đã không được lưu !';
-$lang_module['file_error2'] = 'Vì một lý do nào đó, file mới đã không được lưu vào CSDL !';
+$lang_module['file_error1'] = 'Vì một lý do nào đó, các thay đổi mà bạn vừa khai báo đã không được lưu!';
+$lang_module['file_error2'] = 'Vì một lý do nào đó, file mới đã không được lưu vào CSDL!';
 $lang_module['file_catid_exists'] = 'Lỗi: Chủ đề chưa được chọn';
 $lang_module['file_title'] = 'Tên file';
 $lang_module['file_author_name'] = 'Tên tác giả';
@@ -139,7 +139,7 @@ $lang_module['file_whocomment'] = 'Ai được quyền thảo luận';
 $lang_module['intro_title'] = 'Tóm tắt';
 $lang_module['file_description'] = 'Mô tả file';
 $lang_module['confirm'] = 'Thực hiện';
-$lang_module['file_error_title'] = 'Tiêu đề không được để trống !';
+$lang_module['file_error_title'] = 'Tiêu đề không được để trống!';
 $lang_module['file_size'] = 'Dung lượng';
 $lang_module['file_list_by_cat'] = 'Danh sách các file thuộc chủ đề &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['file_update'] = 'Thời gian đăng';
@@ -212,7 +212,6 @@ $lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['numlinks'] = 'Số liên kết';
-$lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
 $lang_module['content_homeimg'] = 'Hình minh họa';
 $lang_module['save'] = 'Lưu thay đổi';
 $lang_module['download_tags'] = 'Quản lý Tags';

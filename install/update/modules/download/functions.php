@@ -147,7 +147,7 @@ if ($op == 'main') {
                 );
                 $parentid = $c['parentid'];
             }
-            sort($array_mod_title, SORT_NUMERIC);
+            krsort($array_mod_title, SORT_NUMERIC);
         } elseif (preg_match('/^page\-([0-9]+)$/', (isset($array_op[0]) ? $array_op[0] : ''), $m)) {
             $page = ( int )$m[1];
         }

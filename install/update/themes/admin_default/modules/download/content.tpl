@@ -327,6 +327,7 @@
     </div>
 </form>
 <script type="text/javascript">
+    get_alias();
     $("input[name=selectimg]").click(function() {
         nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={UPLOADS_DIR}&currentpath={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
@@ -334,7 +335,7 @@
     function get_alias() {
         var title = strip_tags(document.getElementById('title').value);
         if (title != '') {
-            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title), function(res) {
+            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'gettitle=' + encodeURIComponent(title) + '&id={ID}', function(res) {
                 if (res != "") {
                     document.getElementById('alias').value = res;
                 } else {
