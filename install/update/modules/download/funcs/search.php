@@ -18,8 +18,8 @@ $download_config = nv_mod_down_config();
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = $download_config['per_page_child'];
-$base_url_rewrite = $request_uri = urldecode($_SERVER['REQUEST_URI']);
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=search';
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 $where = $generate_page = '';
 $is_search = false;
 $array = array();
@@ -42,18 +42,17 @@ if (! empty($cat) and isset($list_cats[$cat])) {
     $base_url .= '&cat=' . $cat;
     $array_cat = GetCatidInParent($cat);
     $where .= ' AND catid IN (' . implode(',', $array_cat) . ')';
-} else {
-    $base_url_rewrite = str_replace('&cat=' . $cat, '', $base_url_rewrite);
 }
+
+$page_url = $base_url;
+// URL chính tắc: $page_url, $base_url và $canonicalUrl
+if ($page > 1) {
+    $page_url .= '&amp;page=' . $page;
+}
+$canonicalUrl = getCanonicalUrl($page_url);
 
 if (!empty($where)) {
     $is_search = true;
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-
-    if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-        nv_redirect_location($base_url_rewrite);
-    }
-
     $db->where('status=1' . $where);
 
     $sth = $db->prepare($db->sql());
@@ -64,7 +63,9 @@ if (!empty($where)) {
     }
     $sth->execute();
     $num_items = $sth->fetchColumn();
-
+    $urlappend = '&amp;page=';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
+    
     if (! empty($num_items)) {
         $download_config = nv_mod_down_config();
         $lang_module['search_result_count'] = sprintf($lang_module['search_result_count'], $num_items);

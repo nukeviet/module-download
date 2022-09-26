@@ -18,7 +18,6 @@ $items = array();
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = ! empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
-
 if (! empty($list_cats)) {
     $catalias = isset($array_op[1]) ? $array_op[1] : '';
     $catid = 0;
@@ -64,5 +63,6 @@ if (! empty($list_cats)) {
     }
 }
 
-nv_rss_generate($channel, $items);
+$atomlink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'];
+nv_rss_generate($channel, $items, $atomlink);
 die();
