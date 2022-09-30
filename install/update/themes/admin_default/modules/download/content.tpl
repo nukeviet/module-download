@@ -266,7 +266,7 @@
                                     UploadComplete: function(up, files) {
                                         is_direct_upload = false;
                                         $('#file-upload-form').data('busy', false);
-                                        $('#file-upload-form').find('[name="submit"]').click();
+                                        $('#file-upload-form').find('[name="submit1"]').click();
                                     }
                                 }
                             });
@@ -314,13 +314,13 @@
         <input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
         <!-- END: is_del_report -->
         <!-- BEGIN: approval -->
-        <button type="submit" name="submit" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
+        <button type="submit" name="submit1" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
             {LANG.download_filequeue_submit}
         </button>
         <input type="button" value="{LANG.download_filequeue_del}" class="btn btn-danger" onclick="nv_filequeue_del('{FILEQUEUEIDs}')"/>
         <!-- END: approval -->
         <!-- BEGIN: submit -->
-        <button type="submit" name="submit" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
+        <button type="submit" name="submit1" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> {LANG.waiting}')">
             {LANG.confirm}
         </button>
         <!-- END: submit -->
