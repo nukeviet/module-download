@@ -79,7 +79,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" class="btn btn-primary" /></td>
+                    <td colspan="2"><input type="submit" name="submit1" value="{LANG.cat_save}" class="btn btn-primary" /></td>
                 </tr>
             </tbody>
         </table>
