@@ -187,6 +187,10 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td>{LANG.convert_alias_to_lower}</td>
+                        <td><input name="convert_alias_to_lower" value="1" type="checkbox" {DATA.convert_alias_to_lower} /></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
