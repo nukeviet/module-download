@@ -19,6 +19,20 @@ $allow_func = array('main', 'content', 'filequeue', 'report', 'config', 'cat', '
 if (!empty($module_config[$module_name]['allow_fupload_import'])) {
     $allow_func[] = 'fimport';
 }
+setup_captcha_area_comm();
+/**
+ * Kiểm tra xem module đã có captcha_area_comm chưa để cài đặt vào module
+ */
+function setup_captcha_area_comm() {
+    global $db, $module_name, $nv_Cache, $module_config;
+    if (empty($module_config[$module_name]['captcha_area_comm'])) {
+        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . ' (lang, module, config_name, config_value) VALUES("' . NV_LANG_DATA . '", "' . $module_name . '", "captcha_area_comm", 1)');
+        $module_config[$module_name]['captcha_area_comm'] = 1;
+        $nv_Cache->delMod('settings');
+        $nv_Cache->delMod($module_name);
+    }
+    
+}
 
 /**
  * get_allow_exts()
