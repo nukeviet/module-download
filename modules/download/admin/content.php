@@ -18,6 +18,7 @@ if ($nv_Request->isset_request('gettitle', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $edit_content = ($id > 0) ? 'AND id != ' . $id : '';
     $alias = change_alias($title);
+    $alias =  !empty($module_config[$module_name]['convert_alias_to_lower']) ? strtolower($alias) : $alias;
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' where alias = :alias ' . $edit_content);
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
@@ -429,6 +430,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['alias'] = $nv_Request->get_title('alias', 'post', '');
     $array['alias'] = !empty($array['alias']) ? change_alias($array['alias']) : change_alias($array['title']);
     if ($is_copy) $array['alias'] = 'copy';
+
+    $array['alias'] =  !empty($module_config[$module_name]['convert_alias_to_lower']) ? strtolower($array['alias']) : $array['alias'];
 
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE alias= :alias' . ($id ? ' AND id!=' . $id : ''));
     $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
