@@ -242,6 +242,7 @@ if (!defined('SYS_DOWNLOAD_TABLE')) {
         ('arr_req_ur_filesize', '0'),
         ('arr_req_ur_version', '0'),
         ('arr_req_ur_copyright', '0'),
+        ('convert_alias_to_lower', '1'),
         ('allow_fupload_import', '0')
     ";
 
