@@ -1,8 +1,8 @@
-# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02, 4.3.00, 4.5.00 lên 4.5.02
+# Hướng dẫn cập nhật module download từ 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02, 4.3.00, 4.5.00, 4.5.02 lên 4.5.03
 
 Chú ý:
-- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02, 4.3.00, 4.5.00 nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
-- Module download 4.5.02 hiện tại hoạt động trên NukeViet 4.5.02
+- Gói cập nhật này dành cho module download 4.0.29, 4.1.00, 4.1.01, 4.1.02, 4.2.00, 4.2.01, 4.2.02, 4.3.00, 4.5.00, 4.5.02 nếu module của bạn không ở phiên bản này cần tìm các hướng dẫn cập nhật lên tối thiểu 4.0.29 trước.
+- Module download 4.5.03 hiện tại hoạt động trên NukeViet 4.5.02
 
 ## Chuẩn bị cập nhật
 
@@ -14,7 +14,7 @@ Backup toàn bộ CSDL dữ liệu và code của site đề phòng rủi ro.
 
 Nếu không cập nhật được theo cách trên hãy thực hiện cập nhật thủ công như sau:
 
-Tải gói cập nhật tại https://github.com/nukeviet/module-download/releases/download/4.5.02/update-to-4.5.02.zip. Giải nén và upload thư mục install lên ngang hàng với thư mục install trên server. Đăng nhập quản trị site, nhận được thông báo cập nhật và tiến hành cập nhật theo hướng dẫn của hệ thống.
+Tải gói cập nhật tại https://github.com/nukeviet/module-download/releases/download/4.5.02/update-to-4.5.03.zip. Giải nén và upload thư mục install lên ngang hàng với thư mục install trên server. Đăng nhập quản trị site, nhận được thông báo cập nhật và tiến hành cập nhật theo hướng dẫn của hệ thống.
 
 ## Xử lý sau cập nhật
 

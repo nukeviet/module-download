@@ -131,4 +131,3 @@ $lang_module['keywords'] = 'Keywords';
 $lang_module['load_parentcat'] = 'Return to the topic of father';
 $lang_module['load_subcat'] = 'Go to the child topic';
 $lang_module['file_upload_ok'] = 'Upload successfully!';
-$lang_module['captcha'] = 'Security code';

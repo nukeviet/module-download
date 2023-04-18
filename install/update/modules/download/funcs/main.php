@@ -12,10 +12,7 @@ if (!defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-
 if (empty($list_cats)) {
-    $canonicalUrl = getCanonicalUrl($page_url);
     $page_title = $module_info['site_title'];
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme('');
@@ -92,7 +89,6 @@ $viewcat = $download_config['indexfile'];
 $contents = '';
 
 if ($viewcat == 'viewcat_main_bottom') {
-    $canonicalUrl = getCanonicalUrl($page_url);
     $array_cats = [];
     foreach ($list_cats as $value) {
         if (empty($value['parentid']) and !empty($value['status'])) {
@@ -102,9 +98,10 @@ if ($viewcat == 'viewcat_main_bottom') {
                 ->select('COUNT(*)')
                 ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
-            
+
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
+
             if ($num_items) {
                 $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits');
                 $db->order('uploadtime DESC');
@@ -157,12 +154,9 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $contents = theme_viewcat_main($viewcat, $array_cats);
 } elseif ($viewcat == 'viewcat_list_new') {
-    if ($page > 1) {
-        $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
-    }
-    $canonicalUrl = getCanonicalUrl($page_url);
-
     $array_files = [];
+    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
     // Fetch Limit
     $db->sqlreset()
         ->select('COUNT(*)')
@@ -171,9 +165,6 @@ if ($viewcat == 'viewcat_main_bottom') {
 
     $all_page = $db->query($db->sql())
         ->fetchColumn();
-
-    $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
-    betweenURLs($page, ceil($all_page/$per_page), $base_url, $urlappend, $prevPage, $nextPage);   
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
         ->order('uploadtime DESC')

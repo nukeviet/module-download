@@ -6,7 +6,7 @@
 </div>
 <!-- END: is_error -->
 
-<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}" <!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-horizontal" role="form" data-upload_filetype="{UPLOAD.upload_filetype}">
     <div class="panel panel-default">
         <div class="panel-heading">
             {LANG.upload}
@@ -97,7 +97,7 @@
                             </button> </span>
                     </div>
                     <em class="help-block">{LANG.upload_valid_ext_info}: jpg, gif, png</em>
-                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display:none" />
+                    <input type="file" name="upload_fileimage" id="upload_fileimage" style="display: none" />
                 </div>
             </div>
 
@@ -131,24 +131,30 @@
             </div>
             <!-- END: show_username -->
 
-             <!-- BEGIN: captcha -->
+            <!-- BEGIN: captcha -->
             <div class="form-group">
                 <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA}</label>
-                <div class="col-sm-6 col-md-6">
-                    <input type="text" placeholder="{LANG.captcha}" maxlength="{NV_GFX_NUM}" value="" name="fcode" class="fcode required form-control display-inline-block" style="width:100px;" data-pattern="/^(.){{NV_GFX_NUM},{NV_GFX_NUM}}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_captcha}" autocomplete="off"/>
-                </div>
                 <div class="col-sm-10 col-md-10">
-                    <img width="{GFX_WIDTH}" height="{GFX_HEIGHT}" title="{LANG.captcha}" alt="{LANG.captcha}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" class="captchaImg display-inline-block">
-                    <em onclick="change_captcha('.fcode');" title="{GLANG.captcharefresh}" class="fa fa-pointer fa-refresh margin-left margin-right"></em>
+                    <input type="text" class="form-control" name="upload_seccode" id="upload_seccode_iavim" value="" maxlength="{CAPTCHA_MAXLENGTH}">
+                </div>
+                <div class="col-sm-8 col-md-8">
+                    <img class="middle captchaImg" height="31" name="upload_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{GLANG.captcha}" />
+                    <img class="middle fa-pointer refresh" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/refresh.png" width="16" height="16" onclick="change_captcha('#upload_seccode_iavim');" />
                 </div>
             </div>
             <!-- END: captcha -->
 
             <!-- BEGIN: recaptcha -->
             <div class="form-group">
-                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="text-danger">(*)</span></label>
+                <label class="col-sm-6 col-md-6 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
                 <div class="col-sm-18 col-md-18">
-                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
+                    <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                    <script type="text/javascript">
+                    nv_recaptcha_elements.push({
+                        id: "{RECAPTCHA_ELEMENT}",
+                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                    })
+                    </script>
                 </div>
             </div>
             <!-- END: recaptcha -->
@@ -157,14 +163,14 @@
                 <label class="col-sm-6 col-md-6 control-label"></label>
                 <div class="col-sm-18 col-md-18">
                     <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
-                    <input class="btn btn-primary" type="submit" value="{LANG.upload}" />
+                    <input class="btn btn-primary" type="submit" name="submit" value="{LANG.upload}" />
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 var uploadForm = true;
 </script>

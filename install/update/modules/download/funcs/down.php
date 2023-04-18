@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('code', 'get')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . ' SET download_hits=download_hits+1 WHERE id=' . $_fid);
     }
 
-    $content = "<br /><img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
+    $content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
     $content .= sprintf($lang_module['download_wait2'], $session_files['linkdirect'][$code]['link']);
     $content .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $session_files['linkdirect'][$code]['link'] . "\" />";
 

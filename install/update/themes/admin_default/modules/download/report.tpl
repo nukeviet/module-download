@@ -21,7 +21,7 @@
         <tbody>
             <!-- BEGIN: row -->
             <tr>
-                <td><strong>{ROW.title}</strong></td>
+                <td><strong><a href="{ROW.doc_link}" alt="{ROW.title}" target="_blank">{ROW.title}</a></strong></td>
                 <td><a href="{ROW.catlink}">{ROW.cattitle}</a></td>
                 <td class="text-center"> {ROW.post_time} </td>
                 <td class="text-center"><em class="fa fa-search fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_check({ROW.id});">{LANG.file_checkUrl}</a> &nbsp;&nbsp;<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_edit({ROW.id});">{GLANG.edit}</a> &nbsp;&nbsp;<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_del({ROW.id});">{GLANG.delete}</a></td>

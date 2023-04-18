@@ -104,7 +104,7 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 //List
 $page_title = $lang_module['download_report'];
 
-$sql = 'SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM ' . NV_MOD_TABLE . '_report a INNER JOIN ' . NV_MOD_TABLE . ' b ON a.fid=b.id ORDER BY a.post_time DESC';
+$sql = 'SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid, b.alias AS alias FROM ' . NV_MOD_TABLE . '_report a INNER JOIN ' . NV_MOD_TABLE . ' b ON a.fid=b.id ORDER BY a.post_time DESC';
 $_array_report = $db->query($sql)->fetchAll();
 $num = sizeof($_array_report);
 if (! $num) {
@@ -130,6 +130,7 @@ foreach ($_array_report as $row) {
         'title' => $row['title'],
         'cattitle' => $list_cats[$row['catid']]['title'],
         'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
+        'doc_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
         'post_time' => nv_date('d/m/Y H:i', $row['post_time']),
         'post_ip' => $row['post_ip']
     );

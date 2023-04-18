@@ -60,9 +60,14 @@ if (!nv_user_in_groups($row['groups_view'])) {
     exit();
 }
 
-// URL chính tắc: $page_url, $base_url và $canonicalUrl
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
-$canonicalUrl = getCanonicalUrl($page_url);
+$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true);
+if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+    nv_redirect_location($base_url_rewrite);
+} else {
+    $canonicalUrl = $base_url_rewrite;
+}
 
 $row['cattitle'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '">' . $list_cats[$row['catid']]['title'] . '</a>';
 
@@ -260,7 +265,11 @@ while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
     $meta_property['article:tag'][] = $_row['keyword'];
 }
-
+// meta_property image
+if (!empty($row['fileimage']) && !empty($row['fileimage']['orig_src'])) {
+    $src_img = $row['fileimage']['orig_src'];
+    $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $src_img)) ? $src_img : NV_MY_DOMAIN . $src_img;
+} 
 // comment
 $content_comment = '';
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {

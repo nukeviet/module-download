@@ -50,7 +50,7 @@ if ($catid) {
 $error = '';
 $groups_list = nv_groups_list();
 
-if ($nv_Request->isset_request('submit1', 'post')) {
+if ($nv_Request->isset_request('submit', 'post')) {
     $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
