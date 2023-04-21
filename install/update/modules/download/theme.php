@@ -28,7 +28,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/');
+    $xtpl->assign('IMG_FOLDER', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/');
     $xtpl->assign('MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
 
     foreach ($array_cats as $cat) {
@@ -175,9 +175,9 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
 {
     global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
-    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.pack.js\"></script>\n";
-    $my_head .= "<script src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
-    $my_head .= "<link href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
+    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.pack.js\"></script>\n";
+    $my_head .= "<script src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
+    $my_head .= "<link href=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
 
     $xtpl = new XTemplate('viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -303,8 +303,7 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
  */
 function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
-
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_config, $module_captcha;
     $array['parentid'] = 0;
     if ($array['catid'] and isset($list_cats[$array['catid']])) {
         $array['parentid'] = $list_cats[$array['catid']]['parentid'];
@@ -323,14 +322,21 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->assign('EXT_ALLOWED', implode(', ', $download_config['upload_filetype']));
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
+        // Nếu dùng reCaptcha v3
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
+        // Nếu dùng reCaptcha v2
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
-    } else {
-        $xtpl->assign('CAPTCHA_MAXLENGTH', NV_GFX_NUM);
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
+    } elseif ($module_captcha == 'captcha') {
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+        $xtpl->assign('N_CAPTCHA', $lang_module['captcha']);
         $xtpl->parse('main.captcha');
     }
 
@@ -356,6 +362,7 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 
 /**
  * theme_upload_getcat()
@@ -441,7 +448,7 @@ function theme_viewpdf($file_url)
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
     return $xtpl->text('main');

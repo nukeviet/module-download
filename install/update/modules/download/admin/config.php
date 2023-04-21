@@ -21,6 +21,7 @@ $array_field_key = array_keys($module_config[$module_name]['dis']['ad']);
 
 $array_config = array();
 $array_pdf_handler = array('filetmp', 'phpattachment');
+$array = [];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', 'none');
@@ -92,6 +93,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
                 $sth->execute();
             }
+        }
+    }
+
+    foreach ($array as $config_name => $config_value) {
+        try {
+            $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . ' (lang, module, config_name, config_name) VALUES (' . NV_LANG_DATA . ', :module, :config_name, :config_value)');
+            $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        } catch (Exception $e) {
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name");
+            $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
         }
     }
 
