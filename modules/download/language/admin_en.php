@@ -259,3 +259,4 @@ $lang_module['fimport_stat_cat_add'] = 'Number of newly created categories';
 $lang_module['fimport_stat_cat_ignore'] = 'Number of categories omitted due to availability';
 $lang_module['fimport_stat_file_add'] = 'Number of newly created files/documents';
 $lang_module['fimport_stat_file_ignore'] = 'The number of files/documents that have been skipped due to an existing file';
+$lang_module['convert_alias_to_lower'] = 'Convert alias to lowercase';
