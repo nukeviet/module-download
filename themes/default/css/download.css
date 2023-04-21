@@ -1,3 +1,8 @@
+#uploadForm .error {
+    font-weight: 400!important;
+    color: #a94442;
+}
+
 .mb-0 {
     margin-bottom: 0!important;
 }

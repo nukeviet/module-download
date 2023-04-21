@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<link rel="stylesheet" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
@@ -79,14 +79,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" class="btn btn-primary" /></td>
+                    <td colspan="2"><input type="submit" name="submit1" value="{LANG.cat_save}" class="btn btn-primary" /></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </form>
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript">
     $('#parentid').select2();
     function get_alias() {

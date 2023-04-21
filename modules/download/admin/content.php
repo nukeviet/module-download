@@ -290,7 +290,7 @@ if ($id) {
     $report = false;
 }
 $is_copy = $nv_Request->get_int('copy', 'get', 0);
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('submit1', 'post')) {
     $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['description'] = $nv_Request->get_editor('description', '', NV_ALLOWED_HTML_TAGS);
