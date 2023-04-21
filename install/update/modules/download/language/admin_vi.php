@@ -273,3 +273,4 @@ $lang_module['fimport_stat_cat_ignore'] = 'Số chủ đề đã bỏ qua do đ�
 $lang_module['fimport_stat_file_add'] = 'Số file/tài liệu được tạo mới';
 $lang_module['fimport_stat_file_ignore'] = 'Số file/tài liệu đã bỏ qua do đã có';
 $lang_module['process'] = 'Đã xử lý';
+$lang_module['convert_alias_to_lower'] = 'Chuyển alias sang chữ thường';

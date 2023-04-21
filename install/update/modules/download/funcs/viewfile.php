@@ -260,7 +260,11 @@ while ($_row = $_query->fetch()) {
     $array_keyword[] = $_row;
     $meta_property['article:tag'][] = $_row['keyword'];
 }
-
+// meta_property image
+if (!empty($row['fileimage']) && !empty($row['fileimage']['orig_src'])) {
+    $src_img = $row['fileimage']['orig_src'];
+    $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $src_img)) ? $src_img : NV_MY_DOMAIN . $src_img;
+} 
 // comment
 $content_comment = '';
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {

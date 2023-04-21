@@ -45,8 +45,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
-    $array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
-    $array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
+	$array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
+	$array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
+    $array_config['convert_alias_to_lower'] = $nv_Request->get_int('convert_alias_to_lower', 'post', 0);
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -145,6 +146,7 @@ $array_config['shareport'] = 0;
 $array_config['addthis_pubid'] = 0;
 $array_config['pdf_handler'] = $array_pdf_handler[0];
 $array_config['list_title_length'] = 0;
+$array_config['convert_alias_to_lower'] = 0;
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -163,6 +165,7 @@ $array_config['is_resume'] = !empty($array_config['is_resume']) ? ' checked="che
 $array_config['is_resume'] = !empty($array_config['is_resume']) ? ' checked="checked"' : '';
 $array_config['copy_document'] = !empty($array_config['copy_document']) ? ' checked="checked"' : '';
 $array_config['allow_fupload_import'] = !empty($array_config['allow_fupload_import']) ? ' checked="checked"' : '';
+$array_config['convert_alias_to_lower'] = !empty($array_config['convert_alias_to_lower']) ? ' checked="checked"' : '';
 
 $groups_addfile = explode(',', $array_config['groups_addfile']);
 $array_config['groups_addfile'] = array();
