@@ -14,6 +14,7 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
 
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 
+$is_search = false;
 $download_config = nv_mod_down_config();
 
 $page = $nv_Request->get_int('page', 'get', 1);
@@ -27,7 +28,7 @@ $array = array();
 $key = nv_substr($nv_Request->get_title('q', 'get', '', 1), 0, NV_MAX_SEARCH_LENGTH);
 $cat = $nv_Request->get_int('cat', 'get', 0);
 
-$page_title = $lang_module['search'] . ' ' . $key;
+$page_title = $lang_module['search'] . NV_TITLEBAR_DEFIS . $module_info['site_title'];
 
 $db->sqlreset()
     ->select('COUNT(*)')
@@ -36,12 +37,18 @@ $db->sqlreset()
 $base_url .= '&q=' . $key;
 if (! empty($key)) {
     $where .= ' AND (title LIKE :title OR introtext LIKE :introtext)';
+    $is_search = true;
 }
 
 if (! empty($cat) and isset($list_cats[$cat])) {
     $base_url .= '&cat=' . $cat;
     $array_cat = GetCatidInParent($cat);
     $where .= ' AND catid IN (' . implode(',', $array_cat) . ')';
+    $is_search = true;
+}
+
+if ($is_search) {
+    $nv_BotManager->setPrivate();
 }
 
 $page_url = $base_url;
