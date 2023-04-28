@@ -48,6 +48,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 	$array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
 	$array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
     $array_config['convert_alias_to_lower'] = $nv_Request->get_int('convert_alias_to_lower', 'post', 0);
+    $array_config['type_order_admin'] = $nv_Request->get_title('type_order_admin', 'post', 'order_discount_date');
 
     foreach ($array_field_key as $field) {
         $array_config['arr_req_ad_' . $field] = $nv_Request->get_int('arr_req_ad_' . $field, 'post', 0);
@@ -147,6 +148,7 @@ $array_config['addthis_pubid'] = 0;
 $array_config['pdf_handler'] = $array_pdf_handler[0];
 $array_config['list_title_length'] = 0;
 $array_config['convert_alias_to_lower'] = 0;
+$array_config['type_order_admin'] = 'order_discount_date';
 
 if (file_exists($readme_file)) {
     $array_config['readme'] = file_get_contents($readme_file);
@@ -166,6 +168,11 @@ $array_config['is_resume'] = !empty($array_config['is_resume']) ? ' checked="che
 $array_config['copy_document'] = !empty($array_config['copy_document']) ? ' checked="checked"' : '';
 $array_config['allow_fupload_import'] = !empty($array_config['allow_fupload_import']) ? ' checked="checked"' : '';
 $array_config['convert_alias_to_lower'] = !empty($array_config['convert_alias_to_lower']) ? ' checked="checked"' : '';
+$type_order_admin = [
+    'order_discount_date_selected' => $array_config['type_order_admin'] == 'order_discount_date' ? 'selected="selected"' : '',
+    'order_increase_filename_selected' => $array_config['type_order_admin'] == 'order_increase_filename' ? 'selected="selected"' : '',
+];
+
 
 $groups_addfile = explode(',', $array_config['groups_addfile']);
 $array_config['groups_addfile'] = array();
@@ -212,6 +219,7 @@ $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['mo
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array_config);
+$xtpl->assign('type_order_admin', $type_order_admin);
 $xtpl->assign('NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
 
 foreach ($array_config['groups_addfile'] as $group) {
