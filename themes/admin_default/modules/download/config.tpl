@@ -49,6 +49,15 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td>{LANG.type_order_admin}</td>
+                        <td>
+                            <select class="form-control" name="type_order_admin">
+                                <option value="order_discount_date" {type_order_admin.order_discount_date_selected}>{LANG.order_discount_date}</option>
+                                <option value="order_increase_filename" {type_order_admin.order_increase_filename_selected}>{LANG.order_increase_filename}</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr id="shareport-addthis" data-toggle="shareport"{ADDTHIS_CSS}>
                         <td>{LANG.addthis_pubid}</td>
                         <td><input class="form-control" type="text" name="addthis_pubid" value="{DATA.addthis_pubid}" /></td>
