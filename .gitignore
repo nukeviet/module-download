@@ -23,6 +23,12 @@
 /COPYRIGHT.txt
 /.gitattributes
 /composer.json
+/error.php
+/.github
+/api.php
+LICENSE
+/mload.php
+/sload.php
 
 # Ignore fix module files and directories.
 /modules/*
@@ -41,7 +47,3 @@
 !/themes/default/images/download/*
 !/themes/default/modules/download
 !/themes/default/modules/download/*
-/error.php
-/.github
-/api.php
-LICENSE
