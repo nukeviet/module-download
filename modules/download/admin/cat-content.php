@@ -22,7 +22,7 @@ if ($catid) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
     }
 
-    $page_title = $lang_module['editcat_cat'];
+    $page_title = $nv_Lang->getModule('editcat_cat');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;catid=' . $row['id'];
     
     $array['parentid'] = (int)$row['parentid'];
@@ -36,7 +36,7 @@ if ($catid) {
     $array['groups_addfile'] = $row['groups_addfile'];
 } else {
     $pid = $nv_Request->get_int('pid', 'get', 0);
-    $page_title = $lang_module['addcat_titlebox'];
+    $page_title = $nv_Lang->getModule('addcat_titlebox');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;pid=' . $pid;
     
     $array['parentid'] = $pid;
@@ -58,13 +58,13 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     $array['alias'] = ($array['alias'] == '') ? change_alias($array['title']) : change_alias($array['alias']);
     
     if (empty($array['title'])) {
-        $error = $lang_module['error_cat2'];
+        $error = $nv_Lang->getModule('error_cat2');
     } else {
         if (! empty($array['parentid'])) {
             $sql = 'SELECT COUNT(*) AS count FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $array['parentid'];
             $count = $db->query($sql)->fetchColumn();
             if (! $count) {
-                $error = $lang_module['error_cat3'];
+                $error = $nv_Lang->getModule('error_cat3');
             }
         }
 
@@ -74,7 +74,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             $stmt->execute();
             $count = $stmt->fetchColumn();
             if ($count) {
-                $error = $lang_module['error_cat1'];
+                $error = $nv_Lang->getModule('error_cat1');
             }
         }
     }
@@ -126,11 +126,11 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             if ($stmt->execute()) {
                 nv_fix_cat_order();
                 $nv_Cache->delMod($module_name);
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editcat_cat'], $array['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('editcat_cat'), $array['title'], $admin_info['userid']);
 
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
             } else {
-                $error = $lang_module['error_cat5'];
+                $error = $nv_Lang->getModule('error_cat5');
             }
         } else {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_categories (
@@ -159,12 +159,12 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             
             if ($db->insert_id($sql, 'id', $data_insert)) {
                 nv_fix_cat_order();
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'], $array['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addcat_titlebox'), $array['title'], $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
     
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&pid=' . $array['parentid']);
             } else {
-                $error = $lang_module['error_cat4'];
+                $error = $nv_Lang->getModule('error_cat4');
             }
         }
     }
@@ -173,7 +173,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 $listcats = array(
     array(
         'id' => 0,
-        'title' => $lang_module['category_cat_maincat'],
+        'title' => $nv_Lang->getModule('category_cat_maincat'),
         'lev' => 0,
         'selected' => ''
     )
@@ -222,7 +222,7 @@ foreach ($groups_list as $key => $title) {
 
 $xtpl = new XTemplate('cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array);
 $xtpl->assign('ONCHANGE', $catid ? '' : 'onchange="get_alias();"');
 

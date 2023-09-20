@@ -127,12 +127,12 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    nv_insert_logs(NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_data, $nv_Lang->getModule('download_filequeue_del'), $row['title'], $admin_info['userid']);
     nv_htmlOutput('OK');
 }
 
 // List file
-$page_title = $lang_module['download_filemanager'];
+$page_title = $nv_Lang->getModule('download_filemanager');
 
 $where = array();
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -194,15 +194,15 @@ while ($row = $result2->fetch()) {
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $array_list_action = array(
-    'del0' => $lang_module['file_delmode0'],
-    'del1' => $lang_module['file_delmode1'],
-    'active' => $lang_module['action_active'],
-    'deactive' => $lang_module['action_deactive'],
+    'del0' => $nv_Lang->getModule('file_delmode0'),
+    'del1' => $nv_Lang->getModule('file_delmode1'),
+    'active' => $nv_Lang->getModule('action_active'),
+    'deactive' => $nv_Lang->getModule('action_deactive'),
 );
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -242,8 +242,8 @@ foreach ($list_cats as $catid => $value) {
 }
 
 $array_active = array(
-    '1' => $lang_global['yes'],
-    '0' => $lang_global['no']
+    '1' => $nv_Lang->getGlobal('yes'),
+    '0' => $nv_Lang->getGlobal('no')
 );
 foreach ($array_active as $key => $value) {
     $sl = $array_search['active'] == $key ? 'selected="selected"' : '';

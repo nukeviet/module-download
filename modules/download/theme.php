@@ -23,11 +23,11 @@ if (!defined('NV_IS_MOD_DOWNLOAD')) {
  */
 function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_data = array(), $generate_page = '')
 {
-    global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $my_head, $download_config, $list_cats;
+    global $global_config, $site_mods, $module_info, $module_name, $my_head, $download_config, $list_cats, $nv_Lang;
 
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('IMG_FOLDER', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/');
     $xtpl->assign('MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
 
@@ -96,7 +96,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
     // Danh sach file trong chu de
     if (!empty($array_files)) {
         if (!empty($cat_data)) {
-            $xtpl->assign('CAT_TITLE', sprintf($lang_module['viewcat_listfile'], $cat_data['title']));
+            $xtpl->assign('CAT_TITLE', sprintf($nv_Lang->getModule('viewcat_listfile'), $cat_data['title']));
         }
         $xtpl->assign('FILE_LIST', theme_viewcat_list($array_files, $generate_page, $cat_data, false));
         $xtpl->parse('main.filelist');
@@ -116,7 +116,7 @@ function theme_viewcat_main($viewcat, $array_cats, $array_files = array(), $cat_
  */
 function theme_viewcat_list($array_files, $page = '', $cat_data = array(), $subcat = true, $upload = true)
 {
-    global $global_config, $site_mods, $lang_module, $lang_global, $module_info, $module_name, $my_head, $download_config;
+    global $global_config, $site_mods, $module_info, $module_name, $my_head, $download_config, $nv_Lang;
 
     $viewcat = $download_config['viewlist_type'] == 'list' ? 'viewcat_list' : 'viewcat_table';
 
@@ -131,8 +131,8 @@ function theme_viewcat_list($array_files, $page = '', $cat_data = array(), $subc
     }
 
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CAT', $cat_data);
 
     if (!empty($array_files)) {
@@ -173,18 +173,18 @@ function theme_viewcat_list($array_files, $page = '', $cat_data = array(), $subc
  */
 function view_file($row, $download_config, $content_comment, $array_keyword)
 {
-    global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
+    global $global_config, $module_name, $module_file, $module_info, $my_head, $nv_Lang;
 
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.pack.js\"></script>\n";
     $my_head .= "<script src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
     $my_head .= "<link href=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
 
     $xtpl = new XTemplate('viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('MODULE_FILE', $module_file);
     $xtpl->assign('TEMPLATE', $module_info['template']);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ROW', $row);
 
     if ($download_config['is_addfile_allow']) {
@@ -303,15 +303,15 @@ function view_file($row, $download_config, $content_comment, $array_keyword)
  */
 function theme_upload($array, $list_cats, $download_config, $error, $array_field_key)
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_config, $module_captcha;
+    global $module_info, $module_name, $global_config, $module_config, $module_captcha, $nv_Lang;
     $array['parentid'] = 0;
     if ($array['catid'] and isset($list_cats[$array['catid']])) {
         $array['parentid'] = $list_cats[$array['catid']]['parentid'];
     }
 
     $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -328,15 +328,15 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
     } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         // Nếu dùng reCaptcha v2
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
         $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
-        $xtpl->assign('N_CAPTCHA', $lang_module['captcha']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getModule('captcha'));
         $xtpl->parse('main.captcha');
     }
 
@@ -374,15 +374,15 @@ function theme_upload($array, $list_cats, $download_config, $error, $array_field
  */
 function theme_upload_getcat($parentid, $catid, $list_cats_addfile)
 {
-    global $module_info, $module_name, $lang_module, $lang_global;
+    global $module_info, $module_name, $nv_Lang;
 
     $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
     $xtpl->assign('CATID', $catid);
 
-    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats_addfile[$parentid]['title'] : $lang_module['categories_main']);
+    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats_addfile[$parentid]['title'] : $nv_Lang->getModule('categories_main'));
 
     foreach ($list_cats_addfile as $cat) {
         if ($cat['parentid'] == $parentid) {
@@ -415,10 +415,10 @@ function theme_upload_getcat($parentid, $catid, $list_cats_addfile)
  */
 function theme_search($array, $generate_page, $is_search)
 {
-    global $module_info, $module_name, $lang_module, $lang_global;
+    global $module_info, $module_name, $nv_Lang;
 
     $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if ($is_search) {
         if (!empty($array)) {
@@ -444,10 +444,10 @@ function theme_search($array, $generate_page, $is_search)
  */
 function theme_viewpdf($file_url)
 {
-    global $module_name, $lang_module, $lang_global;
+    global $module_name, $nv_Lang;
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
@@ -466,10 +466,10 @@ function theme_viewpdf($file_url)
  */
 function nv_download_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $time_back = 5, $lang_back = true)
 {
-    global $module_info, $lang_module, $page_title;
+    global $module_info, $page_title, $nv_Lang;
 
     $xtpl = new XTemplate('alert.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CONTENT', $message_content);
 
     if ($type == 'success') {
@@ -516,10 +516,10 @@ function nv_download_theme_alert($message_title, $message_content, $type = 'info
  */
 function view_items_tag($array_item, $generate_page)
 {
-    global $lang_module, $module_info, $module_name, $topicalias, $module_config;
+    global $module_info, $module_name, $topicalias, $module_config, $nv_Lang;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     foreach ($array_item as $array_item_i) {
         $array_item_i['uploadtime'] = date('H:i d/m/Y', $array_item_i['uploadtime']);

@@ -72,9 +72,9 @@ if ($nv_Request->isset_request('rating', 'post')) {
 
                 if ($total and $click) {
                     $round = round($total / $click);
-                    $content = sprintf($lang_module['rating_string'], $lang_module['file_rating' . $round], $total, $click);
+                    $content = sprintf($nv_Lang->getModule('rating_string'), $nv_Lang->getModule('file_rating' . $round), $total, $click);
                 } else {
-                    $content = $lang_module['file_rating0'];
+                    $content = $nv_Lang->getModule('file_rating0');
                 }
 
                 nv_htmlOutput($content);
@@ -82,7 +82,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
         }
     }
 
-    nv_htmlOutput($lang_module['rating_error1']);
+    nv_htmlOutput($nv_Lang->getModule('rating_error1'));
 }
 
 $page_title = $module_info['site_title'];
@@ -102,7 +102,7 @@ if ($viewcat == 'viewcat_main_bottom') {
                 ->select('COUNT(*)')
                 ->from(NV_MOD_TABLE)
                 ->where('status=1 AND catid IN (' . implode(',', $array_cat) . ')');
-            
+
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
             if ($num_items) {
@@ -116,9 +116,9 @@ if ($viewcat == 'viewcat_main_bottom') {
                 while ($row = $result->fetch()) {
                     $uploadtime = (int) $row['uploadtime'];
                     if ($uploadtime >= $today) {
-                        $uploadtime = $lang_module['today'] . ', ' . date('H:i', $row['uploadtime']);
+                        $uploadtime = $nv_Lang->getModule('today') . ', ' . date('H:i', $row['uploadtime']);
                     } elseif ($uploadtime >= $yesterday) {
-                        $uploadtime = $lang_module['yesterday'] . ', ' . date('H:i', $row['uploadtime']);
+                        $uploadtime = $nv_Lang->getModule('yesterday') . ', ' . date('H:i', $row['uploadtime']);
                     } else {
                         $uploadtime = nv_date('d/m/Y H:i', $row['uploadtime']);
                     }
@@ -128,7 +128,7 @@ if ($viewcat == 'viewcat_main_bottom') {
                         'title' => $row['title'],
                         'introtext' => $row['introtext'],
                         'uploadtime' => $uploadtime,
-                        'author_name' => !empty($row['author_name']) ? $row['author_name'] : $lang_module['unknown'],
+                        'author_name' => !empty($row['author_name']) ? $row['author_name'] : $nv_Lang->getModule('unknown'),
                         'filesize' => !empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : '',
                         'imagesrc' => (!empty($row['fileimage'])) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
                         'view_hits' => (int) $row['view_hits'],
@@ -173,7 +173,7 @@ if ($viewcat == 'viewcat_main_bottom') {
         ->fetchColumn();
 
     $urlappend = '&amp;' . NV_OP_VARIABLE . '=page-';
-    betweenURLs($page, ceil($all_page/$per_page), $base_url, $urlappend, $prevPage, $nextPage);   
+    betweenURLs($page, ceil($all_page/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
     $db->select('id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits')
         ->order('uploadtime DESC')
@@ -185,9 +185,9 @@ if ($viewcat == 'viewcat_main_bottom') {
     while ($row = $_query->fetch()) {
         $uploadtime = (int) $row['uploadtime'];
         if ($uploadtime >= $today) {
-            $uploadtime = $lang_module['today'] . ', ' . date('H:i', $row['uploadtime']);
+            $uploadtime = $nv_Lang->getModule('today') . ', ' . date('H:i', $row['uploadtime']);
         } elseif ($uploadtime >= $yesterday) {
-            $uploadtime = $lang_module['yesterday'] . ', ' . date('H:i', $row['uploadtime']);
+            $uploadtime = $nv_Lang->getModule('yesterday') . ', ' . date('H:i', $row['uploadtime']);
         } else {
             $uploadtime = nv_date('d/m/Y H:i', $row['uploadtime']);
         }
@@ -197,7 +197,7 @@ if ($viewcat == 'viewcat_main_bottom') {
             'title' => $row['title'],
             'introtext' => $row['introtext'],
             'uploadtime' => $uploadtime,
-            'author_name' => !empty($row['author_name']) ? $row['author_name'] : $lang_module['unknown'],
+            'author_name' => !empty($row['author_name']) ? $row['author_name'] : $nv_Lang->getModule('unknown'),
             'filesize' => !empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : '',
             'imagesrc' => (!empty($row['fileimage'])) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
             'view_hits' => (int) $row['view_hits'],
@@ -208,7 +208,7 @@ if ($viewcat == 'viewcat_main_bottom') {
             'del_link' => (defined('NV_IS_MODADMIN')) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
         ];
     }
-    $page_title = $page > 1 ? $page_title . ' - ' . $lang_module['page'] . ' ' . $page : $page_title;
+    $page_title = $page > 1 ? $page_title . ' - ' . $nv_Lang->getModule('page') . ' ' . $page : $page_title;
     $page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
     $contents = theme_viewcat_list($array_files, $page, [], 0);
 }

@@ -18,23 +18,22 @@ if (! nv_function_exists('nv_bdown_news')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_bdown_news($module, $data_block, $lang_block)
+    function nv_block_config_bdown_news($module, $data_block)
     {
-        global $db, $site_mods;
+        global $db, $site_mods, $nv_Lang;
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '    <label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '    <label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label>';
         $html .= '    <div class="col-sm-5"><input class="form-control" type="text" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '    <label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '    <label class="control-label col-sm-6">' . $nv_Lang->getModule('numrow') . ':</label>';
         $html .= '    <div class="col-sm-5"><input class="form-control" type="text" name="config_numrow" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '    <label class="control-label col-sm-6">' . $lang_block['class_name'] . ':</label>';
+        $html .= '    <label class="control-label col-sm-6">' . $nv_Lang->getModule('class_name') . ':</label>';
         $html .= '    <div class="col-sm-18"><input class="form-control" type="text" name="config_class_name" value="' . $data_block['class_name'] . '"/></div>';
 
         $html .= '</div>';
@@ -45,10 +44,9 @@ if (! nv_function_exists('nv_bdown_news')) {
      * nv_block_config_bdown_news_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_bdown_news_submit($module, $lang_block)
+    function nv_block_config_bdown_news_submit($module)
     {
         global $nv_Request;
         $return = array();

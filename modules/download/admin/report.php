@@ -102,14 +102,14 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 }
 
 //List
-$page_title = $lang_module['download_report'];
+$page_title = $nv_Lang->getModule('download_report');
 
 $sql = 'SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid, b.alias AS alias FROM ' . NV_MOD_TABLE . '_report a INNER JOIN ' . NV_MOD_TABLE . ' b ON a.fid=b.id ORDER BY a.post_time DESC';
 $_array_report = $db->query($sql)->fetchAll();
 $num = sizeof($_array_report);
 if (! $num) {
     $contents = "<div style=\"padding-top:15px;text-align:center\">\n";
-    $contents .= "<strong>" . $lang_module['report_empty'] . "</strong>";
+    $contents .= "<strong>" . $nv_Lang->getModule('report_empty') . "</strong>";
     $contents .= "</div>\n";
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
 
@@ -137,8 +137,8 @@ foreach ($_array_report as $row) {
 }
 
 $xtpl = new XTemplate('report.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('TABLE_CAPTION', $page_title);
 
 if (! empty($array)) {

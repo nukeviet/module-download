@@ -17,9 +17,9 @@ if (defined('NV_SYSTEM')) {
         function nv_mod_down_config($module)
         {
             global $site_mods, $module_info, $nv_Cache;
-            
+
             $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
-            
+
             $sql = 'SELECT config_name,config_value FROM ' . $_mod_table . '_config';
             $list = $nv_Cache->db($sql, '', $module);
             $download_config = array();
@@ -45,27 +45,24 @@ if (defined('NV_SYSTEM')) {
             return $download_config;
         }
     }
-    global $site_mods, $module_name, $module_info, $lang_module, $nv_Request;
+    global $site_mods, $module_name, $module_info, $nv_Request, $nv_Lang;
     $content = '';
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         $mod_config = nv_mod_down_config($module);
         if ($mod_config['is_upload_allow']) {
-            if ($module == $module_name) {
-                $lang_block_module = $lang_module;
-            } else {
-                $temp_lang_module = $lang_module;
-                $lang_module = array();
-                include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
-                $lang_block_module = $lang_module;
-                $lang_module = $temp_lang_module;
-            }
             $path = NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $site_mods[$module]['module_file'];
             if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $site_mods[$module]['module_file'] . '/block_upload.tpl')) {
                 $path = NV_ROOTDIR . '/themes/default/modules/' . $site_mods[$module]['module_file'];
             }
             $xtpl = new XTemplate('block_upload.tpl', $path);
-            $xtpl->assign('LANG', $lang_block_module);
+            if ($module == $module_name) {
+                $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+            } else {
+                $nv_Lang->loadModule($site_mods[$module]['module_file'], false, true);
+                $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
+                $nv_Lang->changeLang();
+            }
             $xtpl->assign('LINK_UP', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=upload');
             $xtpl->parse('main.have');
             $xtpl->parse('main');

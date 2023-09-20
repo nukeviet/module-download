@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['fimport'];
+$page_title = $nv_Lang->getModule('fimport');
 
 $array = array(
     'catprocess' => $nv_Request->get_int('catprocess', 'post', 0),
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (empty($array_folders)) {
-        $error = $lang_module['fimport_error_nofolder'];
+        $error = $nv_Lang->getModule('fimport_error_nofolder');
     } else {
         asort($array_folders);
         foreach ($array_folders as $folder) {
@@ -259,13 +259,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (empty($error)) {
-        $success = $lang_module['fimport_success'];
+        $success = $nv_Lang->getModule('fimport_success');
     }
 }
 
 $xtpl = new XTemplate('fimport.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 if (!empty($error)) {
@@ -284,7 +284,7 @@ if (!empty($error)) {
 for ($i = 0; $i <= 1; $i++) {
     $status = array(
         'key' => $i,
-        'title' => $lang_module['fimport_status' . $i],
+        'title' => $nv_Lang->getModule('fimport_status' . $i),
         'selected' => $i == $array['status'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('STATUS', $status);
@@ -293,7 +293,7 @@ for ($i = 0; $i <= 1; $i++) {
 for ($i = 0; $i <= 1; $i++) {
     $mode = array(
         'key' => $i,
-        'title' => $lang_module['fimport_mode' . $i],
+        'title' => $nv_Lang->getModule('fimport_mode' . $i),
         'selected' => $i == $array['mode'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('MODE', $mode);
@@ -302,7 +302,7 @@ for ($i = 0; $i <= 1; $i++) {
 for ($i = 0; $i <= 1; $i++) {
     $catprocess = array(
         'key' => $i,
-        'title' => $lang_module['fimport_catprocess' . $i],
+        'title' => $nv_Lang->getModule('fimport_catprocess' . $i),
         'selected' => $i == $array['catprocess'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('CATPROCESS', $catprocess);

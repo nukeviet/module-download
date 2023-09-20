@@ -179,7 +179,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 }
 
 // List cat
-$page_title = $lang_module['download_catmanager'];
+$page_title = $nv_Lang->getModule('download_catmanager');
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
 
@@ -200,11 +200,11 @@ if ($pid) {
     $sql2 = 'SELECT title,parentid FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $pid;
     $result2 = $db->query($sql2);
     list($parentid, $parentid2) = $result2->fetch(3);
-    $caption = sprintf($lang_module['table_caption2'], $parentid);
+    $caption = sprintf($nv_Lang->getModule('table_caption2'), $parentid);
     $parentid = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $parentid2 . '">' . $parentid . '</a>';
 } else {
-    $caption = $lang_module['table_caption1'];
-    $parentid = $lang_module['category_cat_maincat'];
+    $caption = $nv_Lang->getModule('table_caption1');
+    $parentid = $nv_Lang->getModule('category_cat_maincat');
 }
 
 $list = array();
@@ -212,7 +212,7 @@ $a = 0;
 foreach ($_array_cat as $row) {
     $numsub = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_categories WHERE parentid=' . $row['id'])->fetchColumn();
     if ($numsub) {
-        $numsub_str = ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $row['id'] . '">' . $numsub . ' ' . $lang_module['category_cat_sub'] . '</a>)';
+        $numsub_str = ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $row['id'] . '">' . $numsub . ' ' . $nv_Lang->getModule('category_cat_sub') . '</a>)';
     } else {
         $numsub_str = '';
     }
@@ -243,8 +243,8 @@ foreach ($_array_cat as $row) {
 $xtpl = new XTemplate('cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('ADD_NEW_CAT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat-content&amp;pid=' . $row['parentid']);
 $xtpl->assign('TABLE_CAPTION', $caption);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 foreach ($list as $row) {
     $xtpl->assign('ROW', $row);
@@ -255,10 +255,10 @@ foreach ($list as $row) {
     }
 
     $array_viewcat = array(
-        'viewcat_list_new' => $lang_module['config_indexfile_list_new']
+        'viewcat_list_new' => $nv_Lang->getModule('config_indexfile_list_new')
     );
     if ($row['numsub'] > 0) {
-        $array_viewcat['viewcat_main_bottom'] = $lang_module['config_indexfile_main_bottom'];
+        $array_viewcat['viewcat_main_bottom'] = $nv_Lang->getModule('config_indexfile_main_bottom');
     }
 
     foreach ($array_viewcat as $key => $value) {

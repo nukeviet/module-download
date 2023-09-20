@@ -11,7 +11,7 @@
 if (!defined('NV_IS_FILE_ADMIN'))
     die('Stop!!!');
 
-$page_title = $lang_module['fileserver'];
+$page_title = $nv_Lang->getModule('fileserver');
 $set_active_op = 'config';
 
 // Delete fileserver
@@ -73,10 +73,10 @@ if (!empty($server_id)) {
     $data = $result->fetch();
 
     if (empty($data)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'));
     }
 
-    $caption = $lang_module['fileserver_edit'];
+    $caption = $nv_Lang->getModule('fileserver_edit');
 } else {
     $data = array(
         'server_id' => 0,
@@ -86,7 +86,7 @@ if (!empty($server_id)) {
         'secret_key' => ''
     );
 
-    $caption = $lang_module['fileserver_add'];
+    $caption = $nv_Lang->getModule('fileserver_add');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -96,9 +96,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['secret_key'] = $nv_Request->get_title('secret_key', 'post', '', false);
 
     if (empty($data['server_name'])) {
-        $error = $lang_module['fileserver_error_server_name'];
+        $error = $nv_Lang->getModule('fileserver_error_server_name');
     } elseif (empty($data['upload_url'])) {
-        $error = $lang_module['fileserver_error_upload_url'];
+        $error = $nv_Lang->getModule('fileserver_error_upload_url');
     } else {
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_server WHERE server_name = :server_name' . ($server_id ? ' AND server_id != ' . $server_id : '');
         $sth = $db->prepare($sql);
@@ -107,7 +107,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $num = $sth->fetchColumn();
 
         if (!empty($num)) {
-            $error = $lang_module['fileserver_error_exists'];
+            $error = $nv_Lang->getModule('fileserver_error_exists');
         } else {
             if (!$server_id) {
                 $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_server (server_name, upload_url, access_key, secret_key, status) VALUES (
@@ -136,19 +136,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $nv_Cache->delMod($module_name);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                 } else {
-                    $error = $lang_module['errorsave'];
+                    $error = $nv_Lang->getModule('errorsave');
                 }
             }
             catch (PDOException $e) {
-                $error = $lang_module['errorsave'];
+                $error = $nv_Lang->getModule('errorsave');
             }
         }
     }
 }
 
 $xtpl = new XTemplate('fileserver.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CAPTION', $caption);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('DATA', $data);

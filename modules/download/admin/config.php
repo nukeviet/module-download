@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['download_config'];
+$page_title = $nv_Lang->getModule('download_config');
 
 $array_exts = get_allow_exts();
 $groups_list = nv_groups_list();
@@ -45,8 +45,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['addthis_pubid'] = $nv_Request->get_title('addthis_pubid', 'post', '');
     $array_config['pdf_handler'] = $nv_Request->get_title('pdf_handler', 'post', $array_pdf_handler[0]);
     $array_config['list_title_length'] = $nv_Request->get_int('list_title_length', 'post', 0);
-	$array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
-	$array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
+    $array_config['copy_document'] = $nv_Request->get_int('copy_document', 'post', 0);
+    $array_config['allow_fupload_import'] = $nv_Request->get_int('allow_fupload_import', 'post', 0);
     $array_config['convert_alias_to_lower'] = $nv_Request->get_int('convert_alias_to_lower', 'post', 0);
 
     foreach ($array_field_key as $field) {
@@ -210,7 +210,7 @@ $array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload
 
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
 
@@ -228,9 +228,9 @@ if ($array_config['indexfile'] != 'viewcat_list_new') {
     $xtpl->parse('main.display_viewlist_type');
 }
 $array_indexfile = array(
-    'viewcat_main_bottom' => $lang_module['config_indexfile_main_bottom'],
-    'viewcat_list_new' => $lang_module['config_indexfile_list_new'],
-    'none' => $lang_module['config_indexfile_none']
+    'viewcat_main_bottom' => $nv_Lang->getModule('config_indexfile_main_bottom'),
+    'viewcat_list_new' => $nv_Lang->getModule('config_indexfile_list_new'),
+    'none' => $nv_Lang->getModule('config_indexfile_none')
 );
 foreach ($array_indexfile as $key => $value) {
     $sl = $array_config['indexfile'] == $key ? 'selected="selected"' : '';
@@ -239,8 +239,8 @@ foreach ($array_indexfile as $key => $value) {
 }
 
 $array_viewlist_type = array(
-    'list' => $lang_module['config_viewlist_list'],
-    'table' => $lang_module['config_viewlist_table']
+    'list' => $nv_Lang->getModule('config_viewlist_list'),
+    'table' => $nv_Lang->getModule('config_viewlist_table')
 );
 foreach ($array_viewlist_type as $key => $value) {
     $ck = $array_config['viewlist_type'] == $key ? 'checked="checked"' : '';
@@ -265,7 +265,7 @@ $xtpl->assign('IS_ADDFILE', !$array_config['is_addfile'] ? 'style="display: none
 for ($i = 0; $i <= 2; $i ++) {
     $xtpl->assign('DELFILE_MODE', array(
         'key' => $i,
-        'title' => $lang_module['config_delfile_mode' . $i],
+        'title' => $nv_Lang->getModule('config_delfile_mode' . $i),
         'selected' => $i == $array_config['delfile_mode'] ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.delfile_mode');
@@ -285,7 +285,7 @@ foreach ($array_structure_image as $type => $dir) {
 for ($i = 0; $i <= 1; $i ++) {
     $xtpl->assign('SCORM_HANDLE_MODE', array(
         'key' => $i,
-        'title' => $lang_module['config_scorm_handle_mode' . $i],
+        'title' => $nv_Lang->getModule('config_scorm_handle_mode' . $i),
         'selected' => $i == $array_config['scorm_handle_mode'] ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.scorm_handle_mode');
@@ -294,7 +294,7 @@ for ($i = 0; $i <= 1; $i ++) {
 for ($i = 0; $i <= 1; $i++) {
     $xtpl->assign('FILESERVER', array(
         'key' => $i,
-        'title' => $lang_module['config_fileserver' . $i],
+        'title' => $nv_Lang->getModule('config_fileserver' . $i),
         'selected' => $i == $array_config['fileserver'] ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.fileserver');
@@ -306,7 +306,7 @@ $xtpl->assign('FILESERVER_DISPLAY', !empty($array_config['fileserver']) ? '' : '
 foreach ($global_array_shareport as $shareport) {
     $shareport = array(
         'key' => $shareport,
-        'title' => $lang_module['config_share_shareport_' . $shareport],
+        'title' => $nv_Lang->getModule('config_share_shareport_' . $shareport),
         'selected' => $shareport == $array_config['shareport'] ? ' selected="selected"' : ''
     );
 
@@ -319,7 +319,7 @@ $xtpl->assign('ADDTHIS_CSS', $array_config['shareport'] == 'addthis' ? '' : ' st
 foreach ($array_pdf_handler as $_pdf_handler) {
     $pdf_handler = array(
         'key' => $_pdf_handler,
-        'title' => $lang_module['config_pdf_handler_' . $_pdf_handler],
+        'title' => $nv_Lang->getModule('config_pdf_handler_' . $_pdf_handler),
         'selected' => $_pdf_handler == $array_config['pdf_handler'] ? ' selected="selected"' : ''
     );
 
@@ -329,7 +329,7 @@ foreach ($array_pdf_handler as $_pdf_handler) {
 
 foreach ($array_field_key as $field) {
     $xtpl->assign('FIELD_NAME', $field);
-    $xtpl->assign('FIELD_TITLE', isset($lang_module['file_' . $field]) ? $lang_module['file_' . $field] : $field);
+    $xtpl->assign('FIELD_TITLE', $nv_Lang->getModule('file_' . $field));
     $xtpl->assign('REQ_AD_CHECKED', !empty($array_config['arr_req_ad_' . $field]) ? ' checked="checked"' : '');
     $xtpl->assign('REQ_UR_CHECKED', !empty($array_config['arr_req_ur_' . $field]) ? ' checked="checked"' : '');
     $xtpl->assign('DIS_AD_CHECKED', !empty($array_config['arr_dis_ad_' . $field]) ? ' checked="checked"' : '');

@@ -12,33 +12,31 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-$lang_siteinfo = nv_get_lang_module($mod);
-
 $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $mod_data;
 
 // Tong so file
 $number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' where status= 1')->fetchColumn();
 if ($number > 0) {
-    $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_publtime'], 'value' => $number );
+    $siteinfo[] = array( 'key' => $nv_Lang->getModule('siteinfo_publtime'), 'value' => $number );
 }
 
 // Tong so file het han
 $number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' where status= 0')->fetchColumn();
 if ($number > 0) {
-    $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_expired'], 'value' => $number );
+    $siteinfo[] = array( 'key' => $nv_Lang->getModule('siteinfo_expired'), 'value' => $number );
 }
 
 // Tong so binh luan duoc dang
 $number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment where module=' . $db->quote($mod) . ' AND status = 1')->fetchColumn();
 if ($number > 0) {
-    $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
+    $siteinfo[] = array( 'key' => $nv_Lang->getModule('siteinfo_comment'), 'value' => $number );
 }
 
 // So binh luan cho duyet
 $number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment where module=' . $db->quote($mod) . ' AND status = 0')->fetchColumn();
 if ($number > 0) {
     $pendinginfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_comment_pending'],
+        'key' => $nv_Lang->getModule('siteinfo_comment_pending'),
         'value' => $number,
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=0'
     );
@@ -50,7 +48,7 @@ $array_data = $nv_Cache->db($sql, '', $mod);
 $number = isset($array_data[0]['numbers']) ? intval($array_data[0]['numbers']) : 0;
 if ($number > 0) {
     $pendinginfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_users_send'],
+        'key' => $nv_Lang->getModule('siteinfo_users_send'),
         'value' => $number,
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=filequeue'
     );
@@ -60,7 +58,7 @@ if ($number > 0) {
 $number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_report')->fetchColumn();
 if ($number > 0) {
     $pendinginfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_eror'],
+        'key' => $nv_Lang->getModule('siteinfo_eror'),
         'value' => $number,
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=report'
     );

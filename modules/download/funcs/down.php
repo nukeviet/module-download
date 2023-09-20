@@ -64,10 +64,10 @@ if ($nv_Request->isset_request('code', 'get')) {
     }
 
     $content = "<br /><img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-    $content .= sprintf($lang_module['download_wait2'], $session_files['linkdirect'][$code]['link']);
+    $content .= sprintf($nv_Lang->getModule('download_wait2'), $session_files['linkdirect'][$code]['link']);
     $content .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $session_files['linkdirect'][$code]['link'] . "\" />";
 
-    nv_info_die($lang_module['download_detail'], $lang_module['download_wait'], $content);
+    nv_info_die($nv_Lang->getModule('download_detail'), $nv_Lang->getModule('download_wait'), $content);
     die();
 }
 
@@ -112,7 +112,7 @@ if ($filepdf == 1) {
     }
 
     if (empty($file_url)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
     }    
     
     $html = theme_viewpdf($file_url);

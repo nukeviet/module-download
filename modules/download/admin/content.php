@@ -67,15 +67,15 @@ if ($nv_Request->isset_request('loadcat', 'post')) {
  */
 function theme_upload_getcat($parentid, $catid, $list_cats)
 {
-    global $global_config, $module_file, $lang_module, $lang_global;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
     $xtpl->assign('CATID', $catid);
 
-    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats[$parentid]['title'] : $lang_module['category_cat_maincat']);
+    $xtpl->assign('PARENT_TEXT', $parentid ? $list_cats[$parentid]['title'] : $nv_Lang->getModule('category_cat_maincat'));
 
     foreach ($list_cats as $cat) {
         if ($cat['parentid'] == $parentid) {
@@ -148,7 +148,7 @@ if ($id) {
     if ($copy == 1) {
         $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;copy=1&amp;id=' . $id;
     }
-    $page_title = $lang_module['download_editfile'];
+    $page_title = $nv_Lang->getModule('download_editfile');
 
     $array['id'] = (int)$row['id'];
     $array['catid'] = (int)$row['catid'];
@@ -217,7 +217,7 @@ if ($id) {
     }
     unset($fileupload, $file);
 } elseif (!empty($filequeueid)) {
-    $page_title = $lang_module['download_filequeue_edit'];
+    $page_title = $nv_Lang->getModule('download_filequeue_edit');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;filequeueid=' . $filequeueid;
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $filequeueid;
@@ -268,7 +268,7 @@ if ($id) {
     $array['groups_view'] = $array['groups_onlineview'] = $array['groups_download'] = '6';
     $array['is_del_report'] = 1;
 } else {
-    $page_title = $lang_module['file_addfile'];
+    $page_title = $nv_Lang->getModule('file_addfile');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
     $array['id'] = 0;
@@ -446,41 +446,41 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     }
 
     if (empty($array['title'])) {
-        $error = $lang_module['file_error_title'];
+        $error = $nv_Lang->getModule('file_error_title');
     } elseif ($is_exists) {
-        $error = $lang_module['file_title_exists'];
+        $error = $nv_Lang->getModule('file_title_exists');
     } elseif (empty($array['catid']) or !isset($list_cats[$array['catid']])) {
-        $error = $lang_module['file_catid_exists'];
+        $error = $nv_Lang->getModule('file_catid_exists');
     } elseif (empty($array['author_name']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_name'])) {
-        $error = $lang_module['file_error_author_name'];
+        $error = $nv_Lang->getModule('file_error_author_name');
     } elseif (empty($array['author_email']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_email'])) {
-        $error = $lang_module['file_error_author_email'];
+        $error = $nv_Lang->getModule('file_error_author_email');
     } elseif (!empty($array['author_email']) and ($check_valid_email = nv_check_valid_email($array['author_email'])) != '') {
         $error = $check_valid_email;
     } elseif (empty($array['author_url']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['author_url'])) {
-        $error = $lang_module['file_error_author_url_empty'];
+        $error = $nv_Lang->getModule('file_error_author_url_empty');
     } elseif (!empty($array['author_url']) and !nv_is_url($array['author_url'])) {
-        $error = $lang_module['file_error_author_url'];
+        $error = $nv_Lang->getModule('file_error_author_url');
     } elseif (empty($array['fileimage']) and empty($array['fileimage_tmp']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['fileimage'])) {
-        $error = $lang_module['file_error_fileimage'];
+        $error = $nv_Lang->getModule('file_error_fileimage');
     } elseif (empty($array['introtext']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['introtext'])) {
-        $error = $lang_module['file_error_introtext'];
+        $error = $nv_Lang->getModule('file_error_introtext');
     } elseif (empty($array['description']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['description'])) {
-        $error = $lang_module['file_error_description'];
+        $error = $nv_Lang->getModule('file_error_description');
     } elseif (empty($array['linkdirect']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['linkdirect'])) {
-        $error = $lang_module['file_error_linkdirect'];
+        $error = $nv_Lang->getModule('file_error_linkdirect');
     } elseif (empty($array['fileupload']) and empty($array['linkdirect']) and empty($array['scorm_path_old']) and empty($array['fileupload_tmp'])) {
         if (!empty($module_config[$module_name]['dis'][$filequeueid ? 'ur' : 'ad']['linkdirect'])) {
-            $error = $lang_module['file_error_fileupload'];
+            $error = $nv_Lang->getModule('file_error_fileupload');
         } else {
-            $error = $lang_module['file_error_fileupload1'];
+            $error = $nv_Lang->getModule('file_error_fileupload1');
         }
     } elseif (empty($array['filesize']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['filesize'])) {
-        $error = $lang_module['file_error_filesize'];
+        $error = $nv_Lang->getModule('file_error_filesize');
     } elseif (empty($array['version']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['version'])) {
-        $error = $lang_module['file_error_version'];
+        $error = $nv_Lang->getModule('file_error_version');
     } elseif (empty($array['copyright']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['copyright'])) {
-        $error = $lang_module['file_error_copyright'];
+        $error = $nv_Lang->getModule('file_error_copyright');
     } else {
         // Xử lý ảnh minh họa nếu duyệt file
         if (empty($array['fileimage']) and !empty($array['fileimage_tmp'])) {
@@ -649,7 +649,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                                         }
 
                                         if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
-                                            $error = $lang_module['file_error_extract_scorm'] . ': ' . $file_name;
+                                            $error = $nv_Lang->getModule('file_error_extract_scorm') . ': ' . $file_name;
                                             break;
                                         }
                                     }
@@ -744,7 +744,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     }
                     $action_db = true;
                 } else {
-                    $error = $lang_module['file_error2'];
+                    $error = $nv_Lang->getModule('file_error2');
                 }
             } else {
                 $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
@@ -777,7 +777,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 $stmt->bindParam(':num_linkdirect', $array['num_linkdirect'], PDO::PARAM_INT);
 
                 if (!$stmt->execute()) {
-                    $error = $lang_module['file_error1'];
+                    $error = $nv_Lang->getModule('file_error1');
                 } else {
                     $action_db = true;
 
@@ -898,7 +898,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                         $db->query('UPDATE ' . NV_MOD_TABLE . '_files SET weight=' . ($weight++) . ' WHERE file_id=' . $file['file_id']);
                     }
 
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid']);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('download_editfile'), $array['title'], $admin_info['userid']);
                 } else {
                     // Thêm bảng detail
                     $stmt = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_detail (
@@ -930,7 +930,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                         $db->insert_id($sql, 'file_id', $data_insert);
                     }
 
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid']);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('file_addfile'), $array['title'], $admin_info['userid']);
                 }
 
                 if (!empty($array['fileimage_tmp']) and file_exists(NV_UPLOADS_REAL_DIR . $array['fileimage_tmp'])) {
@@ -1012,7 +1012,7 @@ if (!sizeof($array['fileupload'])) {
 
 if (empty($list_cats)) {
     $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-content';
-    $contents = '<p class="note_cat">' . $lang_module['note_cat'] . '</p>';
+    $contents = '<p class="note_cat">' . $nv_Lang->getModule('note_cat') . '</p>';
     $contents .= "<meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />";
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -1083,7 +1083,7 @@ if ($array['catid'] and isset($list_cats[$array['catid']])) {
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', $form_action);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('ID', $is_copy ? 0 : $id);
 $xtpl->assign('DATA', $array);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
+global $global_config, $module_info, $module_name, $module_file, $nv_Request, $nv_Lang;
 
 $download_config = nv_mod_down_config();
 
@@ -27,7 +27,7 @@ $array = array();
 $key = nv_substr($nv_Request->get_title('q', 'get', '', 1), 0, NV_MAX_SEARCH_LENGTH);
 $cat = $nv_Request->get_int('cat', 'get', 0);
 
-$page_title = $lang_module['search'] . ' ' . $key;
+$page_title = $nv_Lang->getModule('search') . ' ' . $key;
 
 $db->sqlreset()
     ->select('COUNT(*)')
@@ -65,10 +65,10 @@ if (!empty($where)) {
     $num_items = $sth->fetchColumn();
     $urlappend = '&amp;page=';
     betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
-    
+
     if (! empty($num_items)) {
         $download_config = nv_mod_down_config();
-        $lang_module['search_result_count'] = sprintf($lang_module['search_result_count'], $num_items);
+        $nv_Lang->setModule('search_result_count', sprintf($nv_Lang->getModule('search_result_count'), $num_items));
 
         $today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
         $yesterday = $today - 86400;
@@ -91,9 +91,9 @@ if (!empty($where)) {
 
             $uploadtime = ( int )$row['uploadtime'];
             if ($uploadtime >= $today) {
-                $uploadtime = $lang_module['today'] . ', ' . date('H:i', $row['uploadtime']);
+                $uploadtime = $nv_Lang->getModule('today') . ', ' . date('H:i', $row['uploadtime']);
             } elseif ($uploadtime >= $yesterday) {
-                $uploadtime = $lang_module['yesterday'] . ', ' . date('H:i', $row['uploadtime']);
+                $uploadtime = $nv_Lang->getModule('yesterday') . ', ' . date('H:i', $row['uploadtime']);
             } else {
                 $uploadtime = nv_date('d/m/Y H:i', $row['uploadtime']);
             }
@@ -120,7 +120,7 @@ if (!empty($where)) {
 
 $contents = theme_search($array, $generate_page, $is_search);
 if ($page > 1) {
-    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 
 $key_words = $description = 'no';

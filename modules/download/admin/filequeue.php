@@ -89,7 +89,7 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 }
 
 // List files
-$page_title = $lang_module['download_filequeue'];
+$page_title = $nv_Lang->getModule('download_filequeue');
 
 $sql = 'FROM ' . NV_MOD_TABLE . '_tmp';
 
@@ -99,7 +99,7 @@ $all_file = $result1->fetchColumn();
 
 if (! $all_file) {
     $contents = "<div style=\"padding-top:15px;text-align:center\">\n";
-    $contents .= "<strong>" . $lang_module['filequeue_empty'] . "</strong>";
+    $contents .= "<strong>" . $nv_Lang->getModule('filequeue_empty') . "</strong>";
     $contents .= "</div>\n";
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
 
@@ -129,8 +129,8 @@ while ($row = $result2->fetch()) {
 }
 
 $xtpl = new XTemplate('filequeue.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('TABLE_CAPTION', $page_title);
 
 if (! empty($array)) {

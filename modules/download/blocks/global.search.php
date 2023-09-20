@@ -13,20 +13,11 @@ if (! defined('NV_MAINFILE')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $module_info, $lang_module, $nv_Request, $nv_Cache, $global_config;
+    global $site_mods, $module_name, $module_info, $nv_Request, $nv_Cache, $global_config, $nv_Lang;
 
     $module = $block_config['module'];
 
     if (isset($site_mods[$module])) {
-        if ($module == $module_name) {
-            $lang_block_module = $lang_module;
-        } else {
-            $temp_lang_module = $lang_module;
-            $lang_module = array();
-            include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
-            $lang_block_module = $lang_module;
-            $lang_module = $temp_lang_module;
-        }
         $_mod_table = (defined('SYS_DOWNLOAD_TABLE')) ? SYS_DOWNLOAD_TABLE : NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
 
         $sql = "SELECT id, title, alias, parentid, lev FROM " . $_mod_table . "_categories WHERE status=1 ORDER BY sort ASC";
@@ -41,7 +32,13 @@ if (defined('NV_SYSTEM')) {
         }
 
         $xtpl = new XTemplate("block_search.tpl", $path);
-        $xtpl->assign('LANG', $lang_block_module);
+        if ($module == $module_name) {
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        } else {
+            $nv_Lang->loadModule($site_mods[$module]['module_file'], false, true);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
+            $nv_Lang->changeLang();
+        }
         $xtpl->assign('keyvalue', $key);
 
         if (!$global_config['rewrite_enable']) {

@@ -12,10 +12,10 @@ if (! defined('NV_IS_MOD_DOWNLOAD')) {
     die('Stop!!!');
 }
 
-global $module_name, $lang_module, $list_cats, $db, $global_config;
+global $module_name, $list_cats, $db, $global_config, $nv_Lang;
 
 $xtpl = new XTemplate('block_lastestdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $db->sqlreset()
     ->select('catid, title, alias, uploadtime')

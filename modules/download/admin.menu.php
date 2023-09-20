@@ -31,14 +31,14 @@ while ($row_config = $_query_config->fetch()) {
     }
 }
 
-$submenu['content'] = $lang_module['file_addfile'];
+$submenu['content'] = $nv_Lang->getModule('file_addfile');
 
 if (!empty($module_config[$module_name]['allow_fupload_import'])) {
-    $submenu['fimport'] = $lang_module['fimport'];
+    $submenu['fimport'] = $nv_Lang->getModule('fimport');
 }
 
-$submenu['filequeue'] = $lang_module['download_filequeue'];
-$submenu['report'] = $lang_module['download_report'];
-$submenu['tags'] = $lang_module['download_tags'];
-$submenu['cat'] = $lang_module['download_catmanager'];
-$submenu['config'] = $lang_module['download_config'];
+$submenu['filequeue'] = $nv_Lang->getModule('download_filequeue');
+$submenu['report'] = $nv_Lang->getModule('download_report');
+$submenu['tags'] = $nv_Lang->getModule('download_tags');
+$submenu['cat'] = $nv_Lang->getModule('download_catmanager');
+$submenu['config'] = $nv_Lang->getModule('download_config');

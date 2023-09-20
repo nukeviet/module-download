@@ -56,7 +56,7 @@ unset($detail);
 
 if (!nv_user_in_groups($row['groups_view'])) {
     $redirect = '<meta http-equiv="Refresh" content="4;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-    nv_info_die($lang_module['error_not_permission_title'], $lang_module['error_not_permission_title'], $lang_module['error_not_permission_content'] . $redirect);
+    nv_info_die($nv_Lang->getModule('error_not_permission_title'), $nv_Lang->getModule('error_not_permission_title'), $nv_Lang->getModule('error_not_permission_content') . $redirect);
     exit();
 }
 
@@ -68,18 +68,18 @@ $row['cattitle'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIAB
 
 $row['uploadtime'] = (int)$row['uploadtime'];
 if ($row['uploadtime'] >= $today) {
-    $row['uploadtime'] = $lang_module['today'] . ', ' . date('H:i', $row['uploadtime']);
+    $row['uploadtime'] = $nv_Lang->getModule('today') . ', ' . date('H:i', $row['uploadtime']);
 } elseif ($row['uploadtime'] >= $yesterday) {
-    $row['uploadtime'] = $lang_module['yesterday'] . ', ' . date('H:i', $row['uploadtime']);
+    $row['uploadtime'] = $nv_Lang->getModule('yesterday') . ', ' . date('H:i', $row['uploadtime']);
 } else {
     $row['uploadtime'] = nv_date('d/m/Y H:i', $row['uploadtime']);
 }
 
 $row['updatetime'] = (int)$row['updatetime'];
 if ($row['updatetime'] >= $today) {
-    $row['updatetime'] = $lang_module['today'] . ', ' . date('H:i', $row['updatetime']);
+    $row['updatetime'] = $nv_Lang->getModule('today') . ', ' . date('H:i', $row['updatetime']);
 } elseif ($row['updatetime'] >= $yesterday) {
-    $row['updatetime'] = $lang_module['yesterday'] . ', ' . date('H:i', $row['updatetime']);
+    $row['updatetime'] = $nv_Lang->getModule('yesterday') . ', ' . date('H:i', $row['updatetime']);
 } else {
     $row['updatetime'] = nv_date('d/m/Y H:i', $row['updatetime']);
 }
@@ -88,7 +88,7 @@ if (defined('NV_IS_MODADMIN') and !empty($row['user_id']) and !empty($row['user_
     $row['user_name'] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['user_id'] . '">' . $row['user_name'] . '</a>';
 }
 if (empty($row['user_name'])) {
-    $row['user_name'] = $lang_module['unknown'];
+    $row['user_name'] = $nv_Lang->getModule('unknown');
 }
 
 if (!empty($row['author_name'])) {
@@ -96,13 +96,13 @@ if (!empty($row['author_name'])) {
         $row['author_name'] .= ' (' . nv_EncodeEmail($row['author_email']) . ')';
     }
 } else {
-    $row['author_name'] = $lang_module['unknown'];
+    $row['author_name'] = $nv_Lang->getModule('unknown');
 }
 
 if (!empty($row['author_url'])) {
     $row['author_url'] = '<a href="' . $row['author_url'] . '" onclick="this.target=\'_blank\'">' . $row['author_url'] . '</a>';
 } else {
-    $row['author_url'] = $lang_module['unknown'];
+    $row['author_url'] = $nv_Lang->getModule('unknown');
 }
 
 if (empty($row['description'])) {
@@ -110,11 +110,11 @@ if (empty($row['description'])) {
 }
 
 if (empty($row['version'])) {
-    $row['version'] = $lang_module['unknown'];
+    $row['version'] = $nv_Lang->getModule('unknown');
 }
 
 if (empty($row['copyright'])) {
-    $row['copyright'] = $lang_module['unknown'];
+    $row['copyright'] = $nv_Lang->getModule('unknown');
 }
 
 $row['catname'] = $list_cats[$row['catid']]['title'];
@@ -225,7 +225,7 @@ if ($row['is_download_allow']) {
     $session_files = [];
 
     $login_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
-    $row['download_info'] = sprintf($lang_module['download_not_allow_info1'], $login_link, NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
+    $row['download_info'] = sprintf($nv_Lang->getModule('download_not_allow_info1'), $login_link, NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
 }
 
 unset($fileuploads, $file);
@@ -233,7 +233,7 @@ unset($fileuploads, $file);
 $session_files = serialize($session_files);
 $nv_Request->set_Session('session_files', $session_files);
 
-$row['filesize'] = !empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : $lang_module['unknown'];
+$row['filesize'] = !empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : $nv_Lang->getModule('unknown');
 
 $img = NV_UPLOADS_DIR . $row['fileimage'];
 $row['fileimage'] = nv_ImageInfo(NV_ROOTDIR . '/' . $img, 300, true, NV_ROOTDIR . '/' . NV_TEMP_DIR);
@@ -264,7 +264,7 @@ while ($_row = $_query->fetch()) {
 if (!empty($row['fileimage']) && !empty($row['fileimage']['orig_src'])) {
     $src_img = $row['fileimage']['orig_src'];
     $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $src_img)) ? $src_img : NV_MY_DOMAIN . $src_img;
-} 
+}
 // comment
 $content_comment = '';
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
@@ -290,9 +290,9 @@ if (!empty($row['rating_detail'])) {
         $row['rating_point'] = round((int)$row['rating_detail'][0] / (int)$row['rating_detail'][1]);
     }
 }
-$row['rating_string'] = $lang_module['file_rating' . $row['rating_point']];
+$row['rating_string'] = $nv_Lang->getModule('file_rating' . $row['rating_point']);
 if ($row['rating_point']) {
-    $row['rating_string'] = $lang_module['file_rating_note3'] . ': ' . $row['rating_string'];
+    $row['rating_string'] = $nv_Lang->getModule('file_rating_note3') . ': ' . $row['rating_string'];
 }
 
 $flrt = $nv_Request->get_string('flrt', 'session', '');
