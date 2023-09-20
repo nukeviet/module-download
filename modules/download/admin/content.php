@@ -462,7 +462,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     } elseif (!empty($array['author_url']) and !nv_is_url($array['author_url'])) {
         $error = $nv_Lang->getModule('file_error_author_url');
     } elseif (empty($array['fileimage']) and empty($array['fileimage_tmp']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['fileimage'])) {
-        $error = $nv_Lang->getModule('file_error_fileimage');
+        $error = $nv_Lang->getModule('file_error_fileimage_admin');
     } elseif (empty($array['introtext']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['introtext'])) {
         $error = $nv_Lang->getModule('file_error_introtext');
     } elseif (empty($array['description']) and !empty($module_config[$module_name]['req'][$filequeueid ? 'ur' : 'ad']['description'])) {
