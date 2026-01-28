@@ -89,7 +89,7 @@ if (!empty($server_id)) {
     $caption = $lang_module['fileserver_add'];
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post')) {
     $data['server_name'] = $nv_Request->get_title('server_name', 'post', '', true);
     $data['upload_url'] = $nv_Request->get_title('upload_url', 'post', '', false);
     $data['access_key'] = $nv_Request->get_title('access_key', 'post', '', false);
@@ -114,8 +114,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					:server_name, :upload_url, :access_key, :secret_key, 1
 				)';
             } else {
-                $sql = 'UPDATE ' . NV_MOD_TABLE . '_server SET 
-                    server_name = :server_name, upload_url = :upload_url, access_key = :access_key, secret_key = :secret_key 
+                $sql = 'UPDATE ' . NV_MOD_TABLE . '_server SET
+                    server_name = :server_name, upload_url = :upload_url, access_key = :access_key, secret_key = :secret_key
                 WHERE server_id = ' . $server_id;
             }
 

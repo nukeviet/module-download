@@ -23,7 +23,7 @@ $array_config = array();
 $array_pdf_handler = array('filetmp', 'phpattachment');
 $array = [];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post')) {
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', 'none');
     $array_config['viewlist_type'] = $nv_Request->get_title('viewlist_type', 'post', 'list');
     $array_config['per_page_home'] = $nv_Request->get_int('per_page_home', 'post', 20);

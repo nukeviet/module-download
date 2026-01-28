@@ -12,7 +12,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Download',
     'modfuncs' => 'main,viewcat,viewfile,down,upload,report,search,tag',
     'change_alias' => 'upload, search',
@@ -23,9 +23,9 @@ $module_version = array(
     'date' => 'Tuesday, April 18, 2023 7:54:51 AM GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => '',
-    'uploads_dir' => array(
+    'uploads_dir' => [
         $module_upload,
         $module_upload . '/temp',
         $module_upload . '/import'
-    )
-);
+    ]
+];

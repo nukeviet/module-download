@@ -67,7 +67,7 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" name="server_id" value="{DATA.server_id}">
-						<input type="submit" name="submit" value="{GLANG.submit}" class="btn btn-primary">
+						<input type="submit" name="submitsave" value="{GLANG.submit}" class="btn btn-primary">
 					</td>
 				</tr>
 			</tfoot>

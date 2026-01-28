@@ -37,7 +37,7 @@
                             <!-- BEGIN: catprocess --><option value="{CATPROCESS.key}"{CATPROCESS.selected}>{CATPROCESS.title}</option><!-- END: catprocess -->
                         </select>
                     </div>
-                    <button class="btn btn-primary" type="submit" name="submit" value="{LANG.fimport_submit}"><i class="fa fa-fw fa-spin fa-spinner hidden"></i>{LANG.fimport_submit}</button>
+                    <button class="btn btn-primary" type="submit" name="submitsave" value="{LANG.fimport_submit}"><i class="fa fa-fw fa-spin fa-spinner hidden"></i>{LANG.fimport_submit}</button>
                 </form>
             </div>
         </div>
@@ -70,7 +70,7 @@ $(function() {
             e.preventDefault();
         }
         $(this).data('busy', true);
-        $('[name="submit"]', $(this)).find('.fa').removeClass('hidden');
+        $('[name="submitsave"]', $(this)).find('.fa').removeClass('hidden');
     });
 });
 </script>
