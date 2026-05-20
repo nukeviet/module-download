@@ -64,10 +64,8 @@ if ($nv_Request->isset_request('check', 'post')) {
     $url = rawurldecode($url);
 
     if ($is_myurl) {
-        $url = substr($url, strlen(NV_BASE_SITEURL));
-        $url = NV_ROOTDIR . '/' . $url;
-        if (! file_exists($url)) {
-            die($lang_module['file_checkUrl_error']);
+        if (!nv_is_file($url, NV_UPLOADS_DIR . '/' . $module_upload)) {
+            nv_htmlOutput($lang_module['file_checkUrl_error']);
         }
     } else {
         $url = trim($url);
@@ -77,10 +75,10 @@ if ($nv_Request->isset_request('check', 'post')) {
         foreach ($url as $l) {
             if (! empty($l)) {
                 if (! nv_is_url($l)) {
-                    die($lang_module['file_checkUrl_error']);
+                    nv_htmlOutput($lang_module['file_checkUrl_error']);
                 }
                 if (! nv_check_url($l)) {
-                    die($lang_module['file_checkUrl_error']);
+                    nv_htmlOutput($lang_module['file_checkUrl_error']);
                 }
             }
         }
@@ -414,6 +412,8 @@ function string_to_filename($word)
     if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup.php')) {
         $utf8_lookup = false;
         include NV_ROOTDIR . '/includes/utf8/lookup.php';
+        /** @disregard P1006 */
+        // phpcs:ignore
         $word = strtr($word, $utf8_lookup['romanize']);
     }
 
