@@ -39,7 +39,7 @@ $currentpath_images = $currentpath[0];
 $currentpath_files = $currentpath[1];
 $uploads_dir_user = $currentpath[2];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post')) {
     if ($sys_info['allowed_set_time_limit']) {
         set_time_limit(0);
     }

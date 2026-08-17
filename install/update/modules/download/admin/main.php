@@ -171,7 +171,38 @@ $num_items = $db->query($db->sql())->fetchColumn();
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = $array_search['per_page'];
 
+$array_order = [];
+$array_order['field'] = $nv_Request->get_title('of', 'get', '');
+$array_order['value'] = $nv_Request->get_title('ov', 'get', '');
+$base_url_order = $base_url;
+if ($page > 1) {
+    $base_url_order .= '&amp;page=' . $page;
+}
+
+// Định nghĩa các field và các value được phép sắp xếp
+$order_fields = ['title', 'uploadtime', 'view_hits', 'download_hits', 'comment_hits'];
+$order_values = ['asc', 'desc'];
+
+if (!in_array($array_order['field'], $order_fields)) {
+    $array_order['field'] = '';
+}
+if (!in_array($array_order['value'], $order_values)) {
+    $array_order['value'] = '';
+}
+
 $db->select('*')->order('uploadtime DESC')->limit($per_page)->offset(($page - 1) * $per_page);
+// Order theo cấu hình
+if (
+    !empty($module_config[$module_name]['type_order_admin']) &&
+    $module_config[$module_name]['type_order_admin'] == 'order_increase_filename'
+) {
+    $db->order('title');
+}
+// Order theo lựa chọn hiện tại
+if (!empty($array_order['field']) and !empty($array_order['value'])) {
+    $order = $array_order['field'] . ' ' . $array_order['value'];
+    $db->order( $order);
+}
 
 $result2 = $db->query($db->sql());
 
@@ -215,6 +246,28 @@ $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
 $xtpl->assign('ADD_NEW_FILE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content');
 $xtpl->assign('DELETEFILE_MODE', $module_config[$module_name]['delfile_mode']);
+
+// Xuất các phần sắp xếp
+foreach ($order_fields as $field) {
+    $url = $base_url_order;
+    if ($array_order['field'] == $field) {
+        if (empty($array_order['value'])) {
+            $url .= '&amp;of=' . $field . '&amp;ov=asc';
+            $icon = '<i class="fa fa-sort" aria-hidden="true"></i>';
+        } elseif ($array_order['value'] == 'asc') {
+            $url .= '&amp;of=' . $field . '&amp;ov=desc';
+            $icon = '<i class="fa fa-sort-asc" aria-hidden="true"></i>';
+        } else {
+            $icon = '<i class="fa fa-sort-desc" aria-hidden="true"></i>';
+        }
+    } else {
+        $url .= '&amp;of=' . $field . '&amp;ov=asc';
+        $icon = '<i class="fa fa-sort" aria-hidden="true"></i>';
+    }
+
+    $xtpl->assign(strtoupper('url_order_' . $field), $url);
+    $xtpl->assign(strtoupper('icon_order_' . $field), $icon);
+}
 
 if (!empty($array)) {
     foreach ($array as $row) {

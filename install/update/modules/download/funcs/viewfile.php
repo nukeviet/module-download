@@ -264,7 +264,7 @@ while ($_row = $_query->fetch()) {
 if (!empty($row['fileimage']) && !empty($row['fileimage']['orig_src'])) {
     $src_img = $row['fileimage']['orig_src'];
     $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $src_img)) ? $src_img : NV_MY_DOMAIN . $src_img;
-} 
+}
 // comment
 $content_comment = '';
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
@@ -278,7 +278,7 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
     define('NV_PER_PAGE_COMMENT', 5); //Số bản ghi hiển thị bình luận
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
     $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
-    $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
+    $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CHECK_SESSION);
 
     $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
 }

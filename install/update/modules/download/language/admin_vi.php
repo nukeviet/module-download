@@ -274,3 +274,6 @@ $lang_module['fimport_stat_file_add'] = 'Số file/tài liệu được tạo m�
 $lang_module['fimport_stat_file_ignore'] = 'Số file/tài liệu đã bỏ qua do đã có';
 $lang_module['process'] = 'Đã xử lý';
 $lang_module['convert_alias_to_lower'] = 'Chuyển alias sang chữ thường';
+$lang_module['type_order_admin'] = 'Kiểu sắp xếp file mặc định trong quản trị';
+$lang_module['order_discount_date'] = 'Giảm dần theo ngày thêm';
+$lang_module['order_increase_filename'] = 'Tăng dần theo tên file';

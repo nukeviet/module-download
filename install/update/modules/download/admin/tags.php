@@ -22,23 +22,23 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 function nv_show_tags_list($q = '', $incomplete = false)
 {
     global $db, $lang_module, $lang_global, $module_name, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
-    
+
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name. '&' . NV_OP_VARIABLE . '='.$op;
-    
+
     $db->sqlreset()
         ->select('count(*)')
         ->from(NV_MOD_TABLE . '_tags')
         ->order('alias ASC');
-        
+
     if (! empty($q)) {
         $q = strip_punctuation($q);
-        $db->where('keywords LIKE %' . $q . '%');
+        $db->where("keywords LIKE '%" . $db->dblikeescape($q) . "%'");
     }
-        
+
     if ($incomplete === true) {
         $db->where('description = \'\'');
     }
-    
+
     $num_items = $db->query($db->sql())->fetchColumn();
 
     $page = $nv_Request->get_int('page', 'post,get', 1);
@@ -73,14 +73,14 @@ function nv_show_tags_list($q = '', $incomplete = false)
     if (empty($q) and $number >= 20) {
         $xtpl->parse('main.other');
     }
-    
+
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-    
+
     if (!empty($generate_page)) {
         $xtpl->assign('GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.generate_page');
     }
-    
+
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
@@ -132,7 +132,7 @@ if (! empty($savecat)) {
     $alias = str_replace(' ', '-', strip_punctuation($alias));
 
     $image = $nv_Request->get_string('image', 'post', '');
-    if (is_file(NV_DOCUMENT_ROOT . $image)) {
+    if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
         $image = substr($image, $lu);
     } else {

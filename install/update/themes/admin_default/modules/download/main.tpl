@@ -65,12 +65,22 @@
             <thead>
                 <tr class="text-center">
                     <th class="text-center w50"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
-                    <th>{LANG.file_title}</th>
+                    <th class="text-nowrap">
+                        <a href="{URL_ORDER_TITLE}">{ICON_ORDER_TITLE} {LANG.file_title}</a>
+                    </th>
                     <th>{LANG.category_cat_parent}</th>
-                    <th>{LANG.file_update}</th>
-                    <th class="text-center">{LANG.file_view_hits}</th>
-                    <th class="text-center">{LANG.file_download_hits}</th>
-                    <th class="text-center">{LANG.file_comment_hits}</th>
+                    <th class="text-nowrap">
+                        <a href="{URL_ORDER_UPLOADTIME}">{ICON_ORDER_UPLOADTIME} {LANG.file_update}</a>
+                    </th>
+                    <th class="text-center text-nowrap">
+                        <a href="{URL_ORDER_VIEW_HITS}">{ICON_ORDER_VIEW_HITS} {LANG.file_view_hits}</a>
+                    </th>
+                    <th class="text-center text-nowrap">
+                        <a href="{URL_ORDER_DOWNLOAD_HITS}">{ICON_ORDER_DOWNLOAD_HITS} {LANG.file_download_hits}</a>
+                    </th>
+                    <th class="text-center text-nowrap">
+                        <a href="{URL_ORDER_COMMENT_HITS}">{ICON_ORDER_COMMENT_HITS} {LANG.file_comment_hits}</a>
+                    </th>
                     <th class="text-center">{LANG.file_active}</th>
                     <th class="text-center w200" >{LANG.file_feature}</th>
                 </tr>

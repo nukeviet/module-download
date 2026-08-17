@@ -12,20 +12,25 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Download',
     'modfuncs' => 'main,viewcat,viewfile,down,upload,report,search,tag',
     'change_alias' => 'upload, search',
     'submenu' => 'main,upload,search',
-    'is_sysmod' => (defined('SYS_DOWNLOAD_TABLE')) ? 1 : 0,
-    'virtual' => (defined('SYS_DOWNLOAD_TABLE')) ? 0 : 1,
-    'version' => '4.5.03',
-    'date' => 'Tuesday, April 18, 2023 7:54:51 AM GMT+07:00',
+    'is_sysmod' => 0,
+    'virtual' => 1,
+    'version' => '4.6.00',
+    'date' => 'Friday, June 19, 2026 at 3:08:43 PM UTC+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => '',
-    'uploads_dir' => array(
+    'uploads_dir' => [
         $module_upload,
         $module_upload . '/temp',
         $module_upload . '/import'
-    )
-);
+    ]
+];
+
+if (defined('SYS_DOWNLOAD_TABLE')) {
+    $module_version['is_sysmod'] = 1;
+    $module_version['virtual'] = 0;
+}
