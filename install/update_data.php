@@ -122,7 +122,7 @@ $nv_update_config['tasklist'][] = [
 ];
 
 $nv_update_config['tasklist'][] = [
-    'r' => '4.5.03',
+    'r' => $nv_update_config['to_version'],
     'rq' => 1,
     'l' => 'nv_up_finish',
     'f' => 'nv_up_finish'
