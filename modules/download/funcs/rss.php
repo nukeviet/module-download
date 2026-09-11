@@ -50,7 +50,9 @@ if (! empty($list_cats)) {
     }
     if ($module_info['rss']) {
         $result = $db->query($db->sql());
-        while (list($id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile) = $_scratch;
+            unset($_scratch);
             $rimages = (! empty($homeimgfile)) ? '<img src="' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . $homeimgfile . '" width="100" align="left" border="0">' : '';
             $items[] = array(
                 'title' => $title,

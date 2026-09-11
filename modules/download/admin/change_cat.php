@@ -17,7 +17,7 @@ $mod = $nv_Request->get_string('mod', 'post', '');
 $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 $content = 'NO_' . $catid;
 
-list($catid, $parentid) = $db->query('SELECT id, parentid FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid)->fetch(3);
+list($catid, $parentid) = $db->query('SELECT id, parentid FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid)->fetch(3) ?: [null, null];
 if ($catid > 0) {
     if ($mod == 'viewcat' and $nv_Request->isset_request('new_vid', 'post')) {
         $viewcat = $nv_Request->get_title('new_vid', 'post');

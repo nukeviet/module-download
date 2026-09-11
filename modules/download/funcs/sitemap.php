@@ -29,7 +29,9 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
         ->order('uploadtime DESC')
         ->limit(1000);
     $result = $db->query($db->sql());
-    while (list($cid, $alias, $publtime) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($cid, $alias, $publtime) = $_scratch;
+        unset($_scratch);
         $url[] = array(
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'], //
             'publtime' => $publtime

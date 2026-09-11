@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $sql = "SELECT server_name, status FROM " . NV_MOD_TABLE . "_server WHERE server_id=" . $server_id;
     $result = $db->query($sql);
-    list($server_name, $status) = $result->fetch(3);
+    list($server_name, $status) = $result->fetch(3) ?: [null, null];
 
     if (empty($server_name))
         die('NO');

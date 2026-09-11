@@ -42,7 +42,7 @@ if ($nv_Request->isset_request('rating', 'post')) {
 
         if ($id and ($point > 0 and $point < 6)) {
             $sql = 'SELECT id FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
-            list ($id) = $db->query($sql)->fetch(3);
+            list ($id) = $db->query($sql)->fetch(3) ?: [null];
             if ($id) {
                 $rating_detail = $db->query('SELECT rating_detail FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id)->fetchColumn();
 

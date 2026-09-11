@@ -167,7 +167,7 @@ if (! empty($savecat)) {
 $did = $nv_Request->get_int('did', 'get', 0);
 
 if ($did > 0) {
-    list($did, $alias, $description, $image, $keywords) = $db->query('SELECT did, alias, description, image, keywords FROM ' . NV_MOD_TABLE . '_tags where did=' . $did)->fetch(3);
+    list($did, $alias, $description, $image, $keywords) = $db->query('SELECT did, alias, description, image, keywords FROM ' . NV_MOD_TABLE . '_tags where did=' . $did)->fetch(3) ?: [null, null, null, null, null];
     $lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 

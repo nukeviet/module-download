@@ -28,7 +28,7 @@ if ($id and ! in_array($id, $dlrp)) {
     $nv_Request->set_Session('dlrp', $dlrp);
 
     $query = 'SELECT id, title FROM ' . NV_MOD_TABLE . ' WHERE id=' . $id;
-    list($id, $title) = $db->query($query)->fetch(3);
+    list($id, $title) = $db->query($query)->fetch(3) ?: [null, null];
     if ($id) {
         $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
         $stmt->bindParam(':ip', $client_info['ip'], PDO::PARAM_STR);

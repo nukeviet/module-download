@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     $query = $db->query('SELECT id, fileupload, fileimage FROM ' . NV_MOD_TABLE . '_tmp WHERE id=' . $id);
-    list($id, $fileupload, $fileimage) = $query->fetch(3);
+    list($id, $fileupload, $fileimage) = $query->fetch(3) ?: [null, null, null];
     if (empty($id)) {
         die('NO');
     }
@@ -59,7 +59,9 @@ if ($nv_Request->isset_request('alldel', 'post')) {
 
     $query = 'SELECT fileupload, fileimage FROM ' . NV_MOD_TABLE . '_tmp';
     $result = $db->query($query);
-    while (list($fileupload, $fileimage) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($fileupload, $fileimage) = $_scratch;
+        unset($_scratch);
         if (! empty($fileupload)) {
             $fileupload = explode('[NV]', $fileupload);
             foreach ($fileupload as $file) {
@@ -79,7 +81,9 @@ if ($nv_Request->isset_request('alldel', 'post')) {
     }
 
     $result = $db->query('SELECT id FROM ' . NV_MOD_TABLE . '_tmp');
-    while (list($_id) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($_id) = $_scratch;
+        unset($_scratch);
         nv_status_notification(NV_LANG_DATA, $module_name, 'upload_new', $_id);
     }
 

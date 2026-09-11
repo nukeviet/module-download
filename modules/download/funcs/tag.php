@@ -41,7 +41,7 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
     $stmt = $db->prepare('SELECT did, image, description, keywords FROM ' . NV_MOD_TABLE . '_tags WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
-    list($tid, $image_tag, $description, $key_words) = $stmt->fetch(3);
+    list($tid, $image_tag, $description, $key_words) = $stmt->fetch(3) ?: [null, null, null, null];
 
     if ($tid > 0) {
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;

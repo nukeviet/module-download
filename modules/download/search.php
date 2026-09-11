@@ -63,7 +63,9 @@ if (! empty($list_cats)) {
             ->limit($limit)->offset(($page - 1) * $limit);
 
         $tmp_re = $db->query($db->sql());
-        while (list($alias, $tilterow, $introtext, $catid) = $tmp_re->fetch(3)) {
+        while ($_scratch = $tmp_re->fetch(3)) {
+            list($alias, $tilterow, $introtext, $catid) = $_scratch;
+            unset($_scratch);
             $result_array[] = array(
                 'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                 'title' => BoldKeywordInStr($tilterow, $key, $logic),

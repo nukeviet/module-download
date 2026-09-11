@@ -47,13 +47,15 @@ function nv_del_cat($catid)
     global $db, $module_name, $module_data, $admin_info, $nv_Cache;
 
     $sql = 'SELECT parentid, title FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid;
-    list($p, $title) = $db->query($sql)->fetch(3);
+    list($p, $title) = $db->query($sql)->fetch(3) ?: [null, null];
 
     $sql = 'SELECT id, fileimage FROM ' . NV_MOD_TABLE . ' WHERE catid=' . $catid;
     $result = $db->query($sql);
 
     $ids = array();
-    while (list($id, $fileimage) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($id, $fileimage) = $_scratch;
+        unset($_scratch);
         $ids[] = $id;
         nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $id);
     }
@@ -89,7 +91,9 @@ function nv_del_cat($catid)
 
     $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_categories WHERE parentid=' . $catid;
     $result = $db->query($sql);
-    while (list($id) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($id) = $_scratch;
+        unset($_scratch);
         nv_del_cat($id);
     }
 
@@ -110,7 +114,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $catid = $nv_Request->get_int('catid', 'post', 0);
     $sql = 'SELECT id, parentid FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $catid;
     $result = $db->query($sql);
-    list($catid, $parentid) = $result->fetch(3);
+    list($catid, $parentid) = $result->fetch(3) ?: [null, null];
 
     if (empty($catid)) {
         die('NO');
@@ -199,7 +203,7 @@ if (! $num) {
 if ($pid) {
     $sql2 = 'SELECT title,parentid FROM ' . NV_MOD_TABLE . '_categories WHERE id=' . $pid;
     $result2 = $db->query($sql2);
-    list($parentid, $parentid2) = $result2->fetch(3);
+    list($parentid, $parentid2) = $result2->fetch(3) ?: [null, null];
     $caption = sprintf($lang_module['table_caption2'], $parentid);
     $parentid = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;pid=' . $parentid2 . '">' . $parentid . '</a>';
 } else {

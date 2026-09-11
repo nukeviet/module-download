@@ -805,7 +805,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                         $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                         $sth->execute();
 
-                        list($did, $alias, $keywords_i) = $sth->fetch(3);
+                        list($did, $alias, $keywords_i) = $sth->fetch(3) ?: [null, null, null];
 
                         if (empty($did)) {
                             $array_insert = array();

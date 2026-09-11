@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('linkcheck', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     $sql = 'SELECT id, linkdirect FROM ' . NV_MOD_TABLE . '_detail WHERE id=' . $id;
-    list($_id, $linkdirect) = $db->query($sql)->fetch(3);
+    list($_id, $linkdirect) = $db->query($sql)->fetch(3) ?: [null, null];
 
     if (empty($_id)) {
         die('BAD_' . $id);
@@ -94,7 +94,9 @@ if ($nv_Request->isset_request('del', 'post')) {
 //All del
 if ($nv_Request->isset_request('alldel', 'post')) {
     $query = $db->query('SELECT fid FROM ' . NV_MOD_TABLE . '_report');
-    while (list($fid) = $query->fetch(3)) {
+    while ($_scratch = $query->fetch(3)) {
+        list($fid) = $_scratch;
+        unset($_scratch);
         nv_status_notification(NV_LANG_DATA, $module_name, 'report', $fid);
     }
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_report');

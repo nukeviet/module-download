@@ -211,7 +211,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                 @unlink($_FILES['upload_fileupload']['tmp_name']);
 
                 if (empty($upload_info['error'])) {
-                    mt_srand(( double )microtime() * 1000000);
+                    mt_srand((float)microtime() * 1000000);
                     $maxran = 1000000;
                     $random_num = mt_rand(0, $maxran);
                     $random_num = md5($random_num);
@@ -256,7 +256,7 @@ if ($nv_Request->isset_request('addfile', 'post')) {
                     @unlink($_FILES['upload_fileimage']['tmp_name']);
 
                     if (empty($upload_info['error'])) {
-                        mt_srand(( double )microtime() * 1000000);
+                        mt_srand((float)microtime() * 1000000);
                         $maxran = 1000000;
                         $random_num = mt_rand(0, $maxran);
                         $random_num = md5($random_num);
